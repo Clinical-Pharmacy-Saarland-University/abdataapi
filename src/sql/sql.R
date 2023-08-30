@@ -66,7 +66,7 @@ sql_famkeys <- function(pzns, con = NULL) {
   }
 
   limit <- length(pzns)
-  query <- glue::glue_sql("SELECT PZN, Key_FAM FROM pae_db WHERE PZN IN ({pzns*}) LIMIT {limit}",
+  query <- glue::glue_sql("SELECT PZN, Key_FAM FROM PAE_DB WHERE PZN IN ({pzns*}) LIMIT {limit}",
     .con = con
   )
   res <- safe_dbGetQuery(con, query) |> suppressWarnings()
@@ -89,11 +89,11 @@ sql_interactions <- function(fam_keys, con = NULL) {
     return(NULL)
   }
 
-  query <- glue::glue_sql("SELECT fzi_c.Key_FAM, fzi_c.Key_INT, szi_c.Lokalisation ",
-    "FROM fzi_c lEFT JOIN ",
-    "szi_c ON fzi_c.Key_INT = szi_c.Key_INT AND ",
-    "fzi_c.Key_STO = szi_c.Key_STO WHERE ",
-    "fzi_c.Key_FAM IN ({fam_keys*})",
+  query <- glue::glue_sql("SELECT FZI_C.Key_FAM, FZI_C.Key_INT, SZI_C.Lokalisation ",
+    "FROM FZI_C lEFT JOIN ",
+    "SZI_C ON FZI_C.Key_INT = SZI_C.Key_INT AND ",
+    "FZI_C.Key_STO = SZI_C.Key_STO WHERE ",
+    "FZI_C.Key_FAM IN ({fam_keys*})",
     .con = con
   )
 
@@ -118,7 +118,7 @@ interaction_sheets <- function(int_keys, con = NULL) {
   }
 
   query <- glue::glue_sql("SELECT Key_INT, Plausibilitaet, Relevanz, Haeufigkeit, Quellenbewertung, ",
-    "Richtung FROM int_c WHERE Key_INT IN ({int_keys*}) AND AMTS_individuell != 0",
+    "Richtung FROM INT_C WHERE Key_INT IN ({int_keys*}) AND AMTS_individuell != 0",
     .con = con
   )
 
@@ -149,7 +149,6 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
   if (is.null(con)) {
     return(NULL)
   }
-
   # fam and inter key fetching
   fam_keys <- sql_famkeys(pz_numbers, con)
   unknown_pzns <- pz_numbers[!pz_numbers %in% fam_keys$PZN]
