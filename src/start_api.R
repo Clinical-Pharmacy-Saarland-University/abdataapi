@@ -8,7 +8,7 @@
 source("settings.R")
 
 router <- plumber::pr("api.R") |>
-  pr_set_api_spec(function(spec) {
+  plumber::pr_set_api_spec(function(spec) {
     spec$info <- list(
       title = SETTINGS$title,
       description = SETTINGS$description,

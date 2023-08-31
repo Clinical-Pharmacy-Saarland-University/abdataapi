@@ -5,18 +5,18 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-safe_fromJson <- safely(fromJSON)
+safe_json_validate <- safely(json_validate)
 
-tag_result <- function(ret) {
+# NULL on valid, else the error msg
+validate_json_schema <- function(json_str, schema) {
 
-  ret$timestamp <- unbox(Sys.time())
-  ret$version <- unbox(SETTINGS$version)
-  ret
+  res <- json_validate(json_str, schema, engine = "ajv", verbose = TRUE)
+  if (res)
+    return(NULL)
+
+  return(attr(res, "errors"))
 }
 
-is_unique <- function(v) {
-  length(v) == length(unique(v))
-}
 
 # T/F
 # input must be a string
@@ -60,64 +60,4 @@ validate_atc <- function(atc) {
     return(FALSE)
   }
 }
-
-
-
-.status_translate <- function(status) {
-  if (status == 400) {
-    return("Bad Request")
-  }
-  if (status == 401) {
-    return("Unauthorized")
-  }
-  if (status == 403) {
-    return("Forbidden")
-  }
-  if (status == 404) {
-    return("Not Found")
-  }
-  if (status == 405) {
-    return("Method Not Allowed")
-  }
-  if (status == 406) {
-    return("Not Acceptable")
-  }
-  if (status == 407) {
-    return("Proxy Authentication Required")
-  }
-  if (status == 408) {
-    return("Request Timeout")
-  }
-
-  if (status == 500) {
-    return("Internal Server Error")
-  }
-  if (status == 501) {
-    return("Not Implemented")
-  }
-  if (status == 502) {
-    return("Bad Gateway")
-  }
-  if (status == 503) {
-    return("Service Unavailable")
-  }
-  if (status == 504) {
-    return("Gateway Timeout")
-  }
-
-  # If the status is not recognized
-  return(paste("Unknown status:", status))
-}
-
-# create an api error message
-api_error <- function(res, status, msg = NULL, details = NULL) {
-  res$status <- status
-  list(
-    status = status,
-    error = .status_translate(status),
-    message = msg,
-    details = details
-  )
-}
-
 
