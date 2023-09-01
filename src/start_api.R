@@ -4,7 +4,48 @@
 # Date: 08-28-2023
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
-# authentication
+
+# Libs and Options ----
+# *******************************************************************
+source("helper/loadHelper.R")
+ensureLib("plumber")
+ensureLib("dplyr")
+ensureLib("purrr")
+ensureLib("tidyr")
+ensureLib("glue")
+ensureLib("jsonlite")
+ensureLib("jsonvalidate")
+ensureLib("DBI")
+ensureLib("RMySQL")
+ensureLib("pool")
+ensureLib("loggit")
+ensureLib("promises")
+ensureLib("future")
+ensureLib("bcrypt")
+ensureLib("jose")
+ensureLib("mongolite")
+
+source("settings.R")
+source("helper/pool.R")
+source("helper/helper.R")
+source("helper/translators.R")
+source("helper/validators.R")
+source("helper/user_handling.R")
+source("sql/sql.R")
+source("api/pzn_api.R")
+source("api/atc_api.R")
+source("api/misc_api.R")
+source("api/api_filters.R")
+
+options(future.globals.onReference = "error")
+plan(multisession, workers = 10)
+
+if (SETTINGS$sql$use_pool) {
+  SETTINGS$sql$pool <- createPool(SETTINGS$sql)
+}
+
+# Authentication ----
+# *******************************************************************
 add_auth <- function(x, paths = NULL) {
   # set authentication method for swagger UI/openapi
   x[["components"]] <- list(
@@ -31,13 +72,15 @@ add_auth <- function(x, paths = NULL) {
   return(x)
 }
 
-router <- plumber::pr("api.R")
+# Plumb ----
+# *******************************************************************
+router <- plumber::pr()
 router <- router |>
   plumber::pr_set_api_spec(function(spec) {
     spec$info <- list(
-      title = router$environment$SETTINGS$title,
-      description = router$environment$SETTINGS$description,
-      version = router$environment$SETTINGS$version
+      title = SETTINGS$swagger$title,
+      description = SETTINGS$swagger$description,
+      version = SETTINGS$swagger$version
     )
     spec
   }) |>
@@ -46,12 +89,12 @@ router <- router |>
 
 router |>
   pr_hook("exit", function() {
-    closePool(router$environment$SETTINGS$sql$pool)
+    closePool(SETTINGS$sql$pool)
   }) |>
   plumber::pr_run(
     host = SETTINGS$server$host,
     port = SETTINGS$server$port,
     debug = SETTINGS$debug_mode,
-    docs = SETTINGS$docs,
+    docs = SETTINGS$swagger$docs,
     quiet = !SETTINGS$debug_mode
   )

@@ -20,7 +20,7 @@ validate_json_schema <- function(json_str, schema) {
 
 # T/F
 # input must be a string
-validate_pzn <- function(pzn, validate_checksum = SETTINGS$limits$validate_pzn_checksums) {
+validate_pzn <- function(pzn, validate_checksum = SETTINGS$validation$validate_pzn_checksums) {
   # Check if PZN is 8 digits long
   if (nchar(pzn) != 8 || !grepl("^\\d{8}$", pzn)) {
     return(FALSE)

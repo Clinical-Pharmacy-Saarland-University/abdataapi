@@ -49,32 +49,43 @@ disconnect <- function(con) {
   return(TRUE)
 }
 
-# Misc queries ----
-# *******************************************************************
-sql_formulations <- sql_atc_names <- function(con = NULL) {
-  if (is.null(con)) {
-    con <- connectServer()
-    on.exit(disconnect(con), add = TRUE)
+sql_query <- function(query_str, ..., .con = NULL) {
+  if (is.null(.con)) {
+    .con <- connectServer()
+    on.exit(disconnect(.con), add = TRUE)
   }
 
-  if (is.null(con)) {
+  if (is.null(.con)) {
     return(NULL)
   }
 
-  query <- glue_sql("SELECT Key_DAR, Name FROM DAR_DB", .con = con)
+  args <- list(...)
+  args <- c(query_str, args, .con = .con)
 
-  res <- safe_dbGetQuery(con, query) |> suppressWarnings()
+  query <- do.call(glue_sql, args)
+  res <- safe_dbGetQuery(.con, query) |> suppressWarnings()
   if (!is.null(res$error)) {
     return(NULL)
   }
-  res <- res$result
-  colnames(res) <- c("formulation", "description")
 
+  res$result
+}
+
+
+# Misc queries ----
+# *******************************************************************
+sql_formulations <- sql_atc_names <- function(con = NULL) {
+  res <- sql_query("SELECT Key_DAR, Name FROM DAR_DB", .con = con)
+  if (is.null(res)) {
+    return(NULL)
+  }
+
+  colnames(res) <- c("formulation", "description")
   res <- list(
-    formulations = res |> na.omit(),
+    formulations = res |> na.omit()
   )
 
-  res
+  return(res)
 }
 
 
@@ -331,4 +342,80 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
   )
 
   return(res)
+}
+
+compound_interactions <- function(compounds, con = NULL) {
+  if (length(compounds) <= 1) {
+    res <- list(
+      interactions = character(),
+      unknown_compounds = character()
+    )
+    return(res)
+  }
+
+  sto_entries <- sql_query("SELECT Key_STO, Name FROM SNA_DB WHERE Name IN ({compounds*})",
+    compounds = compounds, .con = con
+  )
+  if (is.null(sto_entries)) {
+    return(NULL)
+  }
+
+  unknown_compounds <- compounds[!tolower(compounds) %in% tolower(sto_entries$Name)]
+
+  sto <- unique(sto_entries$Key_STO)
+  interactions <- sql_query("SELECT * FROM SZI_C WHERE Key_STO IN ({sto*})", sto = sto, .con = con)
+  if (is.null(interactions)) {
+    return(NULL)
+  }
+
+  interactions <- interactions |>
+    group_by(Key_INT) |>
+    filter(dplyr::n() > 1) |>
+    arrange(Key_INT) |>
+    group_by(Key_INT, Lokalisation) |>
+    slice(1) |>
+    ungroup() |>
+    group_by(Key_INT) |>
+    filter(dplyr::n() > 1) |>
+    ungroup() |>
+    distinct(Key_INT, Lokalisation, Key_STO, .keep_all = TRUE) |>
+    group_by(Key_INT) |>
+    filter(dplyr::n() > 1) |>
+    arrange(Key_INT)
+
+  if (nrow(interactions) == 0) {
+    res <- list(
+      interactions = character(),
+      unknown_compounds = unknown_compounds
+    )
+    return(res)
+  }
+
+  key_ints <- interactions$Key_INT |> unique()
+  inter_sheets <- sql_interaction_sheets(key_ints, con = con)
+  if (is.null(inter_sheets)) {
+    return(NULL)
+  }
+
+  compound_infos <- left_join(interactions, sto_entries, by = "Key_STO") |>
+    select(Key_INT, Lokalisation, Name) |>
+    spread(Lokalisation, Name) |>
+    set_names("Key_INT", "Left_Compound", "Right_Compound")
+
+  inter_res <- inter_sheets |>
+    left_join(compound_infos, by = "Key_INT") |>
+    select(-Key_INT) |>
+    set_names(c(
+      "plausibility", "relevance", "frequency",
+      "credibility", "direction", "left_compound", "right_compound"
+    )) |>
+    translate_interaction_table() |>
+    distinct()
+
+  res <- list(
+    interactions = inter_res,
+    unknown_compounds = unknown_compounds
+  )
+
+  res
 }

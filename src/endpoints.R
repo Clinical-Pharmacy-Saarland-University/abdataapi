@@ -7,7 +7,10 @@ function(req, res) {
 
 #* @filter authenticated
 function(req, res) {
-  filter_valid_token(req, res, token_salt = SETTINGS$token_salt, debugging = SETTINGS$debug_mode)
+  filter_valid_token(req, res,
+    token_salt = SETTINGS$token$token_salt,
+    debugging = SETTINGS$debug_mode
+  )
 }
 
 # Endpoints user handling ----
@@ -20,7 +23,7 @@ function(req, res) {
 #* @param credentials:object
 #* @post /login
 function(req, res, credentials = list(username = "username", password = "password")) {
-  user_login(req, res, token_salt = SETTINGS$token_salt, time = SETTINGS$token_exp)
+  user_login(req, res, token_salt = SETTINGS$token$token_salt, time = SETTINGS$token$token_exp)
 }
 
 #* Endpoint to log a user in
@@ -29,7 +32,10 @@ function(req, res, credentials = list(username = "username", password = "passwor
 #* @get /renew-token
 function(req, res) {
   token <- cleanup_token(req$HTTP_TOKEN)
-  renew_jwt(token = token, token_salt = SETTINGS$token_salt, time = SETTINGS$token_exp)
+  renew_jwt(
+    token = token, token_salt = SETTINGS$token$token_salt,
+    time = SETTINGS$token$token_exp
+  )
 }
 
 # Endpoints Misc ----
@@ -37,32 +43,33 @@ function(req, res) {
 
 #* Formulation list with descriptions
 #* @tag formulation
-#* @tag misc
 #* @get /formulations
-function(short = "", res) {
-  api_formulation_list_get(res)
+function(res) {
+  future_promise({
+    api_formulation_list_get(res)
+  })
 }
 
-# Endpoints PZN ----
+
+
+# Endpoints Interactions ----
 # *******************************************************************
 
-#* ATC endpoint for PZN number input
-#* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
-#* @tag pzn
-#* @tag atc
-#* @get /pzn/atc
-function(pzns, res) {
+#* Interaction endpoint for compound name input
+#* @param cmps:[string] Comma-separated unique compound names as string
+#* @tag interaction
+#* @get /interactions/compounds
+function(cmps, res) {
   future_promise({
-    api_pzn_atc_get(pzns, res)
+    api_compound_interactions_get(pzns, res)
   })
 }
 
 
 #* Interaction endpoint for PZN number input
 #* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
-#* @tag pzn
 #* @tag interaction
-#* @get /pzn/interactions
+#* @get /interactions/pzns
 function(pzns, res) {
   future_promise({
     api_pzn_interactions_get(pzns, res)
@@ -71,9 +78,8 @@ function(pzns, res) {
 
 #* Interaction endpoint for PZN number input from JSON
 #* @param .body The raw body content from the request
-#* @tag pzn
 #* @tag interaction
-#* @post /pzn/interactions
+#* @post /interactions/pzns
 function(req, res) {
   body <- req$postBody
   future_promise({
@@ -82,11 +88,31 @@ function(req, res) {
 }
 
 
+
+##################### TO DO ####################################################
+# TODO ENDPOINTS ----
+# *******************************************************************
+
+#* ATC endpoint for PZN number input
+#* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
+#* @tag pzn
+#* @tag TODO
+#* @get /pzn/atc
+function(pzns, res) {
+  future_promise({
+    api_pzn_atc_get(pzns, res)
+  })
+}
+
+
+
+
+
 # Endpoints ATC ----
 # *******************************************************************
 #* Naming endpoint for ATC input
 #* @param atcs:[string] Comma-separated unique ATCs as strings
-#* @tag atc
+#* @tag TODO
 #* @get /atc/names
 function(atcs, res) {
   api_atc_names_get(atcs, res)
@@ -94,12 +120,9 @@ function(atcs, res) {
 
 
 
-##################### TO DO ####################################################
 
 #* Interaction endpoint for ATC input
 #* @param atcs:[string] Comma-separated unique ATCs as strings
-#* @tag atc
-#* @tag interaction
 #* @tag TODO
 #* @get /atc/interactions
 function(atcs, res) {

@@ -12,9 +12,10 @@ user_login <- function(req, res, token_salt, time) {
 
   # check user exists and fetch password
   qry <- glue('{"username": "(username)"}',
-              .open = "(",
-              .close = ")",
-              username = username)
+    .open = "(",
+    .close = ")",
+    username = username
+  )
 
   ret <- con$find(qry)
   l <- ret |>
@@ -36,8 +37,10 @@ user_login <- function(req, res, token_salt, time) {
   # check password
   pw_ret <- checkpw_safely(password, password_db)
   if (!pw_ret$result) {
-    error <- api_error(res, status = 400, msg = paste0("Invalid password provided for username: ",
-                                                     username))
+    error <- api_error(res, status = 400, msg = paste0(
+      "Invalid password provided for username: ",
+      username
+    ))
     return(error)
   }
 
@@ -51,7 +54,6 @@ user_login <- function(req, res, token_salt, time) {
 
 # generate token
 generate_jwt <- function(token_salt, time, username) {
-
   key <- charToRaw(token_salt)
   res <- generate_claim(time, username) |>
     jwt_encode_hmac_safely(secret = key)
@@ -61,8 +63,10 @@ generate_jwt <- function(token_salt, time, username) {
 
 # generate claim
 generate_claim <- function(time, username) {
-  claim <- jwt_claim(username = username,
-                     exp = Sys.time() + time)
+  claim <- jwt_claim(
+    username = username,
+    exp = Sys.time() + time
+  )
 
   return(claim)
 }
@@ -77,8 +81,9 @@ test_valid_jwt <- function(token, token_salt) {
 
 # fetch username from token for logging
 username_from_jwt <- function(token, token_salt) {
-  if (!test_valid_jwt(token, token_salt) || is.null(token))
+  if (!test_valid_jwt(token, token_salt) || is.null(token)) {
     return(NULL)
+  }
 
   key <- charToRaw(token_salt)
   ret <- jwt_decode_hmac_safely(token, secret = key)
