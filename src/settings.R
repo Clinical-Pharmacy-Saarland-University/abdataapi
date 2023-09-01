@@ -28,6 +28,8 @@ SETTINGS <- list(
     max_ids = 10
   ),
   server = list(
+    multisession = TRUE,
+    worker_threads = 10,
     host = "127.0.0.1",
     port = 8888
   ),

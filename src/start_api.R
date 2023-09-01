@@ -38,10 +38,14 @@ source("api/misc_api.R")
 source("api/api_filters.R")
 
 options(future.globals.onReference = "error")
-plan(multisession, workers = 10)
+if (SETTINGS$server$multisession) {
+  plan(multisession, workers = SETTINGS$server$worker_threads)
+} else {
+  plan(sequential)
+}
 
 if (SETTINGS$sql$use_pool) {
-  SETTINGS$sql$pool <- createPool(SETTINGS$sql)
+  SETTINGS$sql$pool <- createPool(SETTINGS$sql, SETTINGS$server$multisession)
 }
 
 # Authentication ----

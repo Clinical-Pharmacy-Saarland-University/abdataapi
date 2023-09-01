@@ -16,8 +16,8 @@ closePool <- function(pool) {
     }
 }
 
-createPool <- function(settings = SETTINGS$sql) {
-    if (!settings$use_pool) {
+createPool <- function(settings = SETTINGS$sql, multisession) {
+    if (!settings$use_pool || multisession) {
         return(NULL)
     }
 
