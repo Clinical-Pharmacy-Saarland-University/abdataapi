@@ -50,6 +50,15 @@ function(res) {
   })
 }
 
+#* Request limits of the server
+#* @tag limits
+#* @get /limits
+function(res) {
+  future_promise({
+    limits_get(res)
+  })
+}
+
 
 
 # Endpoints Interactions ----

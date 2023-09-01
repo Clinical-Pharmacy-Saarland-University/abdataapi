@@ -10,7 +10,7 @@ source("helper/secret.R")
 # Settings ----
 # *******************************************************************
 SETTINGS <- list(
-  debug_mode = FALSE,
+  debug_mode = TRUE,
   secrets_file = "./secrets.json",
   swagger = list(
     docs = TRUE,

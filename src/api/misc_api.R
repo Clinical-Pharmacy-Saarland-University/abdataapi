@@ -20,6 +20,6 @@ limits_get <- function(res) {
   ret <- list(limits = list(max_pzns = SETTINGS$limits$max_pzns,
                                max_atc = SETTINGS$limits$max_atcs,
                                max_ids = SETTINGS$limits$max_ids,
-                               max_compounds = ETTINGS$limits$max_compounds))
+                               max_compounds = SETTINGS$limits$max_compounds))
   ret <- tag_result(ret)
 }

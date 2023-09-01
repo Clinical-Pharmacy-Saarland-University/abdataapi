@@ -32,10 +32,10 @@ source("helper/translators.R")
 source("helper/validators.R")
 source("helper/user_handling.R")
 source("sql/sql.R")
+source("api/api_filters.R")
 source("api/pzn_api.R")
 source("api/atc_api.R")
 source("api/misc_api.R")
-source("api/api_filters.R")
 
 options(future.globals.onReference = "error")
 if (SETTINGS$server$multisession) {

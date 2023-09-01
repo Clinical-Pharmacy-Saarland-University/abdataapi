@@ -8,7 +8,7 @@
 tag_result <- function(ret) {
 
   ret$timestamp <- unbox(Sys.time())
-  ret$version <- unbox(SETTINGS$version)
+  ret$version <- unbox(SETTINGS$swagger$version)
   ret
 }
 
