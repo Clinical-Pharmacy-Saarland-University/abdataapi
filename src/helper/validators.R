@@ -51,7 +51,7 @@ validate_pzn <- function(pzn, validate_checksum = SETTINGS$limits$validate_pzn_c
 # input must be one atc code
 validate_atc <- function(atc) {
   # Regular expression to match ATC pattern
-  pattern <- "^[A-Z][0-9]{2}[A-Z][0-9]{2}$"
+  pattern <- "^[A-Z][0-9]{2}[A-Z]{2}[0-9]{2}$"
 
   # Check if ATC matches the pattern
   if (grepl(pattern, atc)) {

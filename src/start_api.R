@@ -5,22 +5,25 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-source("settings.R")
-
-router <- plumber::pr("api.R") |>
+router <- plumber::pr("api.R")
+router <- router |>
   plumber::pr_set_api_spec(function(spec) {
     spec$info <- list(
-      title = SETTINGS$title,
-      description = SETTINGS$description,
-      version = SETTINGS$version
+      title = router$environment$SETTINGS$title,
+      description = router$environment$SETTINGS$description,
+      version = router$environment$SETTINGS$version
     )
     spec
   })
 
-plumber::pr_run(router,
-  host = SETTINGS$server$host,
-  port = SETTINGS$server$port,
-  debug = SETTINGS$debug_mode,
-  docs = SETTINGS$docs,
-  quiet = !SETTINGS$debug_mode
-)
+router |>
+  pr_hook("exit", function() {
+    closePool(router$environment$SETTINGS$sql$pool)
+  }) |>
+  plumber::pr_run(
+    host = SETTINGS$server$host,
+    port = SETTINGS$server$port,
+    debug = SETTINGS$debug_mode,
+    docs = SETTINGS$docs,
+    quiet = !SETTINGS$debug_mode
+  )

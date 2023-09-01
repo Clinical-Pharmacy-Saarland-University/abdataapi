@@ -66,10 +66,11 @@ is_unique <- function(v) {
 # create an api error message
 api_error <- function(res, status, msg = NULL, details = NULL) {
   res$status <- status
-  list(
-    status = status,
-    error = .status_translate(status),
-    message = msg,
+  error <- list(
+    status = unbox(status),
+    error = unbox(.status_translate(status)),
+    message = unbox(msg),
     details = details
   )
+  return(error)
 }

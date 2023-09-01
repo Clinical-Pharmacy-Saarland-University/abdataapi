@@ -100,11 +100,11 @@
 
 translate_interaction_table <- function(df) {
 
-    df$Plausibility <- purrr::map_vec(df$Plausibility, ~.translate_plausability(.))
-    df$Relevance  <- purrr::map_vec(df$Relevance, ~.translate_relevance(.))
-    df$Frequency  <- purrr::map_vec(df$Frequency, ~.translate_frequency(.))
-    df$Credibility  <- purrr::map_vec(df$Credibility, ~.translate_credebility(.))
-    df$Direction <- purrr::map_vec(df$Direction, ~.translate_direction(.))
+    df$plausibility <- purrr::map_vec(df$plausibility, ~.translate_plausability(.))
+    df$relevance  <- purrr::map_vec(df$relevance, ~.translate_relevance(.))
+    df$frequency  <- purrr::map_vec(df$frequency, ~.translate_frequency(.))
+    df$credibility  <- purrr::map_vec(df$credibility, ~.translate_credebility(.))
+    df$direction <- purrr::map_vec(df$direction, ~.translate_direction(.))
 
     return(df)
 }

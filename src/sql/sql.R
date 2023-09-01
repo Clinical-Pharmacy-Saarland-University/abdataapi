@@ -49,13 +49,75 @@ disconnect <- function(con) {
   return(TRUE)
 }
 
+# Misc queries ----
+# *******************************************************************
+sql_formulations <- sql_atc_names <- function(con = NULL) {
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
 
-# ADBDATA queries ----
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  query <- glue_sql("SELECT Key_DAR, Name FROM DAR_DB", .con = con)
+
+  res <- safe_dbGetQuery(con, query) |> suppressWarnings()
+  if (!is.null(res$error)) {
+    return(NULL)
+  }
+  res <- res$result
+  colnames(res) <- c("formulation", "description")
+
+  res <- list(
+    formulations = res |> na.omit(),
+  )
+
+  res
+}
+
+
+
+# ATC queries ----
+# *******************************************************************
+sql_atc_names <- function(atcs, con = NULL) {
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  limit <- length(atcs)
+  query <- glue_sql("SELECT Key_ATC, Name_deutsch, Name_englisch FROM ATC_DB WHERE Key_ATC IN ({atcs*}) LIMIT {limit}",
+    .con = con
+  )
+  res <- safe_dbGetQuery(con, query) |> suppressWarnings()
+  if (!is.null(res$error)) {
+    return(NULL)
+  }
+  res <- res$result
+  colnames(res) <- c("atc", "name_german", "name_english")
+
+  unknown_atcs <- atcs[!atcs %in% res$ATC]
+  res <- list(
+    names = res |> na.omit(),
+    unknown_atcs = unknown_atcs
+  )
+
+  res
+}
+
+
+# PZN queries ----
 # *******************************************************************
 
 # df or NULL on error
 # Function takes only at least one pzn
-sql_famkeys <- function(pzns, con = NULL) {
+sql_famkeys_pzn <- function(pzns, con = NULL) {
   if (is.null(con)) {
     con <- connectServer()
     on.exit(disconnect(con), add = TRUE)
@@ -66,7 +128,7 @@ sql_famkeys <- function(pzns, con = NULL) {
   }
 
   limit <- length(pzns)
-  query <- glue::glue_sql("SELECT PZN, Key_FAM FROM PAE_DB WHERE PZN IN ({pzns*}) LIMIT {limit}",
+  query <- glue_sql("SELECT PZN, Key_FAM FROM PAE_DB WHERE PZN IN ({pzns*}) LIMIT {limit}",
     .con = con
   )
   res <- safe_dbGetQuery(con, query) |> suppressWarnings()
@@ -74,6 +136,65 @@ sql_famkeys <- function(pzns, con = NULL) {
     return(NULL)
   }
   res <- res$result
+  res
+}
+
+# df or NULL on error
+# Function takes only at least one atc
+sql_famkeys_atc <- function(atcs, con = NULL) {
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  query <- glue_sql("SELECT Key_ATC, FAM_DB.Key_FAM, Einheit, Zahl, Key_DAR, SNA_DB.Name, Produktname  ",
+    "FROM FAM_DB LEFT JOIN FAI_DB ON FAM_DB.Key_FAM = FAI_DB.Key_FAM ",
+    "LEFT JOIN SNA_DB ON FAI_DB.Key_STO = SNA_DB.Key_STO ",
+    "WHERE Veterinaerpraeparat = 0 AND Stofftyp = 1 AND Herkunft LIKE '%Ph.Eur.%' AND Key_ATC IN ({atcs*})",
+    .con = con
+  )
+  res <- safe_dbGetQuery(con, query) |> suppressWarnings()
+  if (!is.null(res$error)) {
+    return(NULL)
+  }
+
+  res <- res$result
+  res
+}
+
+# list or NULL on error
+# Function takes only at least one pzn
+sql_atc_pzns <- function(pzns, con = NULL) {
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  query <- glue_sql("SELECT PZN, Key_ATC FROM FAM_DB LEFT JOIN PAE_DB ON  PAE_DB.Key_FAM = FAM_DB.Key_FAM ",
+    "WHERE Veterinaerpraeparat = 0 AND PZN IN ({pzns*})",
+    .con = con
+  )
+  res <- safe_dbGetQuery(con, query) |> suppressWarnings()
+  if (!is.null(res$error)) {
+    return(NULL)
+  }
+  res <- res$result
+  colnames(res) <- c("pzn", "atc")
+
+  unknown_pzns <- pzns[!pzns %in% res$PZN]
+  res <- list(
+    atcs = res |> na.omit(),
+    unknown_pzns = unknown_pzns
+  )
+
   res
 }
 
@@ -89,7 +210,7 @@ sql_interactions <- function(fam_keys, con = NULL) {
     return(NULL)
   }
 
-  query <- glue::glue_sql("SELECT FZI_C.Key_FAM, FZI_C.Key_INT, SZI_C.Lokalisation ",
+  query <- glue_sql("SELECT FZI_C.Key_FAM, FZI_C.Key_INT, SZI_C.Lokalisation ",
     "FROM FZI_C lEFT JOIN ",
     "SZI_C ON FZI_C.Key_INT = SZI_C.Key_INT AND ",
     "FZI_C.Key_STO = SZI_C.Key_STO WHERE ",
@@ -107,7 +228,7 @@ sql_interactions <- function(fam_keys, con = NULL) {
 
 # df or NULL on error
 # Function takes at least one Key_INT
-interaction_sheets <- function(int_keys, con = NULL) {
+sql_interaction_sheets <- function(int_keys, con = NULL) {
   if (is.null(con)) {
     con <- connectServer()
     on.exit(disconnect(con), add = TRUE)
@@ -117,7 +238,7 @@ interaction_sheets <- function(int_keys, con = NULL) {
     return(NULL)
   }
 
-  query <- glue::glue_sql("SELECT Key_INT, Plausibilitaet, Relevanz, Haeufigkeit, Quellenbewertung, ",
+  query <- glue_sql("SELECT Key_INT, Plausibilitaet, Relevanz, Haeufigkeit, Quellenbewertung, ",
     "Richtung FROM INT_C WHERE Key_INT IN ({int_keys*}) AND AMTS_individuell != 0",
     .con = con
   )
@@ -131,6 +252,8 @@ interaction_sheets <- function(int_keys, con = NULL) {
 }
 
 
+# Complex queries ----
+# *******************************************************************
 # list or NA if no interactions or with just one PZN or NULL on error
 pzn_interactions <- function(pz_numbers, con = NULL) {
   if (length(pz_numbers) <= 1) {
@@ -150,7 +273,7 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
     return(NULL)
   }
   # fam and inter key fetching
-  fam_keys <- sql_famkeys(pz_numbers, con)
+  fam_keys <- sql_famkeys_pzn(pz_numbers, con)
   unknown_pzns <- pz_numbers[!pz_numbers %in% fam_keys$PZN]
   match_df <- fam_keys |>
     group_by(Key_FAM) |>
@@ -185,7 +308,7 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
   }
 
   key_ints <- min_inter_tab$Key_INT |> unique()
-  inter_sheets <- interaction_sheets(key_ints, con)
+  inter_sheets <- sql_interaction_sheets(key_ints, con)
 
   pzn_infos <- left_join(min_inter_tab, fam_keys, by = "Key_FAM") |>
     select(Key_INT, Lokalisation, PZN) |>
@@ -196,8 +319,8 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
   inter_sheets <- inter_sheets |>
     select(-Key_INT) |>
     set_names(c(
-      "Plausibility", "Relevance", "Frequency",
-      "Credibility", "Direction", "Left_PZN", "Right_PZN"
+      "plausibility", "relevance", "frequency",
+      "credibility", "direction", "left_PZN", "right_PZN"
     )) |>
     translate_interaction_table()
 
