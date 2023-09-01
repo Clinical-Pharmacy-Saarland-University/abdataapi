@@ -4,6 +4,32 @@
 # Date: 08-28-2023
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
+# authentication
+add_auth <- function(x, paths = NULL) {
+  # set authentication method for swagger UI/openapi
+  x[["components"]] <- list(
+    securitySchemes = list(
+      ApiKeyAuth = list(
+        type = "apiKey",
+        `in` = "header",
+        name = "TOKEN",
+        description = "Authentication token provided to users that successfully logged in"
+      )
+    )
+  )
+  # add authentication requirement for all endpoints
+  if (is.null(paths)) paths <- names(x$paths)
+  for (path in paths) {
+    nn <- names(x$paths[[path]])
+    for (p in intersect(nn, c("get", "head", "post", "put", "delete"))) {
+      x$paths[[path]][[p]] <- c(
+        x$paths[[path]][[p]],
+        list(security = list(list(ApiKeyAuth = vector())))
+      )
+    }
+  }
+  return(x)
+}
 
 router <- plumber::pr("api.R")
 router <- router |>
@@ -14,7 +40,9 @@ router <- router |>
       version = router$environment$SETTINGS$version
     )
     spec
-  })
+  }) |>
+  plumber::pr_set_api_spec(add_auth) |>
+  plumber::pr_mount("/api", plumber::Plumber$new("endpoints.R"))
 
 router |>
   pr_hook("exit", function() {
