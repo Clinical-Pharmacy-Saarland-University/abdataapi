@@ -1,9 +1,9 @@
+# Endpoint Logger ----
+# *******************************************************************
+logger <- create_logger("disabled")
+
 # Endpoint filters ----
 # *******************************************************************
-#* @filter logger
-function(req, res) {
-  filter_logger(req)
-}
 
 #* @filter authenticated
 function(req, res) {
@@ -44,18 +44,20 @@ function(req, res) {
 #* Formulation list with descriptions
 #* @tag formulation
 #* @get /formulations
-function(res) {
+function(req, res) {
+  log_info <- req_info(req)
   future_promise({
-    api_formulation_list_get(res)
+    with_logger(logger, log_info, api_formulation_list_get(res))
   })
 }
 
 #* Request limits of the server
 #* @tag limits
 #* @get /limits
-function(res) {
+function(req, res) {
+  log_info <- req_info(req)
   future_promise({
-    limits_get(res)
+    with_logger(logger, log_info, limits_get(res))
   })
 }
 
@@ -80,6 +82,7 @@ function(cmps, res) {
 #* @tag interaction
 #* @get /interactions/pzns
 function(pzns, res) {
+  print("A")
   future_promise({
     api_pzn_interactions_get(pzns, res)
   })

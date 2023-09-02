@@ -18,7 +18,6 @@ ensureLib("jsonvalidate")
 ensureLib("DBI")
 ensureLib("RMySQL")
 ensureLib("pool")
-ensureLib("loggit")
 ensureLib("promises")
 ensureLib("future")
 ensureLib("bcrypt")
@@ -28,6 +27,7 @@ ensureLib("mongolite")
 source("settings.R")
 source("helper/pool.R")
 source("helper/helper.R")
+source("helper/logger.R")
 source("helper/translators.R")
 source("helper/validators.R")
 source("helper/user_handling.R")
@@ -39,6 +39,8 @@ source("api/atc_api.R")
 source("api/misc_api.R")
 
 options(future.globals.onReference = "error")
+options(future.rng.onMisuse = "ignore")
+
 if (SETTINGS$server$multisession) {
   plan(multisession, workers = SETTINGS$server$worker_threads)
 } else {
@@ -51,7 +53,7 @@ if (SETTINGS$sql$use_pool) {
 
 # Authentication ----
 # *******************************************************************
-add_auth <- function(x, paths = NULL) {
+api_spec <- function(x, paths = NULL) {
   # set authentication method for swagger UI/openapi
   x[["components"]] <- list(
     securitySchemes = list(
@@ -74,32 +76,34 @@ add_auth <- function(x, paths = NULL) {
       )
     }
   }
+
+  # title et al
+  x$info <- list(
+    title = SWAGGER_SETTINGS$title,
+    summary = SWAGGER_SETTINGS$summary,
+    description = SWAGGER_SETTINGS$description,
+    version = SETTINGS$version,
+    contact = SWAGGER_SETTINGS$contact
+  )
+
   return(x)
 }
 
 # Plumb ----
 # *******************************************************************
-router <- plumber::pr()
+router <- pr()
 router <- router |>
-  plumber::pr_set_api_spec(function(spec) {
-    spec$info <- list(
-      title = SETTINGS$swagger$title,
-      description = SETTINGS$swagger$description,
-      version = SETTINGS$swagger$version
-    )
-    spec
-  }) |>
-  plumber::pr_set_api_spec(add_auth) |>
-  plumber::pr_mount("/api", plumber::Plumber$new("api/endpoints.R"))
+  pr_set_api_spec(api_spec) |>
+  pr_mount("/api", Plumber$new("api/endpoints.R"))
 
 router |>
   pr_hook("exit", function() {
     closePool(SETTINGS$sql$pool)
   }) |>
-  plumber::pr_run(
+  pr_run(
     host = SETTINGS$server$host,
     port = SETTINGS$server$port,
     debug = SETTINGS$debug_mode,
-    docs = SETTINGS$swagger$docs,
+    docs = SWAGGER_SETTINGS$docs,
     quiet = !SETTINGS$debug_mode
   )

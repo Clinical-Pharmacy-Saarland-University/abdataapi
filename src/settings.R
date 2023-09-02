@@ -9,15 +9,23 @@ source("helper/secret.R")
 
 # Settings ----
 # *******************************************************************
+
+SWAGGER_SETTINGS <- list(
+  docs = TRUE,
+  title = "Clincial Pharmacy DDI API",
+  summary = "A closed API to check for DDIs",
+  description = "An API to check for Drug-Drug-Interaction querying the ABDATA database",
+  contact = list(
+    name = "Dominik Selzer",
+    url = "https://www.uni-saarland.de/lehrstuhl/lehr/",
+    email = "dominik.selzer@uni-saarland.de"
+  )
+)
+
 SETTINGS <- list(
   debug_mode = TRUE,
+  version = "0.1.0",
   secrets_file = "./secrets.json",
-  swagger = list(
-    docs = TRUE,
-    version = "0.1.0",
-    title = "UdS Clincial Pharmacy DDI API",
-    description = "An API to check for Drug-Drug-Interaction querying the ABDATA database"
-  ),
   validation = list(
     validate_pzn_checksums = TRUE
   ),
@@ -25,11 +33,11 @@ SETTINGS <- list(
     max_pzns = 50,
     max_atcs = 50,
     max_compounds = 50,
-    max_ids = 10
+    max_ids = 200
   ),
   server = list(
     multisession = TRUE,
-    worker_threads = 10,
+    worker_threads = 30,
     host = "",
     port = 1111
   ),

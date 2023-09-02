@@ -81,7 +81,7 @@ test_valid_jwt <- function(token, token_salt) {
 
 # fetch username from token for logging
 username_from_jwt <- function(token, token_salt) {
-  if (!test_valid_jwt(token, token_salt) || is.null(token)) {
+  if (is.null(token) || !test_valid_jwt(token, token_salt)) {
     return(NULL)
   }
 

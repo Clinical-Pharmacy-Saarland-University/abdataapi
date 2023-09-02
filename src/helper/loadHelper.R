@@ -10,5 +10,8 @@ ensureLib <- function(package_name) {
   if (!requireNamespace(package_name, quietly = TRUE)) {
     install.packages(package_name, dependencies = TRUE)
   }
-  library(package_name, character.only = TRUE)
+  library(package_name,
+    character.only = TRUE, warn.conflicts = FALSE,
+    verbose = FALSE, quietly = TRUE
+  ) |> suppressMessages()
 }

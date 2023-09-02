@@ -7,22 +7,13 @@ cleanup_token <- function(token) {
   return(token)
 }
 
-# Function to log requests to the server.
-filter_logger <- function(req, path_prefix = "", token_salt = SETTINGS$token$token_salt) {
-  token <- cleanup_token(req$HTTP_TOKEN)
-  username <- username_from_jwt(token, token_salt)
-
-  cat(as.character(Sys.time()), "-",
-      ifelse(is.null(username), "UNKNOWN USER", username), "-",
-      req$REQUEST_METHOD, paste0(path_prefix, req$PATH_INFO), "-",
-      req$HTTP_USER_AGENT, "@", req$REMOTE_ADDR, "\n")
-  forward()
-}
-
 # Filter to check if a user is authorized to access a route.
-filter_valid_token <- function(req, res, token_salt = SETTINGS$token$token_salt, debugging = FALSE) {
-  if (debugging)
+filter_valid_token <- function(req, res,
+                               token_salt = SETTINGS$token$token_salt,
+                               debugging = SETTINGS$debug_mode) {
+  if (debugging) {
     forward()
+  }
 
   token <- cleanup_token(req$HTTP_TOKEN)
 
