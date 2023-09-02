@@ -22,6 +22,10 @@ create_secret_file <- function(path) {
     ),
     token = list(
       token_salt = "salt"
+    ),
+    server = list(
+      host = "host",
+      port = 1111
     )
   )
 
@@ -45,7 +49,11 @@ patch_settings <- function(settings) {
   settings$userdb$url <- json$userdb$url
 
   # token
-  settings$token$token_salt = json$token$token_salt
+  settings$token$token_salt <- json$token$token_salt
+
+  # server
+  settings$server$host <-  json$server$host
+  settings$server$port <-  json$server$port
 
   return(settings)
 }

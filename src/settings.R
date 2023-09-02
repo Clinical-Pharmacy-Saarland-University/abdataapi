@@ -30,14 +30,14 @@ SETTINGS <- list(
   server = list(
     multisession = TRUE,
     worker_threads = 10,
-    host = "127.0.0.1",
-    port = 8888
+    host = "",
+    port = 1111
   ),
   sql = list(
     host = "",
     user = "",
     pwd = "",
-    port = 111,
+    port = 1111,
     database = "",
     use_pool = FALSE
   ),
