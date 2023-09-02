@@ -47,7 +47,7 @@ SETTINGS <- list(
     url = ""
   ),
   token = list(
-    token_salt = "test",
+    token_salt = "",
     token_exp = 3600 # time in s)
   )
 )

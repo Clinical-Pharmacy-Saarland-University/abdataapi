@@ -1,8 +1,0 @@
-# *******************************************************************
-# Project: ABDATA DDI API
-# Script purpose: API entry point
-# Date: 08-28-2023
-# Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
-# *******************************************************************
-
-

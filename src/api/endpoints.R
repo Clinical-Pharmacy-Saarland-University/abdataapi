@@ -70,7 +70,7 @@ function(res) {
 #* @get /interactions/compounds
 function(cmps, res) {
   future_promise({
-    api_compound_interactions_get(pzns, res)
+    api_compound_interactions_get(cmps, res)
   })
 }
 

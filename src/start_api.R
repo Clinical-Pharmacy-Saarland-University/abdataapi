@@ -31,6 +31,7 @@ source("helper/helper.R")
 source("helper/translators.R")
 source("helper/validators.R")
 source("helper/user_handling.R")
+source("sql/sql_helper.R")
 source("sql/sql.R")
 source("api/api_filters.R")
 source("api/pzn_api.R")
@@ -89,7 +90,7 @@ router <- router |>
     spec
   }) |>
   plumber::pr_set_api_spec(add_auth) |>
-  plumber::pr_mount("/api", plumber::Plumber$new("endpoints.R"))
+  plumber::pr_mount("/api", plumber::Plumber$new("api/endpoints.R"))
 
 router |>
   pr_hook("exit", function() {
