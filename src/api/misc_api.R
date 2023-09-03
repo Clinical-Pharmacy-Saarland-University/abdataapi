@@ -14,7 +14,7 @@ api_formulation_list_get <- function(res) {
   return(ret)
 }
 
-limits_get <- function(res) {
+api_limits_get <- function(res) {
   ret <- list(limits = list(
     max_pzns = SETTINGS$limits$max_pzns,
     max_atc = SETTINGS$limits$max_atcs,

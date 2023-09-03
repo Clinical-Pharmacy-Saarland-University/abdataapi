@@ -12,7 +12,7 @@ safe_fromJson <- safely(fromJSON)
 .validate_pzn_get <- function(pzns, res) {
   result <- list(result = NULL, error = NULL)
 
-  if (missing(pzns) || pzns == "") {
+  if (missing(pzns) || is.null(pzns) || pzns == "") {
     error <- api_error(
       res, 400, "PZNs parameter is required.",
       list(list(field = "pzns", issue = "This field is required and cannot be empty."))
@@ -66,11 +66,11 @@ api_pzn_interactions_get <- function(pzns, res) {
     return(pzns$error)
 
   pzns <- pzns$result
-  # check interactions
   ret <- pzn_interactions(pzns)
   if (is.null(ret)) {
     return(api_error(res, 500))
   }
+
   ret <- tag_result(ret)
   ret$pzns <- pzns
   return(ret)
@@ -96,6 +96,13 @@ api_pzn_atc_get <- function(pzns, res) {
 
 api_pzn_interactions_post <- function(req, res) {
   body_data <- req
+  if (is.null(body_data) || body_data == "") {
+    error <- api_error(
+      res, 400, "JSON request is empty.",
+      list(errors = validation_error)
+    )
+    return(error)
+  }
 
   # validate JSON schema
   schema <- '{

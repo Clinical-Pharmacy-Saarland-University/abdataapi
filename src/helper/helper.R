@@ -72,5 +72,7 @@ api_error <- function(res, status, msg = NULL, details = NULL) {
     message = unbox(msg),
     details = details
   )
+  class(error) <- c(class(error), "error")
+
   return(error)
 }

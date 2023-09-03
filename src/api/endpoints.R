@@ -1,10 +1,9 @@
 # Endpoint Logger ----
 # *******************************************************************
-logger <- create_logger("disabled")
+LOGGER <- create_logger(SETTINGS$logging$log_device)
 
 # Endpoint filters ----
 # *******************************************************************
-
 #* @filter authenticated
 function(req, res) {
   filter_valid_token(req, res,
@@ -47,7 +46,7 @@ function(req, res) {
 function(req, res) {
   log_info <- req_info(req)
   future_promise({
-    with_logger(logger, log_info, api_formulation_list_get(res))
+    with_logger(LOGGER, log_info, api_formulation_list_get(res))
   })
 }
 
@@ -57,7 +56,7 @@ function(req, res) {
 function(req, res) {
   log_info <- req_info(req)
   future_promise({
-    with_logger(logger, log_info, limits_get(res))
+    with_logger(LOGGER, log_info, api_limits_get(res))
   })
 }
 
@@ -66,25 +65,38 @@ function(req, res) {
 # Endpoints Interactions ----
 # *******************************************************************
 
+#* Description of the interaction table
+#* @tag interaction
+#* @get /interactions/description
+function(req, res) {
+  log_info <- req_info(req)
+  future_promise({
+    with_logger(LOGGER, log_info, api_interaction_description(res))
+  })
+}
+
+
 #* Interaction endpoint for compound name input
 #* @param cmps:[string] Comma-separated unique compound names as string
 #* @tag interaction
 #* @get /interactions/compounds
-function(cmps, res) {
+function(req, res) {
+  log_info <- req_info(req)
+  cmps <- req$args$cmps
   future_promise({
-    api_compound_interactions_get(cmps, res)
+    with_logger(LOGGER, log_info, api_compound_interactions_get(cmps, res))
   })
 }
-
 
 #* Interaction endpoint for PZN number input
 #* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
 #* @tag interaction
 #* @get /interactions/pzns
-function(pzns, res) {
-  print("A")
+function(req, res) {
+  log_info <- req_info(req)
+  pzns <- req$args$pzns
   future_promise({
-    api_pzn_interactions_get(pzns, res)
+    with_logger(LOGGER, log_info, api_pzn_interactions_get(pzns, res))
   })
 }
 
@@ -93,9 +105,10 @@ function(pzns, res) {
 #* @tag interaction
 #* @post /interactions/pzns
 function(req, res) {
+  log_info <- req_info(req)
   body <- req$postBody
   future_promise({
-    api_pzn_interactions_post(body, res)
+    with_logger(LOGGER, log_info, api_pzn_interactions_post(body, res))
   })
 }
 

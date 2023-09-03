@@ -23,11 +23,14 @@ SWAGGER_SETTINGS <- list(
 )
 
 SETTINGS <- list(
-  debug_mode = TRUE,
+  debug_mode = FALSE,
   version = "0.1.0",
   secrets_file = "./secrets.json",
   validation = list(
     validate_pzn_checksums = TRUE
+  ),
+  logging = list(
+    log_device = "cmdline" # cmdline, db, cmdline-db, disabled
   ),
   limits = list(
     max_pzns = 50,
@@ -36,7 +39,7 @@ SETTINGS <- list(
     max_ids = 200
   ),
   server = list(
-    multisession = TRUE,
+    multisession = FALSE,
     worker_threads = 30,
     host = "",
     port = 1111
