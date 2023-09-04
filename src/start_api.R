@@ -27,16 +27,18 @@ ensureLib("mongolite")
 source("settings.R")
 source("helper/pool.R")
 source("helper/helper.R")
+source("db/sql_helper.R")
+source("db/sql.R")
+source("db/mongo.R")
 source("helper/logger.R")
 source("helper/translators.R")
 source("helper/validators.R")
 source("helper/user_handling.R")
-source("sql/sql_helper.R")
-source("sql/sql.R")
 source("api/api_filters.R")
 source("api/pzn_api.R")
 source("api/atc_api.R")
 source("api/misc_api.R")
+source("api/interaction_api.R")
 
 options(future.globals.onReference = "error")
 options(future.rng.onMisuse = "ignore")
@@ -107,3 +109,8 @@ router |>
     docs = SWAGGER_SETTINGS$docs,
     quiet = !SETTINGS$debug_mode
   )
+
+
+
+
+

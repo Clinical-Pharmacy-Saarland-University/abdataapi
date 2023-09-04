@@ -236,23 +236,42 @@ compound_interactions <- function(compounds, con = NULL) {
     return(res)
   }
 
+  # sheets
   key_ints <- interactions$Key_INT |> unique()
   inter_sheets <- sql_interaction_sheets(key_ints, con = con)
   if (is.null(inter_sheets)) {
     return(NULL)
   }
 
-  compound_infos <- left_join(interactions, sto_entries, by = "Key_STO") |>
-    select(Key_INT, Lokalisation, Name) |>
-    spread(Lokalisation, Name) |>
-    set_names("Key_INT", "Left_Compound", "Right_Compound")
+  # get compound infos
+  compound_meta <- sql_compound_desc_from_int(key_ints, sto, con = con)
+  if (is.null(compound_meta)) {
+    return(NULL)
+  }
 
+  compound_meta <- compound_meta |>
+    mutate(dose = paste(Zahl, Einheit)) |>
+    select(-Zahl, -Einheit)
+
+  # join all infos
+  compound_infos <- interactions |>
+    left_join(sto_entries, by = "Key_STO") |>
+    left_join(compound_meta, by = c("Key_INT", "Key_STO")) |>
+    select(-Key_STO) |>
+    pivot_wider(names_from = Lokalisation,
+                values_from = c("Name", "Key_ATC", "Key_DAR", "Produktname", "dose"))
+
+  # translate and fit tables
   inter_res <- inter_sheets |>
     left_join(compound_infos, by = "Key_INT") |>
     select(-Key_INT) |>
     set_names(c(
       "plausibility", "relevance", "frequency",
-      "credibility", "direction", "left_compound", "right_compound"
+      "credibility", "direction", "left_compound", "right_compound",
+      "left_atc", "right_atc",
+      "left_formulation", "right_formulation",
+      "left_medication", "right_medication",
+      "left_dose", "right_dose"
     )) |>
     translate_interaction_table() |>
     distinct()
@@ -264,3 +283,26 @@ compound_interactions <- function(compounds, con = NULL) {
 
   res
 }
+
+
+
+
+str <- "{das, {dasds, blabla}}}"
+parse_string <- function(s) {
+  # Step 1: Split the input string by '},' to separate out the lists
+  list_strs <- unlist(strsplit(s, "\\},"))
+
+  # Step 2 and 3: Split each list by ',' and clean each string
+  parsed_lists <- lapply(list_strs, function(list_str) {
+    # Remove starting and ending braces and split by comma
+    items <- unlist(strsplit(gsub("^\\{|\\}$", "", list_str), ","))
+
+    # Trim whitespace from each item
+    items <- sapply(items, function(item) gsub("^\\s+|\\s+$", "", item))
+
+    return(items)
+  })
+
+  return(parsed_lists)
+}
+parse_string(str)

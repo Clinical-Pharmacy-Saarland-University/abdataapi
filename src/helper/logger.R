@@ -85,10 +85,11 @@ req_info <- function(req, token_salt = SETTINGS$token$token_salt) {
 
 with_logger <- function(logger, log_info, f) {
   tic <- proc.time()["elapsed"]
-  res <- f # works because of lazy eval in R
+  res <- f # lazy eval
   toc <- proc.time()["elapsed"]
 
   log_info$execution_time_ms <- (toc - tic) * 1000
   logger(log_info)
   res
 }
+

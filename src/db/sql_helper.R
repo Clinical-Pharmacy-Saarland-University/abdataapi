@@ -83,8 +83,7 @@ sql_query <- function(query_str, ..., .con = NULL) {
 sql_famkeys_pzn <- function(pzns, con = NULL) {
   limit <- length(pzns)
   res <- sql_query("SELECT PZN, Key_FAM FROM PAE_DB WHERE PZN IN ({pzns*}) LIMIT {limit}",
-    pzns = pzns, limit = limit,
-    .con = con
+    pzns = pzns, limit = limit, .con = con
   )
 
   res
@@ -99,8 +98,7 @@ sql_famkeys_atc <- function(atcs, con = NULL) {
       "LEFT JOIN SNA_DB ON FAI_DB.Key_STO = SNA_DB.Key_STO ",
       "WHERE Veterinaerpraeparat = 0 AND Stofftyp = 1 AND Herkunft LIKE '%Ph.Eur.%' AND Key_ATC IN ({atcs*})"
     ),
-    atcs = atcs,
-    .con = con
+    atcs = atcs, .con = con
   )
 
   res
@@ -108,13 +106,13 @@ sql_famkeys_atc <- function(atcs, con = NULL) {
 
 # df or NULL on error
 sql_interaction_sheets <- function(int_keys, con = NULL) {
+  l <- length(int_keys)
   res <- sql_query(
     paste(
       "SELECT Key_INT, Plausibilitaet, Relevanz, Haeufigkeit, Quellenbewertung,",
-      "Richtung FROM INT_C WHERE Key_INT IN ({int_keys*}) AND AMTS_individuell != 0"
+      "Richtung FROM INT_C WHERE Key_INT IN ({int_keys*}) AND AMTS_individuell != 0 LIMIT {l}"
     ),
-    int_keys = int_keys,
-    .con = con
+    int_keys = int_keys, l = l, .con = con
   )
 
   res
@@ -130,9 +128,29 @@ sql_fam_keys_interactions <- function(fam_keys, con = NULL) {
       "FZI_C.Key_STO = SZI_C.Key_STO WHERE ",
       "FZI_C.Key_FAM IN ({fam_keys*})"
     ),
-    fam_keys = fam_keys,
-    .con = con
+    fam_keys = fam_keys, .con = con
   )
 
   res
 }
+
+
+# df or NULL on error
+sql_compound_desc_from_int <- function(key_ints, key_sto, con = NULL) {
+  res <- sql_query(
+    paste(
+      "SELECT t.Key_INT, t.Key_STO, Key_ATC, Key_DAR, Produktname, Einheit, Zahl FROM",
+      "(SELECT *, ROW_NUMBER() OVER (PARTITION BY Key_INT, Key_STO ORDER BY Key_FAM)",
+      "AS row_number FROM FZI_C) t",
+      "LEFT JOIN FAM_DB ON t.Key_FAM = FAM_DB.Key_FAM",
+      "LEFT JOIN FAI_DB ON t.Key_FAM = FAI_DB.Key_FAM AND t.Key_STO = FAI_DB.Key_STO",
+      "WHERE t.Key_INT IN ({key_ints*}) AND t.row_number = 1 AND t.Key_STO IN ({key_sto*})"
+    ),
+    key_ints = key_ints, key_sto = key_sto, .con = con
+  )
+
+  res
+}
+
+sql_query("SELECT * FROM FZI_C WHERE Key_STO = 1222100")
+

@@ -1,8 +1,8 @@
-# Endpoint Logger ----
+#  Logger ----
 # *******************************************************************
 LOGGER <- create_logger(SETTINGS$logging$log_device)
 
-# Endpoint filters ----
+# Endpoint Filters ----
 # *******************************************************************
 #* @filter authenticated
 function(req, res) {
@@ -12,7 +12,7 @@ function(req, res) {
   )
 }
 
-# Endpoints user handling ----
+# Endpoints User Handling ----
 # *******************************************************************
 
 #* Endpoint to log a user in
@@ -65,6 +65,10 @@ function(req, res) {
 # Endpoints Interactions ----
 # *******************************************************************
 
+
+## General ----
+# *******************************************************************
+
 #* Description of the interaction table
 #* @tag interaction
 #* @get /interactions/description
@@ -75,18 +79,23 @@ function(req, res) {
   })
 }
 
+## Compounds ----
+# *******************************************************************
 
 #* Interaction endpoint for compound name input
-#* @param cmps:[string] Comma-separated unique compound names as string
+#* @param compounds:[string] Comma-separated unique compound names as string
 #* @tag interaction
 #* @get /interactions/compounds
 function(req, res) {
   log_info <- req_info(req)
-  cmps <- req$args$cmps
+  cmps <- req$args$compounds
   future_promise({
     with_logger(LOGGER, log_info, api_compound_interactions_get(cmps, res))
   })
 }
+
+## PZN ----
+# *******************************************************************
 
 #* Interaction endpoint for PZN number input
 #* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
@@ -114,42 +123,33 @@ function(req, res) {
 
 
 
-##################### TO DO ####################################################
+
 # TODO ENDPOINTS ----
 # *******************************************************************
 
-#* ATC endpoint for PZN number input
-#* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
-#* @tag pzn
-#* @tag TODO
-#* @get /pzn/atc
-function(pzns, res) {
-  future_promise({
-    api_pzn_atc_get(pzns, res)
-  })
-}
-
-
-
-
-
-# Endpoints ATC ----
-# *******************************************************************
-#* Naming endpoint for ATC input
-#* @param atcs:[string] Comma-separated unique ATCs as strings
-#* @tag TODO
-#* @get /atc/names
-function(atcs, res) {
-  api_atc_names_get(atcs, res)
-}
-
-
-
-
-#* Interaction endpoint for ATC input
-#* @param atcs:[string] Comma-separated unique ATCs as strings
-#* @tag TODO
-#* @get /atc/interactions
-function(atcs, res) {
-  api_atc_interactions_get(atcs, res)
-}
+# ATC endpoint for PZN number input
+# @param pzns:[string] Comma-separated unique PZN-Numbers as strings
+# @tag pzn
+# @tag TODO
+# @get /pzn/atc
+# function(pzns, res) {
+#   future_promise({
+#     api_pzn_atc_get(pzns, res)
+#   })
+# }
+#
+# # Naming endpoint for ATC input
+# # @param atcs:[string] Comma-separated unique ATCs as strings
+# # @tag TODO
+# # @get /atc/names
+# function(atcs, res) {
+#   api_atc_names_get(atcs, res)
+# }
+#
+# # Interaction endpoint for ATC input
+# # @param atcs:[string] Comma-separated unique ATCs as strings
+# # @tag TODO
+# # @get /atc/interactions
+# function(atcs, res) {
+#   api_atc_interactions_get(atcs, res)
+# }

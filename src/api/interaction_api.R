@@ -97,6 +97,8 @@ api_interaction_description <- function(res) {
   ret
 }
 
+### Compounds ----
+# *******************************************************************
 api_compound_interactions_get <- function(compounds, res) {
   compounds <- .validate_compounds_get(compounds, res)
 
@@ -113,4 +115,149 @@ api_compound_interactions_get <- function(compounds, res) {
   ret <- tag_result(ret)
   ret$compounds <- compounds
   return(ret)
+}
+
+api_compound_interactions_post <- function(body_data, res) {
+  schema <- '{
+    "type": "array",
+    "minItems": 1,
+    "maxItems": (max_ids),
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "compounds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": (max_cmpts),
+          "uniqueItems": true,
+        }
+      },
+      "required": ["id", "cmpts"]
+    }
+  }'
+
+  parse_res <- read_json_body(body_data, schema, res,
+    max_cmpts = SETTINGS$limits$max_compounds,
+    max_ids = SETTINGS$limits$max_ids
+  )
+  if (!is.null(parse_res$error)) {
+    return(parse_res$error)
+  }
+
+  con <- connectServer()
+  on.exit(disconnect(con))
+
+  ret <- tryCatch(map(list_data, \(x) {
+    cmpts <- unlist(x$compounds)
+    cmpts_ok <- map_lgl(cmpts, \(x) nchar(trimws(x) > 0))
+    if (any(!cmpts_ok)) {
+      error_json <- toJSON(list(id = x$id, invalid_compounds = cmpts[which(!cmpts_ok)]))
+      stop(error_json)
+    }
+
+    res <- compound_interactions(cmpts, con)
+    res$id <- unbox(x$id)
+    res$compounds <- cmpts
+    res
+  }), error = function(e) {
+    error_list <- fromJSON(e$parent$message)
+    error <- api_error(res, 400, "Some provided compounds are not valid.", list(
+      id = unbox(error_list$id),
+      invalid_compounds = error_list$invalid_pzns
+    ))
+    return(error)
+  })
+
+  result <- list(results = ret)
+  result <- tag_result(result)
+  result
+}
+
+
+### PZN ----
+# *******************************************************************
+api_pzn_interactions_get <- function(pzns, res) {
+  pzns <- .validate_pzn_get(pzns, res)
+  if (is.null(pzns$result)) {
+    return(pzns$error)
+  }
+
+  pzns <- pzns$result
+  ret <- pzn_interactions(pzns)
+  if (is.null(ret)) {
+    return(api_error(res, 500))
+  }
+
+  ret <- tag_result(ret)
+  ret$pzns <- pzns
+  return(ret)
+}
+
+
+api_pzn_interactions_post <- function(req, res) {
+  schema <- '{
+    "type": "array",
+    "minItems": 1,
+    "maxItems": (max_ids),
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "pzns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": (max_pzns),
+          "uniqueItems": true,
+        }
+      },
+      "required": ["id", "pzns"]
+    }
+  }'
+
+  parse_res <- read_json_body(body_data, schema,
+    max_pzns = SETTINGS$limits$max_pzns,
+    max_ids = SETTINGS$limits$max_ids
+  )
+  if (!is.null(parse_res$error)) {
+    return(parse_res$error)
+  }
+
+  con <- connectServer()
+  on.exit(disconnect(con))
+
+  ret <- tryCatch(map(list_data, \(x) {
+    pzns <- unlist(x$pzns)
+    pzns_ok <- map_lgl(pzns, validate_pzn)
+    if (any(!pzns_ok)) {
+      error_json <- toJSON(list(id = x$id, invalid_pzns = pzns[which(!pzns_ok)]))
+      stop(error_json)
+    }
+
+    res <- pzn_interactions(pzns, con)
+    res$id <- unbox(x$id)
+    res$pzns <- pzns
+    res
+  }), error = function(e) {
+    error_list <- fromJSON(e$parent$message)
+    error <- api_error(res, 400, "Some provided PZNs are not valid.", list(
+      id = unbox(error_list$id),
+      invalid_pzns = error_list$invalid_pzns
+    ))
+    return(error)
+  })
+
+  result <- list(results = ret)
+  result <- tag_result(result)
+  result
 }
