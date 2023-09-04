@@ -94,6 +94,18 @@ function(req, res) {
   })
 }
 
+#* Interaction endpoint for  compound name from JSON
+#* @param .body The raw body content from the request
+#* @tag interaction
+#* @post /interactions/compounds
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+    with_logger(LOGGER, log_info, api_compound_interactions_post(body, res))
+  })
+}
+
 ## PZN ----
 # *******************************************************************
 
