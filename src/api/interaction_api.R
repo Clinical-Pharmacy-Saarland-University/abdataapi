@@ -13,7 +13,7 @@ safe_fromJson <- safely(fromJSON)
 # API functions ----
 # *******************************************************************
 
-api_interaction_description <- function(res) {
+api_interaction_description <- function() {
   plausability <- data.frame(ABDATA_code = c(10, 20, 30, NA))
   plausability <- plausability |> mutate(
     api_text =
@@ -99,25 +99,21 @@ api_interaction_description <- function(res) {
 
 ### Compounds ----
 # *******************************************************************
-api_compound_interactions_get <- function(compounds, res) {
-  compounds <- .validate_compounds_get(compounds, res)
+api_compound_interactions_get <- function(compounds) {
+  compounds <- .validate_compounds_get(compounds)
 
-  if (is.null(compounds$result)) {
-    return(compounds$error)
-  }
-
-  compounds <- compounds$result
   # check interactions
   ret <- compound_interactions(compounds)
   if (is.null(ret)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error("Database connection error.")
   }
+
   ret <- tag_result(ret, list(ids = 1, items = length(compounds)))
   ret$compounds <- compounds
   return(ret)
 }
 
-api_compound_interactions_post <- function(body_data, res) {
+api_compound_interactions_post <- function(body_data) {
   schema <- '{
     "type": "array",
     "minItems": 1,
@@ -138,49 +134,39 @@ api_compound_interactions_post <- function(body_data, res) {
           "uniqueItems": true,
         }
       },
-      "required": ["id", "cmpts"]
+      "required": ["id", "compounds"]
     }
   }'
 
-  parse_res <- read_json_body(body_data, schema, res,
+  parse_res <- read_json_body(body_data, schema,
     max_cmpts = SETTINGS$limits$max_compounds,
     max_ids = SETTINGS$limits$max_ids
   )
-  if (!is.null(parse_res$error)) {
-    return(parse_res$error)
-  }
 
-  list_data <- parse_res$result
   con <- connectServer()
   on.exit(disconnect(con))
-
   sum_c <- 0
-  ret <- tryCatch(map(list_data, \(x) {
+  ret <- lapply(parse_res, \(x) {
     cmpts <- unlist(x$compounds)
-
     sum_c <<- sum_c + length(cmpts)
-    cmpts_ok <- map_lgl(cmpts, \(x) nchar(trimws(x) > 0))
+    cmpts_ok <- map_lgl(cmpts, \(x) nchar(trimws(x)) > 0)
     if (any(!cmpts_ok)) {
-      error_json <- toJSON(list(id = x$id, invalid_compounds = cmpts[which(!cmpts_ok)]))
-      stop(error_json)
+      stop_for_bad_request("Some Compounds are invalid.", invalid_compounds = cmpts[which(!cmpts_ok)])
     }
 
     res <- compound_interactions(cmpts, con)
+    if (is.null(res)) {
+      stop_for_internal_server_error("Database connection error.")
+    }
+
     res$id <- unbox(x$id)
     res$compounds <- cmpts
     res
-  }), error = function(e) {
-    error_list <- fromJSON(e$parent$message)
-    error <- api_error(res, 400, "Some provided compounds are not valid.", list(
-      id = unbox(error_list$id),
-      invalid_compounds = error_list$invalid_pzns
-    ))
-    return(error)
   })
 
   result <- list(results = ret)
   result <- tag_result(result, list(
-    ids = legnth(list_data),
+    ids = length(parse_res),
     items = length(sum_c)
   ))
   result
@@ -189,16 +175,12 @@ api_compound_interactions_post <- function(body_data, res) {
 
 ### PZN ----
 # *******************************************************************
-api_pzn_interactions_get <- function(pzns, res) {
-  pzns <- .validate_pzn_get(pzns, res)
-  if (is.null(pzns$result)) {
-    return(pzns$error)
-  }
+api_pzn_interactions_get <- function(pzns) {
+  pzns <- .validate_pzn_get(pzns)
 
-  pzns <- pzns$result
   ret <- pzn_interactions(pzns)
   if (is.null(ret)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error("Database connection error.")
   }
 
   ret <- tag_result(ret, list(ids = 1, items = length(pzns)))
@@ -207,7 +189,7 @@ api_pzn_interactions_get <- function(pzns, res) {
 }
 
 
-api_pzn_interactions_post <- function(req, res) {
+api_pzn_interactions_post <- function(body_data) {
   schema <- '{
     "type": "array",
     "minItems": 1,
@@ -236,40 +218,32 @@ api_pzn_interactions_post <- function(req, res) {
     max_pzns = SETTINGS$limits$max_pzns,
     max_ids = SETTINGS$limits$max_ids
   )
-  if (!is.null(parse_res$error)) {
-    return(parse_res$error)
-  }
 
-  list_data <- parse_res$result
   con <- connectServer()
   on.exit(disconnect(con))
-
   sum_p <- 0
-  ret <- tryCatch(map(list_data, \(x) {
+  ret <- lapply(parse_res, \(x) {
     pzns <- unlist(x$pzns)
     pzns_ok <- map_lgl(pzns, validate_pzn)
+
     if (any(!pzns_ok)) {
-      error_json <- toJSON(list(id = x$id, invalid_pzns = pzns[which(!pzns_ok)]))
-      stop(error_json)
+      stop_for_bad_request("Some PZNs are invalid.", invalid_pzns = pzns[which(!pzns_ok)])
     }
 
     sum_p <<- sum_p + length(pzns)
     res <- pzn_interactions(pzns, con)
+    if (is.null(res)) {
+      stop_for_internal_server_error("Database connection error.")
+    }
+
     res$id <- unbox(x$id)
     res$pzns <- pzns
     res
-  }), error = function(e) {
-    error_list <- fromJSON(e$parent$message)
-    error <- api_error(res, 400, "Some provided PZNs are not valid.", list(
-      id = unbox(error_list$id),
-      invalid_pzns = error_list$invalid_pzns
-    ))
-    return(error)
   })
 
   result <- list(results = ret)
   result <- tag_result(result, list(
-    ids = legnth(list_data),
+    ids = length(parse_res),
     items = length(sum_p)
   ))
   result

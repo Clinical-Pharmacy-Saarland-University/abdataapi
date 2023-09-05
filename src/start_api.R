@@ -23,6 +23,7 @@ ensureLib("future")
 ensureLib("bcrypt")
 ensureLib("jose")
 ensureLib("mongolite")
+ensureLib("httpproblems")
 
 source("settings.R")
 source("helper/pool.R")
@@ -39,6 +40,8 @@ source("api/pzn_api.R")
 source("api/atc_api.R")
 source("api/misc_api.R")
 source("api/interaction_api.R")
+source("setup/swagger.R")
+source("setup/handlers.R")
 
 options(future.globals.onReference = "error")
 options(future.rng.onMisuse = "ignore")
@@ -53,64 +56,24 @@ if (SETTINGS$sql$use_pool) {
   SETTINGS$sql$pool <- createPool(SETTINGS$sql, SETTINGS$server$multisession)
 }
 
-# Authentication ----
-# *******************************************************************
-api_spec <- function(x, paths = NULL) {
-  # set authentication method for swagger UI/openapi
-  x[["components"]] <- list(
-    securitySchemes = list(
-      ApiKeyAuth = list(
-        type = "apiKey",
-        `in` = "header",
-        name = "TOKEN",
-        description = "Authentication token provided to users that successfully logged in"
-      )
-    )
-  )
-  # add authentication requirement for all endpoints
-  if (is.null(paths)) paths <- names(x$paths)
-  for (path in paths) {
-    nn <- names(x$paths[[path]])
-    for (p in intersect(nn, c("get", "head", "post", "put", "delete"))) {
-      x$paths[[path]][[p]] <- c(
-        x$paths[[path]][[p]],
-        list(security = list(list(ApiKeyAuth = vector())))
-      )
-    }
-  }
-
-  # title et al
-  x$info <- list(
-    title = SWAGGER_SETTINGS$title,
-    summary = SWAGGER_SETTINGS$summary,
-    description = SWAGGER_SETTINGS$description,
-    version = SETTINGS$version,
-    contact = SWAGGER_SETTINGS$contact
-  )
-
-  return(x)
-}
-
 # Plumb ----
 # *******************************************************************
-router <- pr()
-router <- router |>
-  pr_set_api_spec(api_spec) |>
-  pr_mount("/api", Plumber$new("api/endpoints.R"))
+endpoints <- Plumber$new("api/endpoints.R") |>
+  pr_set_error(api_error_handler)
 
-router |>
+router <- pr() |>
+  pr_set_api_spec(api_spec) |>
+  pr_mount("/api", endpoints) |>
   pr_hook("exit", function() {
     closePool(SETTINGS$sql$pool)
-  }) |>
-  pr_run(
-    host = SETTINGS$server$host,
-    port = SETTINGS$server$port,
-    debug = SETTINGS$debug_mode,
-    docs = SWAGGER_SETTINGS$docs,
-    quiet = !SETTINGS$debug_mode
-  )
+  })
 
-
-
-
-
+# Run ----
+# *******************************************************************
+pr_run(router,
+  host = SETTINGS$server$host,
+  port = SETTINGS$server$port,
+  debug = SETTINGS$debug_mode,
+  docs = SWAGGER_SETTINGS$docs,
+  quiet = !SETTINGS$debug_mode
+)

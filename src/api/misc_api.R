@@ -5,16 +5,17 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-api_formulation_list_get <- function(res) {
+api_formulation_list_get <- function() {
   ret <- sql_formulations()
   if (is.null(ret)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error("Database connection error.")
   }
+
   ret <- tag_result(ret)
   return(ret)
 }
 
-api_limits_get <- function(res) {
+api_limits_get <- function() {
   ret <- list(limits = list(
     max_pzns = SETTINGS$limits$max_pzns,
     max_atc = SETTINGS$limits$max_atcs,

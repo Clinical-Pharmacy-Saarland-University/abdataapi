@@ -3,17 +3,15 @@ jwt_encode_hmac_safely <- safely(jwt_encode_hmac)
 checkpw_safely <- safely(checkpw)
 
 # log a user in
-user_login <- function(username, password, res, token_salt, time) {
+user_login <- function(username, password, token_salt, time) {
   if (is.null(username) || is.null(password) ||
     !is.character(username) || !is.character(password)) {
-
-    error <- api_error(res, status = 400, msg = "Invalid JSON login format.")
-    return(error)
+    stop_for_bad_request("Invalid JSON login format.")
   }
 
   con <- mongo_userdb()
   if (is.null(con)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error("Database connection error.")
   }
   on.exit(disconnect_mongo(con))
 
@@ -23,28 +21,25 @@ user_login <- function(username, password, res, token_salt, time) {
   ret <- catch_error(con$find(qry))
   ret <- ret$result
   if (is.null(ret)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error("Database connection error.")
   }
 
   if (nrow(ret) != 1) {
-    error <- api_error(res, status = 401, msg = "Username and/or password are invalid.")
-    return(error)
+    stop_for_unauthorized("Username and/or password are invalid.")
   }
 
-  password_db <- ret |>
-    pull(password)
-
   # check password
+  password_db <- ret |> pull(password)
   pw_ret <- checkpw_safely(password, password_db)
   if (!pw_ret$result) {
-    error <- api_error(res, status = 401, msg = "Username and/or password are invalid.")
-    return(error)
+    stop_for_unauthorized("Username and/or password are invalid.")
   }
 
   ret <- generate_jwt(token_salt, time, username)
   if (is.null(ret$result)) {
-    return(api_error(res, 500))
+    stop_for_internal_server_error()
   }
+
   return(ret$result)
 }
 

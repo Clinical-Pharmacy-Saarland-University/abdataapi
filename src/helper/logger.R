@@ -94,16 +94,8 @@ with_logger <- function(logger, log_info, f) {
   toc <- proc.time()["elapsed"]
   log_info$execution_time_ms <- (toc - tic) * 1000
 
-  if ("error" %in% class(res)) {
-    log_info$status <- "error"
-    log_info$details <- list(
-      error_code = res$status,
-      error_msg = res$message
-    )
-  } else {
-    log_info$status <- "success"
-    log_info$details <- attr(res, "details")
-  }
+  log_info$status <- "success"
+  log_info$details <- attr(res, "details")
 
   logger(log_info)
   res

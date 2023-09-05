@@ -19,31 +19,20 @@ safe_json_validate <- safely(json_validate)
 
 
 # list(result, error)
-read_json_body <- function(json_str, schema, res, ...) {
-  result <- list(
-    result = NULL,
-    error = NULL
-  )
-
+read_json_body <- function(json_str, schema, ...) {
   # test for empty
   if (is.null(json_str) || json_str == "") {
-    result$error <- api_error(res, 400, "JSON request is empty.")
-    return(result)
+    stop_for_bad_request("JSON request is empty.")
   }
 
   # test for schema
   schema <- glue(schema, ..., .open = "(", .close = ")")
-  validation_error <- validate_json_schema(json_str, schema)
+  validation_error <- .validate_json_schema(json_str, schema)
   if (!is.null(validation_error)) {
-    result$error <- api_error(
-      res, 400,
-      "Posted JSON has invalid schema.", list(errors = validation_error)
-    )
-    return(result)
+    stop_for_bad_request("JSON request has invalid schema.")
   }
 
-  result$result <- fromJSON(json_str, simplifyVector = FALSE)
-  return(result)
+  fromJSON(json_str, simplifyVector = FALSE)
 }
 
 # T/F
@@ -93,17 +82,11 @@ validate_atc <- function(atc) {
 # Endpoint validator ----
 # *******************************************************************
 
-# returns list(result, error)
-.validate_compounds_get <- function(cmps, res) {
-  result <- list(result = NULL, error = NULL)
+# returns result
+.validate_compounds_get <- function(cmps) {
 
   if (missing(cmps) || is.null(cmps) || cmps == "") {
-    error <- api_error(
-      res, 400, "Compounds parameter is required.",
-      list(list(field = "compounds", issue = "This field is required and cannot be empty."))
-    )
-    result$error <- error
-    return(result)
+    stop_for_bad_request("Compounds parameter is required.")
   }
 
   cmps <- unlist(strsplit(cmps, split = ","))
@@ -111,36 +94,23 @@ validate_atc <- function(atc) {
 
   # limits test
   if (length(cmps) > SETTINGS$limits$max_compounds) {
-    error <- api_error(
-      res, 400,
+    stop_for_bad_request(
       glue("Maximum number ({SETTINGS$limits$max_compounds}) of allowed compounds exceeded ({length(cmps)}).")
     )
-    result$error <- error
-    return(result)
   }
 
   # unique pzns test
   if (!is_unique(cmps)) {
-    error <- api_error(res, 400, "Compounds must be unique.")
-    result$error <- error
-    return(result)
+    stop_for_bad_request("Compounds must be unique.")
   }
 
-  result$result <- cmps
-  return(result)
+  return(cmps)
 }
 
 
-.validate_pzn_get <- function(pzns, res) {
-  result <- list(result = NULL, error = NULL)
-
+.validate_pzn_get <- function(pzns) {
   if (missing(pzns) || is.null(pzns) || pzns == "") {
-    error <- api_error(
-      res, 400, "PZNs parameter is required.",
-      list(list(field = "pzns", issue = "This field is required and cannot be empty."))
-    )
-    result$error <- error
-    return(result)
+    stop_for_bad_request("PZNs parameter is required.")
   }
 
   pzns <- unlist(strsplit(pzns, split = ","))
@@ -148,31 +118,21 @@ validate_atc <- function(atc) {
 
   # limits test
   if (length(pzns) > SETTINGS$limits$max_pzns) {
-    error <- api_error(
-      res, 400,
+    stop_for_bad_request(
       glue("Maximum number ({SETTINGS$limits$max_pzns}) of allowed PZNs exceeded ({length(pzns)}).")
     )
-    result$error <- error
-    return(result)
   }
 
   # unique pzns test
   if (!is_unique(pzns)) {
-    error <- api_error(res, 400, "PZNs must be unique.")
-    result$error <- error
-    return(result)
+    stop_for_bad_request("PZNs must be unique.")
   }
 
   # check if pzns are valid
   pzns_ok <- map_lgl(pzns, validate_pzn)
   if (any(!pzns_ok)) {
-    error <- api_error(
-      res, 400, "Some provided PZNs are not valid.", list(invalid_pzns = pzns[which(!pzns_ok)])
-    )
-    result$error <- error
-    return(result)
+    stop_for_bad_request("Some PZNs are invalid.", invalid_pzns = pzns[which(!pzns_ok)])
   }
 
-  result$result <- pzns
-  return(result)
+  return(pzns)
 }

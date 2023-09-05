@@ -27,7 +27,7 @@ SWAGGER_SETTINGS <- list(
 )
 
 SETTINGS <- list(
-  debug_mode = FALSE,
+  debug_mode = TRUE,
   version = "0.1.0",
   secrets_file = "./secrets.json",
   validation = list(
@@ -45,7 +45,7 @@ SETTINGS <- list(
     max_pzns = 50,
     max_atcs = 50,
     max_compounds = 50,
-    max_ids = 200
+    max_ids = 100
   ),
   server = list(
     multisession = TRUE,

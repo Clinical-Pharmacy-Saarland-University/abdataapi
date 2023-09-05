@@ -65,23 +65,9 @@ catch_error <- function(code, otherwise = NULL, quiet = TRUE) {
   return(paste("Unknown status:", status))
 }
 
-# create an api error message
-api_error <- function(res, status, msg = NULL, details = NULL) {
-  res$status <- status
-  error <- list(
-    status = unbox(status),
-    error = unbox(.status_translate(status)),
-    message = unbox(msg),
-    details = details
-  )
-  class(error) <- c(class(error), "error")
-
-  return(error)
-}
-
 tag_result <- function(res, details = NULL) {
   res$timestamp <- unbox(Sys.time())
-  res$version <- unbox(SETTINGS$version)
+  res$api_version <- unbox(SETTINGS$version)
   attr(res, "details") <- details
   res
 }

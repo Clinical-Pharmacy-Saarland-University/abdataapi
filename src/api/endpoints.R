@@ -6,10 +6,7 @@ LOGGER <- create_logger(SETTINGS$logging$log_device)
 # *******************************************************************
 #* @filter authenticated
 function(req, res) {
-  filter_valid_token(req, res,
-    token_salt = SETTINGS$token$token_salt,
-    debugging = SETTINGS$debug_mode
-  )
+  filter_valid_token(req, token_salt = SETTINGS$token$token_salt, debugging = SETTINGS$debug_mode)
 }
 
 # Endpoints User Handling ----
@@ -25,7 +22,7 @@ function(req, res, credentials = list(username = "username", password = "passwor
   username <- catch_error(req$body$credentials$username)$result
   password <- catch_error(req$body$credentials$password)$result
 
-  user_login(username, password, res,
+  user_login(username, password,
     token_salt = SETTINGS$token$token_salt,
     time = SETTINGS$token$token_exp
   )
@@ -47,48 +44,38 @@ function(req, res) {
 # *******************************************************************
 
 #* Formulation list with descriptions
-#* @tag formulation
+#* @tag information
 #* @get /formulations
 function(req, res) {
   log_info <- req_info(req)
   future_promise({
-    with_logger(LOGGER, log_info, api_formulation_list_get(res))
+    with_logger(LOGGER, log_info, api_formulation_list_get())
   })
 }
 
 #* Request limits of the server
-#* @tag limits
+#* @tag information
 #* @get /limits
 function(req, res) {
   log_info <- req_info(req)
   future_promise({
-    with_logger(LOGGER, log_info, api_limits_get(res))
+    with_logger(LOGGER, log_info, api_limits_get())
   })
 }
 
-
-
-# Endpoints Interactions ----
-# *******************************************************************
-
-
-## General ----
-# *******************************************************************
-
 #* Description of the interaction table
-#* @tag interaction
+#* @tag information
 #* @get /interactions/description
 function(req, res) {
   log_info <- req_info(req)
   future_promise({
-    with_logger(LOGGER, log_info, api_interaction_description(res))
+    with_logger(LOGGER, log_info, api_interaction_description())
   })
 }
 
-## Compounds ----
+# Endpoints Interactions ----
 # *******************************************************************
-
-#* Interaction endpoint for compound name input
+#* Interaction endpoint for compound names input
 #* @param compounds:[string] Comma-separated unique compound names as string
 #* @tag interaction
 #* @get /interactions/compounds
@@ -96,11 +83,11 @@ function(req, res) {
   log_info <- req_info(req)
   cmps <- req$args$compounds
   future_promise({
-    with_logger(LOGGER, log_info, api_compound_interactions_get(cmps, res))
+    with_logger(LOGGER, log_info, api_compound_interactions_get(cmps))
   })
 }
 
-#* Interaction endpoint for  compound name from JSON
+#* Interaction endpoint for  compound names from JSON
 #* @param .body The raw body content from the request
 #* @tag interaction
 #* @post /interactions/compounds
@@ -108,26 +95,23 @@ function(req, res) {
   log_info <- req_info(req)
   body <- req$postBody
   future_promise({
-    with_logger(LOGGER, log_info, api_compound_interactions_post(body, res))
+    with_logger(LOGGER, log_info, api_compound_interactions_post(body))
   })
 }
 
-## PZN ----
-# *******************************************************************
-
-#* Interaction endpoint for PZN number input
-#* @param pzns:[string] Comma-separated unique PZN-Numbers as strings
+#* Interaction endpoint for PZN input
+#* @param pzns:[string] Comma-separated unique PZNs as strings
 #* @tag interaction
 #* @get /interactions/pzns
 function(req, res) {
   log_info <- req_info(req)
   pzns <- req$args$pzns
   future_promise({
-    with_logger(LOGGER, log_info, api_pzn_interactions_get(pzns, res))
+    with_logger(LOGGER, log_info, api_pzn_interactions_get(pzns))
   })
 }
 
-#* Interaction endpoint for PZN number input from JSON
+#* Interaction endpoint for PZN input from JSON
 #* @param .body The raw body content from the request
 #* @tag interaction
 #* @post /interactions/pzns
@@ -135,11 +119,9 @@ function(req, res) {
   log_info <- req_info(req)
   body <- req$postBody
   future_promise({
-    with_logger(LOGGER, log_info, api_pzn_interactions_post(body, res))
+    with_logger(LOGGER, log_info, api_pzn_interactions_post(body))
   })
 }
-
-
 
 
 # TODO ENDPOINTS ----
