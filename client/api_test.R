@@ -75,9 +75,3 @@ tests <- function(time = TRUE) {
 
 tests()
 
-
-compound_list <- purrr::map(seq(100), \(i)  {
-  list(id = unbox(as.character(i)), compounds = c("verapamil","simvastatin","diltiazem","amiodarone","amlodipine","lovastatin"))
-})
-a <- api_post(HOST, "api/interactions/compounds", compound_list, token)
-
