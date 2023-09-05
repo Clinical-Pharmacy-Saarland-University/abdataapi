@@ -112,7 +112,7 @@ api_compound_interactions_get <- function(compounds, res) {
   if (is.null(ret)) {
     return(api_error(res, 500))
   }
-  ret <- tag_result(ret)
+  ret <- tag_result(ret, list(ids = 1, items = length(compounds)))
   ret$compounds <- compounds
   return(ret)
 }
@@ -150,11 +150,15 @@ api_compound_interactions_post <- function(body_data, res) {
     return(parse_res$error)
   }
 
+  list_data <- parse_res$result
   con <- connectServer()
   on.exit(disconnect(con))
 
+  sum_c <- 0
   ret <- tryCatch(map(list_data, \(x) {
     cmpts <- unlist(x$compounds)
+
+    sum_c <<- sum_c + length(cmpts)
     cmpts_ok <- map_lgl(cmpts, \(x) nchar(trimws(x) > 0))
     if (any(!cmpts_ok)) {
       error_json <- toJSON(list(id = x$id, invalid_compounds = cmpts[which(!cmpts_ok)]))
@@ -175,7 +179,10 @@ api_compound_interactions_post <- function(body_data, res) {
   })
 
   result <- list(results = ret)
-  result <- tag_result(result)
+  result <- tag_result(result, list(
+    ids = legnth(list_data),
+    items = length(sum_c)
+  ))
   result
 }
 
@@ -194,7 +201,7 @@ api_pzn_interactions_get <- function(pzns, res) {
     return(api_error(res, 500))
   }
 
-  ret <- tag_result(ret)
+  ret <- tag_result(ret, list(ids = 1, items = length(pzns)))
   ret$pzns <- pzns
   return(ret)
 }
@@ -233,9 +240,11 @@ api_pzn_interactions_post <- function(req, res) {
     return(parse_res$error)
   }
 
+  list_data <- parse_res$result
   con <- connectServer()
   on.exit(disconnect(con))
 
+  sum_p <- 0
   ret <- tryCatch(map(list_data, \(x) {
     pzns <- unlist(x$pzns)
     pzns_ok <- map_lgl(pzns, validate_pzn)
@@ -244,6 +253,7 @@ api_pzn_interactions_post <- function(req, res) {
       stop(error_json)
     }
 
+    sum_p <<- sum_p + length(pzns)
     res <- pzn_interactions(pzns, con)
     res$id <- unbox(x$id)
     res$pzns <- pzns
@@ -258,6 +268,9 @@ api_pzn_interactions_post <- function(req, res) {
   })
 
   result <- list(results = ret)
-  result <- tag_result(result)
+  result <- tag_result(result, list(
+    ids = legnth(list_data),
+    items = length(sum_p)
+  ))
   result
 }

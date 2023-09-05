@@ -5,13 +5,6 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-tag_result <- function(ret) {
-
-  ret$timestamp <- unbox(Sys.time())
-  ret$version <- unbox(SETTINGS$version)
-  ret
-}
-
 is_unique <- function(v) {
   length(v) == length(unique(v))
 }
@@ -75,4 +68,12 @@ api_error <- function(res, status, msg = NULL, details = NULL) {
   class(error) <- c(class(error), "error")
 
   return(error)
+}
+
+tag_result <- function(res, details = NULL) {
+
+  res$timestamp <- unbox(Sys.time())
+  res$version <- unbox(SETTINGS$version)
+  attr(res, "details") <- details
+  res
 }
