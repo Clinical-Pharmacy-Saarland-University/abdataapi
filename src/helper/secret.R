@@ -16,9 +16,14 @@ create_secret_file <- function(path) {
       database = "db"
     ),
     userdb = list(
-      collection = "collection",
       db = "db",
+      collection = "collection",
       url = "mongodb://localhost:port"
+    ),
+    log_db = list(
+      db = "db",
+      collection = "collection",
+      url = ""
     ),
     token = list(
       token_salt = "salt"
@@ -43,10 +48,15 @@ patch_settings <- function(settings) {
   settings$sql$port <- json$sql$port
   settings$sql$database <- json$sql$database
 
-  # mongo
+  # user
   settings$userdb$collection <- json$userdb$collection
   settings$userdb$db <- json$userdb$db
   settings$userdb$url <- json$userdb$url
+
+  # logging
+  settings$logging$log_db$collection <- json$log_db$collection
+  settings$logging$log_db$db <- json$log_db$db
+  settings$logging$log_db$url <- json$log_db$url
 
   # token
   settings$token$token_salt <- json$token$token_salt

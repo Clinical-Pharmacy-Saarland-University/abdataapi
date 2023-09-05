@@ -15,6 +15,7 @@ user_login <- function(username, password, res, token_salt, time) {
   if (is.null(con)) {
     return(api_error(res, 500))
   }
+  on.exit(disconnect_mongo(con))
 
   # check user exists and fetch password
   qry <- glue('{"username": "(username)"}', .open = "(", .close = ")", username = username)

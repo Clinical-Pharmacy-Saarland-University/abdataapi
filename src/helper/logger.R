@@ -13,7 +13,12 @@
 }
 
 .db_logger <- function(x) {
-  stop("LOGGER NOT IMPLEMENTED")
+
+  con <- mongo_logdb()
+  if (!is.null(con)) {
+    try(con$insert(x), silent = TRUE)
+    disconnect_mongo(con)
+  }
 }
 
 .combined_logger <- function(x) {

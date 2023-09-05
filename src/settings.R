@@ -34,7 +34,7 @@ SETTINGS <- list(
     validate_pzn_checksums = TRUE
   ),
   logging = list(
-    log_device = "cmdline", # cmdline, db, cmdline-db, disabled
+    log_device = "cmdline-db", # cmdline, db, cmdline-db, disabled
     log_db = list(
       db = "",
       collection = "",
