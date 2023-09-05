@@ -152,5 +152,3 @@ sql_compound_desc_from_int <- function(key_ints, key_sto, con = NULL) {
   res
 }
 
-sql_query("SELECT * FROM FZI_C WHERE Key_STO = 1222100")
-

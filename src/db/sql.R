@@ -284,25 +284,3 @@ compound_interactions <- function(compounds, con = NULL) {
   res
 }
 
-
-
-
-str <- "{das, {dasds, blabla}}}"
-parse_string <- function(s) {
-  # Step 1: Split the input string by '},' to separate out the lists
-  list_strs <- unlist(strsplit(s, "\\},"))
-
-  # Step 2 and 3: Split each list by ',' and clean each string
-  parsed_lists <- lapply(list_strs, function(list_str) {
-    # Remove starting and ending braces and split by comma
-    items <- unlist(strsplit(gsub("^\\{|\\}$", "", list_str), ","))
-
-    # Trim whitespace from each item
-    items <- sapply(items, function(item) gsub("^\\s+|\\s+$", "", item))
-
-    return(items)
-  })
-
-  return(parsed_lists)
-}
-parse_string(str)

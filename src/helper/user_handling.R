@@ -3,31 +3,30 @@ jwt_encode_hmac_safely <- safely(jwt_encode_hmac)
 checkpw_safely <- safely(checkpw)
 
 # log a user in
-user_login <- function(req, res, token_salt, time) {
-  con <- mongoCon()
-  error <- NULL
+user_login <- function(username, password, res, token_salt, time) {
+  if (is.null(username) || is.null(password) ||
+    !is.character(username) || !is.character(password)) {
 
-  username <- req$body$credentials$username
-  password <- req$body$credentials$password
-
-  # check user exists and fetch password
-  qry <- glue('{"username": "(username)"}',
-    .open = "(",
-    .close = ")",
-    username = username
-  )
-
-  ret <- con$find(qry)
-  l <- ret |>
-    nrow()
-
-  if (l == 0) {
-    error <- api_error(res, status = 400, msg = paste0("Invalid username: ", username))
-  } else if (l > 1) {
-    error <- api_error(res, status = 400, msg = paste0("Ambiguous username: ", username))
+    error <- api_error(res, status = 400, msg = "Invalid JSON login format.")
+    return(error)
   }
 
-  if (length(error) > 0) {
+  con <- mongo_userdb()
+  if (is.null(con)) {
+    return(api_error(res, 500))
+  }
+
+  # check user exists and fetch password
+  qry <- glue('{"username": "(username)"}', .open = "(", .close = ")", username = username)
+
+  ret <- catch_error(con$find(qry))
+  ret <- ret$result
+  if (is.null(ret)) {
+    return(api_error(res, 500))
+  }
+
+  if (nrow(ret) != 1) {
+    error <- api_error(res, status = 401, msg = "Username and/or password are invalid.")
     return(error)
   }
 
@@ -37,18 +36,14 @@ user_login <- function(req, res, token_salt, time) {
   # check password
   pw_ret <- checkpw_safely(password, password_db)
   if (!pw_ret$result) {
-    error <- api_error(res, status = 400, msg = paste0(
-      "Invalid password provided for username: ",
-      username
-    ))
+    error <- api_error(res, status = 401, msg = "Username and/or password are invalid.")
     return(error)
   }
 
-  if (length(ret$error) <= 0) {
-    # generate token
-    ret <- generate_jwt(token_salt, time, username)
+  ret <- generate_jwt(token_salt, time, username)
+  if (is.null(ret$result)) {
+    return(api_error(res, 500))
   }
-
   return(ret$result)
 }
 

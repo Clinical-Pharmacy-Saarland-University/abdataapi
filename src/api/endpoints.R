@@ -22,7 +22,13 @@ function(req, res) {
 #* @param credentials:object
 #* @post /login
 function(req, res, credentials = list(username = "username", password = "password")) {
-  user_login(req, res, token_salt = SETTINGS$token$token_salt, time = SETTINGS$token$token_exp)
+  username <- catch_error(req$body$credentials$username)$result
+  password <- catch_error(req$body$credentials$password)$result
+
+  user_login(username, password, res,
+    token_salt = SETTINGS$token$token_salt,
+    time = SETTINGS$token$token_exp
+  )
 }
 
 #* Endpoint to log a user in

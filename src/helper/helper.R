@@ -9,6 +9,15 @@ is_unique <- function(v) {
   length(v) == length(unique(v))
 }
 
+catch_error <- function(code, otherwise = NULL, quiet = TRUE) {
+  tryCatch(list(result = code, error = NULL), error = function(e) {
+    if (!quiet) {
+      message("Error: ", conditionMessage(e))
+    }
+    list(result = otherwise, error = e)
+  })
+}
+
 
 .status_translate <- function(status) {
   if (status == 400) {
@@ -71,7 +80,6 @@ api_error <- function(res, status, msg = NULL, details = NULL) {
 }
 
 tag_result <- function(res, details = NULL) {
-
   res$timestamp <- unbox(Sys.time())
   res$version <- unbox(SETTINGS$version)
   attr(res, "details") <- details

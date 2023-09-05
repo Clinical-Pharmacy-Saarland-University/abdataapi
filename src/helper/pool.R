@@ -31,3 +31,4 @@ createPool <- function(settings = SETTINGS$sql, multisession) {
     con <- con$result
     return(con)
 }
+

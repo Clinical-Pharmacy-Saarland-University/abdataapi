@@ -7,15 +7,21 @@
 
 mongo_safely <- safely(mongo)
 
-mongoCon <- function(settings = SETTINGS$userdb) {
-  con <- mongo_safely(collection = SETTINGS$userdb$collection,
-                      db = SETTINGS$userdb$db,
-                      url = SETTINGS$userdb$url)
-
+.mongo_connect <- function(cfg) {
+  con <- mongo_safely(collection = cfg$collection,
+                      db = cfg$db,
+                      url = cfg$url)
   con <- con$result
   return(con)
 }
 
-if (exists("SETTINGS$sql$pool")) {
-  closePool(SETTINGS$sql$pool)
+mongo_userdb <- function(settings = SETTINGS$userdb) {
+  .mongo_connect(settings)
 }
+
+mongo_logdb <- function(settings = SETTINGS$logging$log_db) {
+  .mongo_connect(settings)
+}
+
+
+
