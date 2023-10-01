@@ -32,19 +32,6 @@
 
 # Log functions ----
 # *******************************************************************
-meta_logger <- function(n_ids = 0, n_items = 0) {
-  function(res) {
-    list(
-      req = list(
-        n_ids = n_ids,
-        n_items = n_items
-      ),
-      res = ifelse(is.null(res) || "error" %in% class(res), "error", "success"),
-      payload = res
-    )
-  }
-}
-
 create_logger <- function(type = c("cmdline", "db", "cmdline-db", "disabled")) {
   type <- match.arg(type)
   if (type == "cmdline") {
@@ -90,7 +77,7 @@ req_info <- function(req, token_salt = SETTINGS$token$token_salt) {
 
 with_logger <- function(logger, log_info, f) {
   tic <- proc.time()["elapsed"]
-  res <- f # lazy eval
+  res <- f
   toc <- proc.time()["elapsed"]
   log_info$execution_time_ms <- (toc - tic) * 1000
 

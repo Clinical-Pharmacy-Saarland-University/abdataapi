@@ -8,6 +8,8 @@
 
 # API functions ----
 # *******************************************************************
+
+# FIXME NOT USED
 api_pzn_atc_get <- function(pzns, res) {
   pzns <- .validate_pzn_get(pzns, res)
   ret <- sql_atc_pzns(pzns)

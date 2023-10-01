@@ -44,7 +44,7 @@ sql_atc_names <- function(atcs, con = NULL) {
 
   colnames(res) <- c("atc", "name_german", "name_english")
 
-  unknown_atcs <- atcs[!atcs %in% res$ATC]
+  unknown_atcs <- atcs[!tolower(atcs) %in% tolower(res$atc)]
   res <- list(
     names = res |> na.omit(),
     unknown_atcs = unknown_atcs
@@ -58,6 +58,7 @@ sql_atc_names <- function(atcs, con = NULL) {
 # *******************************************************************
 
 # list or NULL on error
+# FIXME NOT USED
 sql_atc_pzns <- function(pzns, con = NULL) {
   res <- sql_query(
     paste(

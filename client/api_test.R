@@ -43,8 +43,8 @@ tests <- function(time = TRUE) {
     list(id = unbox(as.character(i)), pzns = c("03041347", "17145955", "00592733", "13981502"))
   })
   log <- api_test(
-    log, "Post", "interactions/pzns", "5 ids",
-    api_post(HOST, "api/interactions/pzns", pzn_list, token)
+    log, "POST", "interactions/pzns", "5 ids",
+    api_post(HOST, "api/interactions/pzns", pzn_list, token, time = time)
   )
 
   ## Compound GET ----
@@ -64,14 +64,22 @@ tests <- function(time = TRUE) {
     list(id = unbox(as.character(i)), compounds = c("verapamil","simvastatin","diltiazem","amiodarone","amlodipine","lovastatin"))
   })
   log <- api_test(
-    log, "Post", "interactions/compounds", "5 ids",
-    api_post(HOST, "api/interactions/compounds", compound_list, token)
+    log, "POST", "interactions/compounds", "5 ids",
+    api_post(HOST, "api/interactions/compounds", compound_list, token, time = time)
   )
 
+  ## ATC GET ----
+  # *******************************************************************
+  log <- api_test(
+    log, "GET", "atcs/drugs", "4 ATCs",
+    api_get(HOST, "api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02", token, time = time)
+  )
 
   log <- log |> arrange(endpoint)
   return(log)
 }
 
 tests()
+
+
 

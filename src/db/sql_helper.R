@@ -90,13 +90,12 @@ sql_famkeys_pzn <- function(pzns, con = NULL) {
 }
 
 # df or NULL on error
-sql_famkeys_atc <- function(atcs, con = NULL) {
+TEST <- function(atcs, con = NULL) {
   res <- sql_query(
     paste(
-      "SELECT Key_ATC, FAM_DB.Key_FAM, Einheit, Zahl, Key_DAR, SNA_DB.Name, Produktname  ",
-      "FROM FAM_DB LEFT JOIN FAI_DB ON FAM_DB.Key_FAM = FAI_DB.Key_FAM ",
-      "LEFT JOIN SNA_DB ON FAI_DB.Key_STO = SNA_DB.Key_STO ",
-      "WHERE Veterinaerpraeparat = 0 AND Stofftyp = 1 AND Herkunft LIKE '%Ph.Eur.%' AND Key_ATC IN ({atcs*})"
+      "SELECT Key_INT, FAM_DB.Key_FAM, Key_ATC ",
+      "FROM FAM_DB LEFT JOIN FZI_C ON FZI_C.Key_FAM = FAM_DB.Key_FAM ",
+      "WHERE Key_ATC IN ({atcs*})"
     ),
     atcs = atcs, .con = con
   )

@@ -8,6 +8,7 @@
 library(jsonlite)
 library(httr)
 library(dplyr)
+library(tictoc)
 
 api_login <- function(host, user, pwd) {
   creds <- list(credentials = list(username = user, password = pwd))

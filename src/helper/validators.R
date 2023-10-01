@@ -136,3 +136,31 @@ validate_atc <- function(atc) {
 
   return(pzns)
 }
+
+
+.validate_atc_get <- function(atcs) {
+  if (missing(atcs) || atcs == "") {
+    stop_for_bad_request("ATCs parameter is required.")
+  }
+
+  atcs <- unlist(strsplit(atcs, split = ","))
+  atcs <- trimws(atcs) |> toupper()
+
+  # limits test
+  if (length(atcs) > SETTINGS$limits$max_atcs) {
+    stop_for_bad_request("Maximum number ({SETTINGS$limits$max_atcs}) of allowed ATCs exceeded ({length(atcs)}).")
+  }
+
+  # unique pzns test
+  if (!is_unique(atcs)) {
+    stop_for_bad_request("ATCs must be unique.")
+  }
+
+  # check if pzns are valid
+  atcs_ok <- map_lgl(atcs, validate_atc)
+  if (any(!atcs_ok)) {
+    stop_for_bad_request("Some ATCs are invalid.", invalid_atcs = atcs[which(!atcs_ok)])
+  }
+
+  return(atcs)
+}

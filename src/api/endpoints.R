@@ -124,19 +124,21 @@ function(req, res) {
 }
 
 
-# TODO ENDPOINTS ----
+# ATC ENDPOINTS ----
 # *******************************************************************
 
-# ATC endpoint for PZN number input
-# @param pzns:[string] Comma-separated unique PZN-Numbers as strings
-# @tag pzn
-# @tag TODO
-# @get /pzn/atc
-# function(pzns, res) {
-#   future_promise({
-#     api_pzn_atc_get(pzns, res)
-#   })
-# }
+#* Drug endpoint for ATC input
+#* @param atcs:[string] Comma-separated unique ATCs as strings
+#* @tag atc
+#* @get /atcs/drugs
+function(req, res) {
+  log_info <- req_info(req)
+  atcs <- req$args$atcs
+  future_promise({
+    with_logger(LOGGER, log_info, api_atc_names_get(atcs))
+  })
+}
+
 #
 # # Naming endpoint for ATC input
 # # @param atcs:[string] Comma-separated unique ATCs as strings
