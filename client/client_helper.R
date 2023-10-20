@@ -52,7 +52,12 @@ api_get <- function(host, endpoint, token, time = TRUE) {
     tic()
     on.exit(toc())
   }
-  response <- GET(addr, add_headers(TOKEN = token))
+
+  if (is.null(token)) {
+    response <- GET(addr)
+  } else {
+    response <- GET(addr, add_headers(TOKEN = token))
+  }
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
 

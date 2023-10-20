@@ -49,3 +49,4 @@ po/*~
 rsconnect/
 src/secrets.json
 client/test_credentials.R
+management/users.json
