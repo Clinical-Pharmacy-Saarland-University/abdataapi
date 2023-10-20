@@ -27,7 +27,7 @@ SWAGGER_SETTINGS <- list(
 )
 
 SETTINGS <- list(
-  debug_mode = TRUE,
+  debug_mode = FALSE,
   version = "0.1.0",
   secrets_file = "./secrets.json",
   validation = list(
