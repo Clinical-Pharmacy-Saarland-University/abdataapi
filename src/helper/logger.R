@@ -13,7 +13,6 @@
 }
 
 .db_logger <- function(x) {
-
   con <- mongo_logdb()
   if (!is.null(con)) {
     try(con$insert(x), silent = TRUE)
@@ -57,10 +56,14 @@ create_logger <- function(type = c("cmdline", "db", "cmdline-db", "disabled")) {
   stop("NOT IMPLEMENTED")
 }
 
-req_info <- function(req, token_salt = SETTINGS$token$token_salt) {
-  token <- cleanup_token(req$HTTP_TOKEN)
-  user_name <- username_from_jwt(token, token_salt)
-  user_name <- ifelse(is.null(user_name), "Unknown", user_name)
+req_info <- function(req, token_salt = SETTINGS$token$token_salt, debug = SETTINGS$debug_mode) {
+  if (debug) {
+    user_name <- "debug"
+  } else {
+    token <- cleanup_token(req$HTTP_TOKEN)
+    user_name <- username_from_jwt(token, token_salt)
+    user_name <- ifelse(is.null(user_name), "Unknown", user_name)
+  }
 
   list(
     timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%OSZ"),
