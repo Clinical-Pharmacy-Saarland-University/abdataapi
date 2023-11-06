@@ -3,8 +3,8 @@
 ## Version History
 | Date        | Version | Changes |                                                          
 | ------------ | ------ | ------- |
-| 10-20-2023         | 1.0    | Initial document   |
-| 11-06-2023         | 1.1    | Updates authorization schema (Bearer format)   |
+| 10-20-2023         | 0.1.0    | Initial document   |
+| 11-06-2023         | 0.2.0    | Updates authorization schema (Bearer format)   |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.

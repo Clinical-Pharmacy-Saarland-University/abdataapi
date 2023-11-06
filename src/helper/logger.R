@@ -60,7 +60,7 @@ req_info <- function(req, token_salt = SETTINGS$token$token_salt, debug = SETTIN
   if (debug) {
     user_name <- "debug"
   } else {
-    token <- cleanup_token(req$HTTP_AUTHORIZATION)
+    token <- cleanup_token(req)
     user_name <- username_from_jwt(token, token_salt)
     user_name <- ifelse(is.null(user_name), "Unknown", user_name)
   }
