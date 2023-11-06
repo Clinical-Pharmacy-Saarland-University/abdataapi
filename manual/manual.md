@@ -1,4 +1,11 @@
 # ABDA API usage
+
+## Version History
+| Date        | Version | Changes |                                                          
+| ------------ | ------ | ------- |
+| 10-20-2023         | 1.0    | Initial document   |
+| 11-06-2023         | 1.1    | Updates authorization schema (Bearer format)   |
+
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
 ## Access
@@ -70,7 +77,7 @@ Check for interactions based on compound names provided as query parameters.
 curl -X GET "https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin" \
     -H "accept: application/json" \
     -H "Content-Type: application/json" \
-    -H "TOKEN: yourjwttoken"
+    -H "Authentication: Bearer yourjwttoken"
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
@@ -124,7 +131,7 @@ Check for interactions based on compound names provided as *JSON*. Drug lists mu
 #### Example Usage
 ```{curl}
 curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/compounds" \
-     -H "TOKEN: yourjwttoken" \
+     -H "Authentication: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
      -d '[{"id":"1","compounds":["verapamil","simvastatin"]},{"id":"2","compounds":["diltiazem","amiodarone","amlodipine","lovastatin"]}]'
 ```
@@ -256,7 +263,7 @@ The return value for a successful **POST** request has the following structure:
 #### Example Usage
 ```{curl}
 curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns" \
-     -H "TOKEN: yourjwttoken" \
+     -H "Authentication: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
      -d '[{"id":"1","pzns":["03041347","17145955","00592733","13981502"]},{"id":"2","pzns":["03041347","17145955","00592733","13981502"]}]'
 ```
@@ -321,7 +328,7 @@ Get drug names based on ATCs. Please note, that some ATCs may not resolve to a u
 ```{curl}
 curl -X GET "https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02" \
     -H "accept: */*" \
-    -H "TOKEN: yourjwttoken"
+    -H "Authentication: Bearer yourjwttoken"
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
