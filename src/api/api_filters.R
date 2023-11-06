@@ -5,6 +5,20 @@ cleanup_token <- function(token) {
   }
 
   token <- token |>
+    stringr::str_split(" ", simplify = TRUE) |>
+    trimws()
+
+  if (length(token) != 2) {
+    stop_for_unauthorized("Invalid token format provided.")
+  }
+
+  token[1] <- token[1] |> tolower()
+  if (token[1] != "bearer") {
+    stop_for_unauthorized("Invalid token format provided (expected 'Bearer').")
+  }
+
+  token <- token[2]
+  token <- token |>
     stringr::str_remove_all('\"')
 
   return(token)
@@ -15,7 +29,7 @@ filter_valid_token <- function(req,
                                token_salt = SETTINGS$token$token_salt,
                                debugging = SETTINGS$debug_mode) {
   if (!debugging) {
-    token <- cleanup_token(req$HTTP_TOKEN)
+    token <- cleanup_token(req$HTTP_AUTHORIZATION)
 
     # check if token is valid
     valid <- test_valid_jwt(token, token_salt)

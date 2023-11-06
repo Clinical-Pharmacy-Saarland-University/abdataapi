@@ -33,7 +33,7 @@ function(req, res, credentials = list(username = "username", password = "passwor
 #* @serializer unboxedJSON list(na = NULL)
 #* @get /renew-token
 function(req, res) {
-  token <- cleanup_token(req$HTTP_TOKEN)
+  token <- cleanup_token(req$HTTP_AUTHORIZATION)
   renew_jwt(
     token = token, token_salt = SETTINGS$token$token_salt,
     time = SETTINGS$token$token_exp

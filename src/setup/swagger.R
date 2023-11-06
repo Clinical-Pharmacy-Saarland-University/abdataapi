@@ -11,7 +11,7 @@ api_spec <- function(x, paths = NULL) {
       ApiKeyAuth = list(
         type = "apiKey",
         `in` = "header",
-        name = "TOKEN",
+        name = "Authorization",
         description = "Authentication token provided to users that successfully logged in"
       )
     )

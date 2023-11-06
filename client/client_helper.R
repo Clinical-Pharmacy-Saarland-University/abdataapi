@@ -10,6 +10,10 @@ library(httr)
 library(dplyr)
 library(tictoc)
 
+.bearer <- function(token) {
+  paste("Bearer", token)
+}
+
 api_login <- function(host, user, pwd) {
   creds <- list(credentials = list(username = user, password = pwd))
 
@@ -33,7 +37,7 @@ api_login <- function(host, user, pwd) {
 
 api_renew_token <- function(host, token) {
   addr <- paste0(host, "/api/renew-token")
-  response <- GET(addr, add_headers(TOKEN = token))
+  response <- GET(addr, add_headers(Authorization = .bearer(token)))
 
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
@@ -56,7 +60,7 @@ api_get <- function(host, endpoint, token, time = TRUE) {
   if (is.null(token)) {
     response <- GET(addr)
   } else {
-    response <- GET(addr, add_headers(TOKEN = token))
+    response <- GET(addr, add_headers(Authorization = .bearer(token)))
   }
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
@@ -79,7 +83,8 @@ api_post <- function(host, endpoint, payload, token, time = TRUE) {
   response <- POST(addr,
     body = payload, encode = "json",
     add_headers(
-      TOKEN = token, encode = "json", .headers = c("Content-Type" = "application/json")
+      Authorization = .bearer(token), encode = "json",
+      .headers = c("Content-Type" = "application/json")
     )
   )
 
