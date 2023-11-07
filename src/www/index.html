@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>manual.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="abda-api-usage">ABDA API usage</h1>
+<h2 id="version-history">Version History</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Version</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10-20-2023</td>
+<td>0.1.0</td>
+<td>Initial document</td>
+</tr>
+<tr>
+<td>11-06-2023</td>
+<td>0.2.0</td>
+<td>Updates authorization schema (Bearer format)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="general-remarks">General Remarks</h2>
+<p>The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.</p>
+<h2 id="access">Access</h2>
+<p>The API is provided under the following URL: <a href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a>.</p>
+<h2 id="usage-and-testing-info">Usage and Testing Info</h2>
+<p>The API is generally intended for usage with dedicated console utilities such as <em>curl</em> or the corresponding utilities in programming languages such as the <em>httr</em> or similar packages in the <em>R</em> programming language.
+There is no dedicated endpoint for testing access to the API yet. However, testing <strong>GET</strong> endpoints is possible in a browser, for instance <a href="https://abdata.clinicalpharmacy.me/api/limits">https://abdata.clinicalpharmacy.me/api/limits</a> should return</p>
+<pre class="hljs"><code><div>{
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7235#section-3.1&quot;,
+    &quot;title&quot;: &quot;Unauthorized&quot;, 
+    &quot;status&quot;: 401, 
+    &quot;detail&quot;: &quot;No login token provided.&quot;, 
+    &quot;instance&quot;: &quot;/limits&quot; 
+}
+</div></code></pre>
+<h2 id="authentication">Authentication</h2>
+<p>This API uses <em>Java Web Token (jwt)</em> for authentication. A <em>jwt</em> is provided to you <a href="#post-login">upon login</a> and must be provided when accessing all other routes. See <a href="#get-interactionscompounds">GET /interactions/compounds</a>  as an example on how to provide the token.</p>
+<h2 id="endpoints">Endpoints</h2>
+<p>The following is a list of endpoints for the API.
+All endpoints are only accessible <strong>without a trailing slash!</strong>
+All routes refer to <a href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a> as the root URI.
+Currently, all access to all routes other than <a href="#post-login">POST /login</a> <strong>require authentication.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Method</th>
+<th>Route</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user</td>
+<td>POST</td>
+<td>/login</td>
+<td>Log a user in. See <a href="#post-login">POST /login</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>user</td>
+<td>GET</td>
+<td>/renew-token</td>
+<td>Retrieve a new token. No parameters.</td>
+</tr>
+<tr>
+<td>information</td>
+<td>GET</td>
+<td>/formulations</td>
+<td>Retrieve a list of all formulations within the database. No parameters.</td>
+</tr>
+<tr>
+<td>information</td>
+<td>GET</td>
+<td>/limits</td>
+<td>Request limits of the server. No parameters.</td>
+</tr>
+<tr>
+<td>information</td>
+<td>GET</td>
+<td>/interactions/description</td>
+<td>Request description of the interaction table. No parameters.</td>
+</tr>
+<tr>
+<td>interactions</td>
+<td>GET</td>
+<td>/interactions/compounds</td>
+<td>Interaction endpoint for compound names input. See <a href="#get-interactionscompounds">GET /interactions/compounds</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>interactions</td>
+<td>POST</td>
+<td>/interactions/compounds</td>
+<td>Interaction endpoint for compound names input from JSON. See <a href="#post-interactionscompounds">POST /interactions/compounds</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>interactions</td>
+<td>GET</td>
+<td>/interactions/pzns</td>
+<td>Interaction endpoint for pzn input. See <a href="#get-interactionspzns">GET /interactions/pzns</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>interactions</td>
+<td>POST</td>
+<td>/interactions/pzns</td>
+<td>Interaction endpoint for pzn input from JSON. See <a href="#post-interactionspzns">POST /interactions/pzns</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>atc</td>
+<td>GET</td>
+<td>/atcs/drugs</td>
+<td>Drug endpoint for ATC input</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example-usage">Example Usage</h2>
+<h3 id="post-login">POST /login</h3>
+<h4 id="input">Input</h4>
+<p>Provide your credentials as a <em>JSON</em>. The <em>JSON</em> must be structured as follows:</p>
+<pre class="hljs"><code><div>{
+    &quot;credentials&quot;: {
+        &quot;username&quot;: &quot;your_username&quot;,
+        &quot;password&quot;: &quot;your_password&quot;
+    }
+}
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/login&quot;  \
+    -H &quot;accept: application/json&quot; \
+    -H &quot;Content-Type: application/json&quot; \
+    -d '{&quot;credentials&quot;:{&quot;username&quot;:&quot;username&quot;,&quot;password&quot;:&quot;password&quot;}}'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+    &quot;yourjwttoken&quot;
+}
+</div></code></pre>
+<h3 id="get-interactionscompounds">GET /interactions/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for interactions based on compound names provided as query parameters.</p>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div># wrong
+curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
+    -H &quot;accept: application/json&quot; \
+    -H &quot;Content-Type: application/json&quot; \
+    -H &quot;Authentication: Bearer yourjwttoken&quot;
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  &quot;interactions&quot;: [
+    {
+      &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+      &quot;relevance&quot;: &quot;severe&quot;,
+      &quot;frequency&quot;: &quot;not known&quot;,
+      &quot;credibility&quot;: &quot;high&quot;,
+      &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+      &quot;left_compound&quot;: &quot;Simvastatin&quot;,
+      &quot;right_compound&quot;: &quot;Verapamil&quot;,
+      &quot;left_atc&quot;: &quot;C10AA01&quot;,
+      &quot;right_atc&quot;: &quot;C08DA01&quot;,
+      &quot;left_formulation&quot;: &quot;FTA&quot;,
+      &quot;right_formulation&quot;: &quot;FTA&quot;,
+      &quot;left_medication&quot;: &quot;ZOCOR 10mg&quot;,
+      &quot;right_medication&quot;: &quot;Isoptin 80mg&quot;,
+      &quot;left_dose&quot;: &quot;10 mg&quot;,
+      &quot;right_dose&quot;: &quot;74.06 mg&quot;
+    }
+  ],
+  &quot;unknown_compounds&quot;: [],
+  &quot;timestamp&quot;: &quot;2023-10-20 13:20:57&quot;,
+  &quot;api_version&quot;: &quot;0.1.0&quot;,
+  &quot;compounds&quot;: [
+    &quot;verapamil&quot;,
+    &quot;simvastatin&quot;
+  ]
+}
+</div></code></pre>
+<h3 id="post-interactionscompounds">POST /interactions/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for interactions based on compound names provided as <em>JSON</em>. Drug lists must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>{
+    [
+        { 
+            &quot;id&quot;: &quot;1&quot;,
+            &quot;compounds&quot;: [&quot;verapamil&quot;,&quot;simvastatin&quot;] 
+        },
+        { 
+            &quot;id&quot;: &quot;2&quot;,
+            &quot;compounds&quot;: [&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;] 
+        }
+    ]
+}
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds&quot; \
+     -H &quot;Authentication: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;,&quot;simvastatin&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;]}]'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  &quot;results&quot;: [
+    {
+      &quot;interactions&quot;: [
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;severe&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;high&quot;,
+          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+          &quot;left_compound&quot;: &quot;Simvastatin&quot;,
+          &quot;right_compound&quot;: &quot;Verapamil&quot;,
+          &quot;left_atc&quot;: &quot;C10AA01&quot;,
+          &quot;right_atc&quot;: &quot;C08DA01&quot;,
+          &quot;left_formulation&quot;: &quot;FTA&quot;,
+          &quot;right_formulation&quot;: &quot;FTA&quot;,
+          &quot;left_medication&quot;: &quot;ZOCOR 10mg&quot;,
+          &quot;right_medication&quot;: &quot;Isoptin 80mg&quot;,
+          &quot;left_dose&quot;: &quot;10 mg&quot;,
+          &quot;right_dose&quot;: &quot;74.06 mg&quot;
+        }
+      ],
+      &quot;unknown_compounds&quot;: [],
+      &quot;id&quot;: &quot;1&quot;,
+      &quot;compounds&quot;: [
+        &quot;verapamil&quot;,
+        &quot;simvastatin&quot;
+      ]
+    },
+    {
+      &quot;interactions&quot;: [
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;moderate&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;weak&quot;,
+          &quot;direction&quot;: &quot;undirected interaction&quot;,
+          &quot;left_compound&quot;: &quot;Amiodarone&quot;,
+          &quot;right_compound&quot;: &quot;Diltiazem&quot;,
+          &quot;left_atc&quot;: &quot;C01BD01&quot;,
+          &quot;right_atc&quot;: &quot;C08DB01&quot;,
+          &quot;left_formulation&quot;: &quot;DFL&quot;,
+          &quot;right_formulation&quot;: &quot;RET&quot;,
+          &quot;left_medication&quot;: &quot;Cordarex 150mg/3ml Injektionslösung&quot;,
+          &quot;right_medication&quot;: &quot;Dilzem 120mg retard&quot;,
+          &quot;left_dose&quot;: &quot;141.98 mg&quot;,
+          &quot;right_dose&quot;: &quot;110.3 mg&quot;
+        },
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;severe&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;high&quot;,
+          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
+          &quot;right_compound&quot;: &quot;Amiodarone&quot;,
+          &quot;left_atc&quot;: &quot;C10AA02&quot;,
+          &quot;right_atc&quot;: &quot;C01BD01&quot;,
+          &quot;left_formulation&quot;: &quot;TAB&quot;,
+          &quot;right_formulation&quot;: &quot;DFL&quot;,
+          &quot;left_medication&quot;: &quot;Lovastatin AL 20mg&quot;,
+          &quot;right_medication&quot;: &quot;Cordarex 150mg/3ml Injektionslösung&quot;,
+          &quot;left_dose&quot;: &quot;20 mg&quot;,
+          &quot;right_dose&quot;: &quot;141.98 mg&quot;
+        },
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;severe&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;high&quot;,
+          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
+          &quot;right_compound&quot;: &quot;Diltiazem&quot;,
+          &quot;left_atc&quot;: &quot;C10AA02&quot;,
+          &quot;right_atc&quot;: &quot;C08DB01&quot;,
+          &quot;left_formulation&quot;: &quot;TAB&quot;,
+          &quot;right_formulation&quot;: &quot;RET&quot;,
+          &quot;left_medication&quot;: &quot;Lovastatin AL 20mg&quot;,
+          &quot;right_medication&quot;: &quot;Dilzem 120mg retard&quot;,
+          &quot;left_dose&quot;: &quot;20 mg&quot;,
+          &quot;right_dose&quot;: &quot;110.3 mg&quot;
+        },
+        {
+          &quot;relevance&quot;: &quot;no statement possible&quot;,
+          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
+          &quot;right_compound&quot;: &quot;Amlodipine&quot;,
+          &quot;right_atc&quot;: &quot;C08CA01&quot;,
+          &quot;right_formulation&quot;: &quot;TAB&quot;,
+          &quot;right_medication&quot;: &quot;Norvasc 5mg&quot;,
+          &quot;right_dose&quot;: &quot;5 mg&quot;
+        }
+      ],
+      &quot;unknown_compounds&quot;: [],
+      &quot;id&quot;: &quot;2&quot;,
+      &quot;compounds&quot;: [
+        &quot;diltiazem&quot;,
+        &quot;amiodarone&quot;,
+        &quot;amlodipine&quot;,
+        &quot;lovastatin&quot;
+      ]
+    }
+  ],
+  &quot;timestamp&quot;: &quot;2023-10-20 13:21:59&quot;,
+  &quot;api_version&quot;: &quot;0.1.0&quot;
+}
+</div></code></pre>
+<h3 id="post-interactionspzns">POST /interactions/pzns</h3>
+<h4 id="input">Input</h4>
+<p>Check for interactions based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs)  provided as <em>JSON</em>. Lists of PZNs must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>[ 
+    {
+        &quot;id&quot;: &quot;1&quot;, 
+        &quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;] 
+    },
+    {
+        &quot;id&quot;: &quot;2&quot;, 
+        &quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;] 
+    }
+]
+      
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
+     -H &quot;Authentication: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  &quot;results&quot;: [
+    {
+      &quot;interactions&quot;: [
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;minor&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;weak&quot;,
+          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+          &quot;left_PZN&quot;: &quot;03041347&quot;,
+          &quot;right_PZN&quot;: &quot;00592733&quot;
+        }
+      ],
+      &quot;unknown_pzns&quot;: [],
+      &quot;id&quot;: &quot;1&quot;,
+      &quot;pzns&quot;: [
+        &quot;03041347&quot;,
+        &quot;17145955&quot;,
+        &quot;00592733&quot;,
+        &quot;13981502&quot;
+      ]
+    },
+    {
+      &quot;interactions&quot;: [
+        {
+          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
+          &quot;relevance&quot;: &quot;minor&quot;,
+          &quot;frequency&quot;: &quot;not known&quot;,
+          &quot;credibility&quot;: &quot;weak&quot;,
+          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
+          &quot;left_PZN&quot;: &quot;03041347&quot;,
+          &quot;right_PZN&quot;: &quot;00592733&quot;
+        }
+      ],
+      &quot;unknown_pzns&quot;: [],
+      &quot;id&quot;: &quot;2&quot;,
+      &quot;pzns&quot;: [
+        &quot;03041347&quot;,
+        &quot;17145955&quot;,
+        &quot;00592733&quot;,
+        &quot;13981502&quot;
+      ]
+    }
+  ],
+  &quot;timestamp&quot;: &quot;2023-10-20 13:17:41&quot;,
+  &quot;api_version&quot;: &quot;0.1.0&quot;
+}
+</div></code></pre>
+<h3 id="get-atcsdrugs">GET /atcs/drugs</h3>
+<h4 id="input">Input</h4>
+<p>Get drug names based on ATCs. Please note, that some ATCs may not resolve to a unique drug product, especially in case of fixed drug combinations</p>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02&quot; \
+    -H &quot;accept: */*&quot; \
+    -H &quot;Authentication: Bearer yourjwttoken&quot;
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{ 
+    &quot;names&quot;: [ 
+        { 
+            &quot;atc&quot;: &quot;C01BD01&quot;, 
+            &quot;name_german&quot;:&quot;Amiodaron&quot;, 
+            &quot;name_english&quot;:&quot;Amiodarone&quot; 
+        }, 
+        { 
+            &quot;atc&quot;: &quot;C08DA01&quot; 
+            ,&quot;name_german&quot;: &quot;Verapamil&quot;,
+            &quot;name_english&quot;:&quot;Verapamil&quot;
+        },
+        { 
+            &quot;atc&quot;: &quot;C08DB01&quot;, 
+            &quot;name_german&quot;: &quot;Diltiazem&quot;,
+            &quot;name_english&quot;: &quot;Diltiazem&quot;
+        }, 
+        { 
+            &quot;atc&quot;: &quot;J01CR02&quot;, 
+            &quot;name_german&quot;: &quot;Amoxicillin und Beta-Lactamase-Inhibitor&quot;, 
+            &quot;name_english&quot;:&quot;Amoxicillin and beta-lactamase inhibitor&quot;
+        }
+    ],
+    &quot;unknown_atcs&quot;:[],
+    &quot;timestamp&quot;: &quot;2023-10-20 10:56:21&quot;,
+    &quot;api_version&quot;: &quot;0.1.0&quot;, 
+    &quot;atcs&quot;: [&quot;C01BD01&quot;,&quot;C08DB01&quot;,&quot;C08DA01&quot;,&quot;J01CR02&quot;]
+} 
+</div></code></pre>
+
+</body>
+</html>

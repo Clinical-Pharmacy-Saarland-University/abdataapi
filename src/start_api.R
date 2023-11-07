@@ -64,6 +64,7 @@ endpoints <- Plumber$new("api/endpoints.R") |>
 router <- pr() |>
   pr_set_api_spec(api_spec) |>
   pr_mount("/api", endpoints) |>
+  pr_static("/", "./www") |>
   pr_hook("exit", function() {
     closePool(SETTINGS$sql$pool)
   })
