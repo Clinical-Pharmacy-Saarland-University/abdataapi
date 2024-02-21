@@ -9,10 +9,9 @@
 # API functions ----
 # *******************************************************************
 
-# FIXME NOT USED
-api_pzn_atc_get <- function(pzns, res) {
-  pzns <- .validate_pzn_get(pzns, res)
-  ret <- sql_atc_pzns(pzns)
+api_pzn_product_get <- function(pzns) {
+  pzns <- .validate_pzn_get(pzns)
+  ret <- sql_pzn_product(pzns)
   if (is.null(ret)) {
     stop_for_internal_server_error("Database connection error.")
   }

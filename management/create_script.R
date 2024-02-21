@@ -4,19 +4,19 @@ SETTINGS <- list(
   mail = list(
     enable = FALSE,
     subject = "CLinical Pharmacy Saarland University - abdata API Credentials",
-    from = "",
-    from_name = "",
+    from = "dominik.selzer@uni-saarland.de",
+    from_name = "Clinical Pharmacy Saarland University",
     host = "",
     username = "",
     password = "",
     use_ssl = FALSE
   ),
   userdb = list(
-    url = "mongodb://localhost:27017",
+    url = "",
     db = "",
     collection = ""
   ),
-  users = "users.json"
+  users = "users_roman.json"
 )
 
 create_users(SETTINGS)

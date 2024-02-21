@@ -37,6 +37,16 @@ tests <- function(time = TRUE) {
     api_get(HOST, "api/interactions/pzns?pzns=03967062", token, time = time)
   )
 
+  log <- api_test(
+    log, "GET", "pzns/products", "3 pzns",
+    api_get(HOST, "api/pzns/products?pzns=03967062,03041347,00592733", token, time = time)
+  )
+
+  log <- api_test(
+    log, "GET", "pzns/products", "1 pzn",
+    api_get(HOST, "api/pzns/products?pzns=03967062", token, time = time)
+  )
+
   ## PZN Post ----
   # *******************************************************************
   pzn_list <- purrr::map(seq(5), \(i)  {

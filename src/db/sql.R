@@ -58,28 +58,47 @@ sql_atc_names <- function(atcs, con = NULL) {
 # *******************************************************************
 
 # list or NULL on error
-# FIXME NOT USED
-sql_atc_pzns <- function(pzns, con = NULL) {
-  res <- sql_query(
-    paste(
-      "SELECT PZN, Key_ATC FROM FAM_DB LEFT JOIN PAE_DB ON  PAE_DB.Key_FAM = FAM_DB.Key_FAM",
-      "WHERE Veterinaerpraeparat = 0 AND PZN IN ({pzns*})"
-    ),
-    pzns = pzns, .con = con
-  )
-
-  if (is.null(res)) {
-    return(NULL)
+sql_pzn_product <- function(pz_numbers, con = NULL) {
+  if (length(pz_numbers) < 1) {
+    res <- list(
+      products = character(),
+      unknown_pzns = character()
+    )
+    return(res)
   }
 
-  colnames(res) <- c("pzn", "atc")
-  unknown_pzns <- pzns[!pzns %in% res$PZN]
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+
+  limit <- length(pz_numbers)
+  products_entries <- sql_query(
+    paste(
+      "SELECT PZN, Produktname FROM PAE_DB LEFT JOIN FAM_DB ON ",
+      "FAM_DB.Key_FAM = PAE_DB.Key_FAM WHERE PZN IN ({pz_numbers*}) LIMIT {limit}"
+    ),
+    pz_numbers = pz_numbers, limit = limit, .con = con
+  )
+
+  unknown_pzns <- pz_numbers[!pz_numbers %in% products_entries$PZN]
+  if (nrow(products_entries) == 0) {
+    res <- list(
+      products = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  colnames(products_entries) <- c("pzn", "product")
+
   res <- list(
-    atcs = res |> na.omit(),
+    products = products_entries,
     unknown_pzns = unknown_pzns
   )
 
-  res
+  return(res)
 }
 
 

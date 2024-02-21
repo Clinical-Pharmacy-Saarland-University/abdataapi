@@ -60,7 +60,7 @@ api_get <- function(host, endpoint, token, time = TRUE) {
   if (is.null(token)) {
     response <- GET(addr)
   } else {
-    response <- GET(addr, add_headers(Authorization = .bearer(token)))
+    response <- GET(addr, add_headers(TOKEN = token))
   }
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()

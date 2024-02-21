@@ -150,4 +150,3 @@ sql_compound_desc_from_int <- function(key_ints, key_sto, con = NULL) {
 
   res
 }
-

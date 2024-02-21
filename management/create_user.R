@@ -10,6 +10,7 @@ library(curl)
 library(purrr)
 library(jsonlite)
 library(mongolite)
+library(bcrypt)
 
 # Functions ----
 # *******************************************************************

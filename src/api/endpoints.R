@@ -124,7 +124,7 @@ function(req, res) {
 }
 
 
-# ATC ENDPOINTS ----
+# Endpoints ATC  ----
 # *******************************************************************
 
 #* Drug endpoint for ATC input
@@ -136,6 +136,22 @@ function(req, res) {
   atcs <- req$args$atcs
   future_promise({
     with_logger(LOGGER, log_info, api_atc_names_get(atcs))
+  })
+}
+
+
+# Endpoints PZN ----
+# *******************************************************************
+
+#* Product endpoint for PZN input
+#* @param pzns:[string] Comma-separated unique PZNs as strings
+#* @tag pzn
+#* @get /pzns/products
+function(req, res) {
+  log_info <- req_info(req)
+  pzns <- req$args$pzns
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_product_get(pzns))
   })
 }
 
