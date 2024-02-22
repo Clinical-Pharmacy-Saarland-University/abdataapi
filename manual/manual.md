@@ -5,6 +5,7 @@
 | ------------ | ------ | ------- |
 | 10-20-2023         | 0.1.0    | Initial document   |
 | 11-06-2023         | 0.2.0    | Updates authorization schema (Bearer format)   |
+| 02-21-2024         | 0.3.0    | Adds PZN search endpoint, fixed documentation error  |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
@@ -22,7 +23,7 @@ There is no dedicated endpoint for testing access to the API yet. However, testi
     "instance": "/limits" 
 }
 ```
-## Authentication
+## Authorization
 This API uses *Java Web Token (jwt)* for authentication. A *jwt* is provided to you [upon login](#post-login) and must be provided when accessing all other routes. See [GET /interactions/compounds](#get-interactionscompounds)  as an example on how to provide the token.
 ## Endpoints
 The following is a list of endpoints for the API.
@@ -41,6 +42,7 @@ Currently, all access to all routes other than [POST /login](#post-login) **requ
 | interactions | GET    | /interactions/pzns        | Interaction endpoint for pzn input. See [GET /interactions/pzns](#get-interactionspzns) for more information and example usage.                                  |
 | interactions | POST   | /interactions/pzns        | Interaction endpoint for pzn input from JSON. See [POST /interactions/pzns](#post-interactionspzns) for more information and example usage.                      |
 | atc          | GET    | /atcs/drugs               | Drug endpoint for ATC input                                                                                                                                      |
+| pzns         | GET    | /pzns/products            | Drug products endpoint for PZN input                                                                                                                             |
 
 ## Example Usage
 ### POST /login
@@ -77,7 +79,7 @@ Check for interactions based on compound names provided as query parameters.
 curl -X GET "https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin" \
     -H "accept: application/json" \
     -H "Content-Type: application/json" \
-    -H "Authentication: Bearer yourjwttoken"
+    -H "Authorization: Bearer yourjwttoken"
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
@@ -104,7 +106,7 @@ The return value for a successful **GET** request has the following structure:
   ],
   "unknown_compounds": [],
   "timestamp": "2023-10-20 13:20:57",
-  "api_version": "0.1.0",
+  "api_version": "0.3.0",
   "compounds": [
     "verapamil",
     "simvastatin"
@@ -131,7 +133,7 @@ Check for interactions based on compound names provided as *JSON*. Drug lists mu
 #### Example Usage
 ```{curl}
 curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/compounds" \
-     -H "Authentication: Bearer yourjwttoken" \
+     -H "Authorization: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
      -d '[{"id":"1","compounds":["verapamil","simvastatin"]},{"id":"2","compounds":["diltiazem","amiodarone","amlodipine","lovastatin"]}]'
 ```
@@ -241,7 +243,7 @@ The return value for a successful **POST** request has the following structure:
     }
   ],
   "timestamp": "2023-10-20 13:21:59",
-  "api_version": "0.1.0"
+  "api_version": "0.3.0"
 }
   ```
   ### POST /interactions/pzns
@@ -263,7 +265,7 @@ The return value for a successful **POST** request has the following structure:
 #### Example Usage
 ```{curl}
 curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns" \
-     -H "Authentication: Bearer yourjwttoken" \
+     -H "Authorization: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
      -d '[{"id":"1","pzns":["03041347","17145955","00592733","13981502"]},{"id":"2","pzns":["03041347","17145955","00592733","13981502"]}]'
 ```
@@ -316,7 +318,7 @@ The return value for a successful **POST** request has the following structure:
     }
   ],
   "timestamp": "2023-10-20 13:17:41",
-  "api_version": "0.1.0"
+  "api_version": "0.3.0"
 }
 ```
 
@@ -328,7 +330,7 @@ Get drug names based on ATCs. Please note, that some ATCs may not resolve to a u
 ```{curl}
 curl -X GET "https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02" \
     -H "accept: */*" \
-    -H "Authentication: Bearer yourjwttoken"
+    -H "Authorization: Bearer yourjwttoken"
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
@@ -358,7 +360,45 @@ The return value for a successful **GET** request has the following structure:
     ],
     "unknown_atcs":[],
     "timestamp": "2023-10-20 10:56:21",
-    "api_version": "0.1.0", 
+    "api_version": "0.3.0", 
     "atcs": ["C01BD01","C08DB01","C08DA01","J01CR02"]
 } 
+```
+
+### GET /pzns/products
+#### Input
+Get product names based on PZNs. Please note, that some PZNs may not be up to date.
+#### Example Usage
+```{curl}
+curl -X GET "https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,03041347,00592733" \
+    -H "accept: */*" \
+    -H "Authorization: Bearer yourjwttoken"
+```
+#### Output
+The return value for a successful **GET** request has the following structure:
+```{JSON}
+{
+    "products": [
+    {
+        "pzn":"00592733",
+            "product":"Famotidin STADA 40mg"
+    },
+    {
+        "pzn":"03041347",
+        "product":"Domperidon AbZ 10mg"
+    },
+    {
+        "pzn":"03967062",
+        "product":"MCP-ratiopharm 10mg"
+    }
+    ],
+    "unknown_pzns":[],
+    "timestamp":"2024-02-22 09:05:55",
+    "api_version":"0.3.0",
+    "pzns":[
+        "03967062",
+        "03041347",
+        "00592733"
+    ]
+}
 ```
