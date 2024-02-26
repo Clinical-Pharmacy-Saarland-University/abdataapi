@@ -99,11 +99,15 @@ api_interaction_description <- function() {
 
 ### Compounds ----
 # *******************************************************************
-api_compound_interactions_get <- function(compounds) {
+api_compound_interactions_get <- function(compounds, explain) {
   compounds <- .validate_compounds_get(compounds)
+  explain <- validate_logical(
+    explain, FALSE,
+    "'explain' parameter must be logical (T/F/TRUE/FALSE)"
+  )
 
   # check interactions
-  ret <- compound_interactions(compounds)
+  ret <- compound_interactions(compounds, explain)
   if (is.null(ret)) {
     stop_for_internal_server_error("Database connection error.")
   }
@@ -123,6 +127,9 @@ api_compound_interactions_post <- function(body_data) {
       "properties": {
         "id": {
           "type": "string"
+        },
+        "explain": {
+          "type": "boolean"
         },
         "compounds": {
           "type": "array",
@@ -154,7 +161,12 @@ api_compound_interactions_post <- function(body_data) {
       stop_for_bad_request("Some Compounds are invalid.", invalid_compounds = cmpts[which(!cmpts_ok)])
     }
 
-    res <- compound_interactions(cmpts, con)
+    explain <- validate_logical(
+      x$explain, FALSE,
+      "'explain' parameter must be logical (T/F/TRUE/FALSE)"
+    )
+
+    res <- compound_interactions(cmpts, explain, con)
     if (is.null(res)) {
       stop_for_internal_server_error("Database connection error.")
     }
@@ -175,10 +187,14 @@ api_compound_interactions_post <- function(body_data) {
 
 ### PZN ----
 # *******************************************************************
-api_pzn_interactions_get <- function(pzns) {
+api_pzn_interactions_get <- function(pzns, explain) {
   pzns <- .validate_pzn_get(pzns)
+  explain <- validate_logical(
+    explain, FALSE,
+    "'explain' parameter must be logical (T/F/TRUE/FALSE)"
+  )
 
-  ret <- pzn_interactions(pzns)
+  ret <- pzn_interactions(pzns, explain)
   if (is.null(ret)) {
     stop_for_internal_server_error("Database connection error.")
   }
@@ -199,6 +215,9 @@ api_pzn_interactions_post <- function(body_data) {
       "properties": {
         "id": {
           "type": "string"
+        },
+        "explain": {
+          "type": "boolean"
         },
         "pzns": {
           "type": "array",
@@ -231,7 +250,11 @@ api_pzn_interactions_post <- function(body_data) {
     }
 
     sum_p <<- sum_p + length(pzns)
-    res <- pzn_interactions(pzns, con)
+    explain <- validate_logical(
+      x$explain, FALSE,
+      "'explain' parameter must be logical (T/F/TRUE/FALSE)"
+    )
+    res <- pzn_interactions(pzns, explain, con)
     if (is.null(res)) {
       stop_for_internal_server_error("Database connection error.")
     }

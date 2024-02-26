@@ -105,7 +105,7 @@ sql_pzn_product <- function(pz_numbers, con = NULL) {
 # Interactions ----
 # *******************************************************************
 # list or NULL on error
-pzn_interactions <- function(pz_numbers, con = NULL) {
+pzn_interactions <- function(pz_numbers, explain = FALSE, con = NULL) {
   if (length(pz_numbers) <= 1) {
     res <- list(
       interactions = character(),
@@ -186,12 +186,21 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
 
   inter_sheets <- left_join(inter_sheets, pzn_infos, by = "Key_INT")
   inter_sheets <- inter_sheets |>
-    select(-Key_INT) |>
     set_names(c(
-      "plausibility", "relevance", "frequency",
+      "Key_INT", "plausibility", "relevance", "frequency",
       "credibility", "direction", "left_PZN", "right_PZN"
     )) |>
     translate_interaction_table()
+
+
+  if (explain && !is.null(inter_sheets) && nrow(inter_sheets) > 0) {
+    key_ints <- inter_sheets$Key_INT |> unique()
+    inter_extra <- sql_inter_explain(key_ints, con = con)
+    inter_sheets <- inter_sheets |>
+      left_join(inter_extra, by = "Key_INT")
+  }
+
+  inter_sheets <- inter_sheets |> select(-Key_INT)
 
   res <- list(
     interactions = inter_sheets,
@@ -202,7 +211,7 @@ pzn_interactions <- function(pz_numbers, con = NULL) {
 }
 
 # list or NULL on error
-compound_interactions <- function(compounds, con = NULL) {
+compound_interactions <- function(compounds, explain = FALSE, con = NULL) {
   if (length(compounds) <= 1) {
     res <- list(
       interactions = character(),
@@ -278,15 +287,17 @@ compound_interactions <- function(compounds, con = NULL) {
     left_join(sto_entries, by = "Key_STO") |>
     left_join(compound_meta, by = c("Key_INT", "Key_STO")) |>
     select(-Key_STO) |>
-    pivot_wider(names_from = Lokalisation,
-                values_from = c("Name", "Key_ATC", "Key_DAR", "Produktname", "dose"))
+    pivot_wider(
+      names_from = Lokalisation,
+      values_from = c("Name", "Key_ATC", "Key_DAR", "Produktname", "dose")
+    )
+
 
   # translate and fit tables
   inter_res <- inter_sheets |>
     left_join(compound_infos, by = "Key_INT") |>
-    select(-Key_INT) |>
     set_names(c(
-      "plausibility", "relevance", "frequency",
+      "Key_INT", "plausibility", "relevance", "frequency",
       "credibility", "direction", "left_compound", "right_compound",
       "left_atc", "right_atc",
       "left_formulation", "right_formulation",
@@ -296,6 +307,15 @@ compound_interactions <- function(compounds, con = NULL) {
     translate_interaction_table() |>
     distinct()
 
+
+  if (explain && !is.null(inter_res) && nrow(inter_res) > 0) {
+    key_ints <- inter_res$Key_INT |> unique()
+    inter_extra <- sql_inter_explain(key_ints, con = con)
+    inter_res <- inter_res |>
+      left_join(inter_extra, by = "Key_INT")
+  }
+
+  inter_res <- inter_res |> select(-Key_INT)
   res <- list(
     interactions = inter_res,
     unknown_compounds = unknown_compounds
@@ -303,4 +323,3 @@ compound_interactions <- function(compounds, con = NULL) {
 
   res
 }
-

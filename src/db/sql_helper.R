@@ -89,19 +89,6 @@ sql_famkeys_pzn <- function(pzns, con = NULL) {
   res
 }
 
-# df or NULL on error
-TEST <- function(atcs, con = NULL) {
-  res <- sql_query(
-    paste(
-      "SELECT Key_INT, FAM_DB.Key_FAM, Key_ATC ",
-      "FROM FAM_DB LEFT JOIN FZI_C ON FZI_C.Key_FAM = FAM_DB.Key_FAM ",
-      "WHERE Key_ATC IN ({atcs*})"
-    ),
-    atcs = atcs, .con = con
-  )
-
-  res
-}
 
 # df or NULL on error
 sql_interaction_sheets <- function(int_keys, con = NULL) {
@@ -114,8 +101,19 @@ sql_interaction_sheets <- function(int_keys, con = NULL) {
     int_keys = int_keys, l = l, .con = con
   )
 
+  inter_keys <- res$Key_INT
+  inter_explain <- sql_query(
+    paste(
+      "SELECT Key_INT, Textfeld, Text FROM INT_C RIGHT JOIN ITX_C ON",
+      "INT_C.Textverweis = ITX_C.Textverweis WHERE Key_INT IN ({int_keys*}) AND",
+      "Textfeld IN (50, 360, 350, 270)"
+    ),
+    int_keys = inter_keys, l = l, .con = con
+  )
+
   res
 }
+
 
 # df or NULL on error
 sql_fam_keys_interactions <- function(fam_keys, con = NULL) {
@@ -133,6 +131,46 @@ sql_fam_keys_interactions <- function(fam_keys, con = NULL) {
   res
 }
 
+# df or NULL on error
+sql_inter_explain <- function(int_keys, con = NULL) {
+  res <- sql_query(
+    paste(
+      "SELECT Key_INT, Textfeld, Text FROM INT_C RIGHT JOIN ITX_C ON",
+      "INT_C.Textverweis = ITX_C.Textverweis WHERE Key_INT IN ({int_keys*}) AND",
+      "Textfeld IN (50, 360, 350, 270)"
+    ),
+    int_keys = int_keys, .con = con
+  )
+
+  if (!is.null(res)) {
+    res <- res |>
+      mutate(Text_Name = case_when(
+        Textfeld == 50 ~ "pharm_effect",
+        Textfeld == 360 ~ "adr",
+        Textfeld == 350 ~ "risk_factors",
+        Textfeld == 270 ~ "risk_factors_add",
+        TRUE ~ as.character(Textfeld)
+      )) |>
+      select(-Textfeld) |>
+      pivot_wider(
+        names_from = Text_Name,
+        values_from = Text,
+        values_fill = list(Text = NA),
+        names_prefix = ""
+      )
+
+    # List of all expected columns after pivot
+    expected_columns <- c("pharm_effect", "adr", "risk_factors", "risk_factors_add")
+
+    # Adding missing columns with NA values
+    missing_columns <- setdiff(expected_columns, names(res))
+    for (col in missing_columns) {
+      res[[col]] <- NA_character_
+    }
+  }
+
+  res
+}
 
 # df or NULL on error
 sql_compound_desc_from_int <- function(key_ints, key_sto, con = NULL) {

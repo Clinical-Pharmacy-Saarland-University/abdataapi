@@ -77,19 +77,23 @@ function(req, res) {
 # *******************************************************************
 #* Interaction endpoint for compound names input
 #* @param compounds:[string] Comma-separated unique compound names as string
+#* @param explain:[logical] Whether to explain the interaction details. Default is FALSE.
 #* @tag interaction
+#* @serializer unboxedJSON list(na = NULL)
 #* @get /interactions/compounds
 function(req, res) {
   log_info <- req_info(req)
   cmps <- req$args$compounds
+  explain <- req$args$explain
   future_promise({
-    with_logger(LOGGER, log_info, api_compound_interactions_get(cmps))
+    with_logger(LOGGER, log_info, api_compound_interactions_get(cmps, explain))
   })
 }
 
 #* Interaction endpoint for  compound names from JSON
 #* @param .body The raw body content from the request
 #* @tag interaction
+#* @serializer unboxedJSON list(na = NULL)
 #* @post /interactions/compounds
 function(req, res) {
   log_info <- req_info(req)
@@ -101,19 +105,23 @@ function(req, res) {
 
 #* Interaction endpoint for PZN input
 #* @param pzns:[string] Comma-separated unique PZNs as strings
+#* @param explain:[logical] Whether to explain the interaction details. Default is FALSE.
 #* @tag interaction
+#* @serializer unboxedJSON list(na = NULL)
 #* @get /interactions/pzns
 function(req, res) {
   log_info <- req_info(req)
   pzns <- req$args$pzns
+  explain <- req$args$explain
   future_promise({
-    with_logger(LOGGER, log_info, api_pzn_interactions_get(pzns))
+    with_logger(LOGGER, log_info, api_pzn_interactions_get(pzns, explain))
   })
 }
 
 #* Interaction endpoint for PZN input from JSON
 #* @param .body The raw body content from the request
 #* @tag interaction
+#* @serializer unboxedJSON list(na = NULL)
 #* @post /interactions/pzns
 function(req, res) {
   log_info <- req_info(req)
@@ -154,20 +162,3 @@ function(req, res) {
     with_logger(LOGGER, log_info, api_pzn_product_get(pzns))
   })
 }
-
-#
-# # Naming endpoint for ATC input
-# # @param atcs:[string] Comma-separated unique ATCs as strings
-# # @tag TODO
-# # @get /atc/names
-# function(atcs, res) {
-#   api_atc_names_get(atcs, res)
-# }
-#
-# # Interaction endpoint for ATC input
-# # @param atcs:[string] Comma-separated unique ATCs as strings
-# # @tag TODO
-# # @get /atc/interactions
-# function(atcs, res) {
-#   api_atc_interactions_get(atcs, res)
-# }

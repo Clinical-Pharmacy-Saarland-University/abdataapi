@@ -79,6 +79,20 @@ validate_atc <- function(atc) {
 }
 
 
+validate_logical <- function(logical, default, error_msg) {
+
+  if (missing(logical) || is.null(logical) || logical == "") {
+    return(default)
+  }
+
+  res <- as.logical(logical)
+  if (is.na(res)) {
+    stop_for_bad_request(error_msg)
+  }
+
+  res
+}
+
 # Endpoint validator ----
 # *******************************************************************
 

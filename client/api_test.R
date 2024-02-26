@@ -33,8 +33,16 @@ tests <- function(time = TRUE) {
     api_get(HOST, "api/interactions/pzns?pzns=03967062,03041347,00592733", token, time = time)
   )
   log <- api_test(
+    log, "GET", "interactions/pzns", "3 pzns / explain",
+    api_get(HOST, "api/interactions/pzns?pzns=03967062,03041347,00592733&explain=T", token, time = time)
+  )
+  log <- api_test(
     log, "GET", "interactions/pzns", "1 pzn",
     api_get(HOST, "api/interactions/pzns?pzns=03967062", token, time = time)
+  )
+  log <- api_test(
+    log, "GET", "interactions/pzns", "1 pzn / explain",
+    api_get(HOST, "api/interactions/pzns?pzns=03967062&explain=T", token, time = time)
   )
 
   log <- api_test(
@@ -57,6 +65,17 @@ tests <- function(time = TRUE) {
     api_post(HOST, "api/interactions/pzns", pzn_list, token, time = time)
   )
 
+  pzn_list <- purrr::map(seq(5), \(i)  {
+    list(
+      id = unbox(as.character(i)), explain = as.logical(i %% 2),
+      pzns = c("03041347", "17145955", "00592733", "13981502")
+    )
+  })
+  log <- api_test(
+    log, "POST", "interactions/pzns", "5 ids / explain",
+    api_post(HOST, "api/interactions/pzns", pzn_list, token, time = time)
+  )
+
   ## Compound GET ----
   # *******************************************************************
   log <- api_test(
@@ -64,17 +83,36 @@ tests <- function(time = TRUE) {
     api_get(HOST, "api/interactions/compounds?compounds=verapamil,simvastatin,diltiazem,amiodarone,amlodipine,lovastatin", token, time = time)
   )
   log <- api_test(
+    log, "GET", "interactions/compounds", "3 compounds / explain",
+    api_get(HOST, "api/interactions/compounds?compounds=verapamil,simvastatin,diltiazem,amiodarone,amlodipine,lovastatin&explain=T", token, time = time)
+  )
+  log <- api_test(
     log, "GET", "interactions/compounds", "1 compound",
     api_get(HOST, "api/interactions/compounds?compounds=verapamil", token, time = time)
+  )
+  log <- api_test(
+    log, "GET", "interactions/compounds", "1 compound / explain",
+    api_get(HOST, "api/interactions/compounds?compounds=verapamil&explain=T", token, time = time)
   )
 
   ## Compound Post ----
   # *******************************************************************
   compound_list <- purrr::map(seq(5), \(i)  {
-    list(id = unbox(as.character(i)), compounds = c("verapamil","simvastatin","diltiazem","amiodarone","amlodipine","lovastatin"))
+    list(id = unbox(as.character(i)), compounds = c("verapamil", "simvastatin", "diltiazem", "amiodarone", "amlodipine", "lovastatin"))
   })
   log <- api_test(
     log, "POST", "interactions/compounds", "5 ids",
+    api_post(HOST, "api/interactions/compounds", compound_list, token, time = time)
+  )
+
+  compound_list <- purrr::map(seq(5), \(i)  {
+    list(
+      id = unbox(as.character(i)), explain = as.logical(i %% 2),
+      compounds = c("verapamil", "simvastatin", "diltiazem", "amiodarone", "amlodipine", "lovastatin")
+    )
+  })
+  log <- api_test(
+    log, "POST", "interactions/compounds", "5 ids / explain",
     api_post(HOST, "api/interactions/compounds", compound_list, token, time = time)
   )
 
@@ -90,6 +128,3 @@ tests <- function(time = TRUE) {
 }
 
 tests()
-
-
-
