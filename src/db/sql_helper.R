@@ -101,16 +101,6 @@ sql_interaction_sheets <- function(int_keys, con = NULL) {
     int_keys = int_keys, l = l, .con = con
   )
 
-  inter_keys <- res$Key_INT
-  inter_explain <- sql_query(
-    paste(
-      "SELECT Key_INT, Textfeld, Text FROM INT_C RIGHT JOIN ITX_C ON",
-      "INT_C.Textverweis = ITX_C.Textverweis WHERE Key_INT IN ({int_keys*}) AND",
-      "Textfeld IN (50, 360, 350, 270)"
-    ),
-    int_keys = inter_keys, l = l, .con = con
-  )
-
   res
 }
 

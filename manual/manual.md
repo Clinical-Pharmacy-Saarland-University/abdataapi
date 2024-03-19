@@ -6,6 +6,8 @@
 | 10-20-2023         | 0.1.0    | Initial document   |
 | 11-06-2023         | 0.2.0    | Updates authorization schema (Bearer format)   |
 | 02-21-2024         | 0.3.0    | Adds PZN search endpoint, fixed documentation error  |
+| 02-22-2024         | 0.4.0    | Adds /pzns/products endpoint  |
+| 03-19-2024         | 0.5.0    | Changes /pzns/products endpoint to include ATC output |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
@@ -367,7 +369,7 @@ The return value for a successful **GET** request has the following structure:
 
 ### GET /pzns/products
 #### Input
-Get product names based on PZNs. Please note, that some PZNs may not be up to date.
+Get product names and ATC codes based on PZNs. Please note, that some PZNs may not be up to date.
 #### Example Usage
 ```{curl}
 curl -X GET "https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,03041347,00592733" \
@@ -381,15 +383,18 @@ The return value for a successful **GET** request has the following structure:
     "products": [
     {
         "pzn":"00592733",
-            "product":"Famotidin STADA 40mg"
+        "product":"Famotidin STADA 40mg",
+        "atc":"A02BA03"
     },
     {
         "pzn":"03041347",
-        "product":"Domperidon AbZ 10mg"
+        "product":"Domperidon AbZ 10mg",
+        "atc":"A03FA03"
     },
     {
         "pzn":"03967062",
-        "product":"MCP-ratiopharm 10mg"
+        "product":"MCP-ratiopharm 10mg",
+        "atc":"A03FA01"
     }
     ],
     "unknown_pzns":[],

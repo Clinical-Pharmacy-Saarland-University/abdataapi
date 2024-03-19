@@ -76,7 +76,7 @@ sql_pzn_product <- function(pz_numbers, con = NULL) {
   limit <- length(pz_numbers)
   products_entries <- sql_query(
     paste(
-      "SELECT PZN, Produktname FROM PAE_DB LEFT JOIN FAM_DB ON ",
+      "SELECT PZN, Produktname, Key_ATC FROM PAE_DB LEFT JOIN FAM_DB ON ",
       "FAM_DB.Key_FAM = PAE_DB.Key_FAM WHERE PZN IN ({pz_numbers*}) LIMIT {limit}"
     ),
     pz_numbers = pz_numbers, limit = limit, .con = con
@@ -91,7 +91,7 @@ sql_pzn_product <- function(pz_numbers, con = NULL) {
     return(res)
   }
 
-  colnames(products_entries) <- c("pzn", "product")
+  colnames(products_entries) <- c("pzn", "product", "atc")
 
   res <- list(
     products = products_entries,

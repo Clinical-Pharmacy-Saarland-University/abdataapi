@@ -50,3 +50,5 @@ rsconnect/
 src/secrets.json
 client/test_credentials.R
 management/users.json
+management/users_*.json
+src/Rplots.pdf
