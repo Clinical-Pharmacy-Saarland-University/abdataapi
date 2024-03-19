@@ -386,6 +386,21 @@ code {
 <td>0.2.0</td>
 <td>Updates authorization schema (Bearer format)</td>
 </tr>
+<tr>
+<td>02-21-2024</td>
+<td>0.3.0</td>
+<td>Adds PZN search endpoint, fixed documentation error</td>
+</tr>
+<tr>
+<td>02-22-2024</td>
+<td>0.4.0</td>
+<td>Adds /pzns/products endpoint</td>
+</tr>
+<tr>
+<td>03-19-2024</td>
+<td>0.5.0</td>
+<td>Changes /pzns/products endpoint to include ATC output</td>
+</tr>
 </tbody>
 </table>
 <h2 id="general-remarks">General Remarks</h2>
@@ -403,7 +418,7 @@ There is no dedicated endpoint for testing access to the API yet. However, testi
     &quot;instance&quot;: &quot;/limits&quot; 
 }
 </div></code></pre>
-<h2 id="authentication">Authentication</h2>
+<h2 id="authorization">Authorization</h2>
 <p>This API uses <em>Java Web Token (jwt)</em> for authentication. A <em>jwt</em> is provided to you <a href="#post-login">upon login</a> and must be provided when accessing all other routes. See <a href="#get-interactionscompounds">GET /interactions/compounds</a>  as an example on how to provide the token.</p>
 <h2 id="endpoints">Endpoints</h2>
 <p>The following is a list of endpoints for the API.
@@ -480,6 +495,12 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>/atcs/drugs</td>
 <td>Drug endpoint for ATC input</td>
 </tr>
+<tr>
+<td>pzns</td>
+<td>GET</td>
+<td>/pzns/products</td>
+<td>Drug products endpoint for PZN input</td>
+</tr>
 </tbody>
 </table>
 <h2 id="example-usage">Example Usage</h2>
@@ -513,7 +534,7 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
-    -H &quot;Authentication: Bearer yourjwttoken&quot;
+    -H &quot;Authorization: Bearer yourjwttoken&quot;
 </div></code></pre>
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
@@ -539,7 +560,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
   ],
   &quot;unknown_compounds&quot;: [],
   &quot;timestamp&quot;: &quot;2023-10-20 13:20:57&quot;,
-  &quot;api_version&quot;: &quot;0.1.0&quot;,
+  &quot;api_version&quot;: &quot;0.3.0&quot;,
   &quot;compounds&quot;: [
     &quot;verapamil&quot;,
     &quot;simvastatin&quot;
@@ -564,7 +585,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 </div></code></pre>
 <h4 id="example-usage">Example Usage</h4>
 <pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds&quot; \
-     -H &quot;Authentication: Bearer yourjwttoken&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
      -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;,&quot;simvastatin&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;]}]'
 </div></code></pre>
@@ -673,7 +694,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
     }
   ],
   &quot;timestamp&quot;: &quot;2023-10-20 13:21:59&quot;,
-  &quot;api_version&quot;: &quot;0.1.0&quot;
+  &quot;api_version&quot;: &quot;0.3.0&quot;
 }
 </div></code></pre>
 <h3 id="post-interactionspzns">POST /interactions/pzns</h3>
@@ -693,7 +714,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 </div></code></pre>
 <h4 id="example-usage">Example Usage</h4>
 <pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
-     -H &quot;Authentication: Bearer yourjwttoken&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
      -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
 </div></code></pre>
@@ -745,7 +766,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
     }
   ],
   &quot;timestamp&quot;: &quot;2023-10-20 13:17:41&quot;,
-  &quot;api_version&quot;: &quot;0.1.0&quot;
+  &quot;api_version&quot;: &quot;0.3.0&quot;
 }
 </div></code></pre>
 <h3 id="get-atcsdrugs">GET /atcs/drugs</h3>
@@ -754,7 +775,7 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="example-usage">Example Usage</h4>
 <pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02&quot; \
     -H &quot;accept: */*&quot; \
-    -H &quot;Authentication: Bearer yourjwttoken&quot;
+    -H &quot;Authorization: Bearer yourjwttoken&quot;
 </div></code></pre>
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
@@ -783,9 +804,47 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
     ],
     &quot;unknown_atcs&quot;:[],
     &quot;timestamp&quot;: &quot;2023-10-20 10:56:21&quot;,
-    &quot;api_version&quot;: &quot;0.1.0&quot;, 
+    &quot;api_version&quot;: &quot;0.3.0&quot;, 
     &quot;atcs&quot;: [&quot;C01BD01&quot;,&quot;C08DB01&quot;,&quot;C08DA01&quot;,&quot;J01CR02&quot;]
 } 
+</div></code></pre>
+<h3 id="get-pznsproducts">GET /pzns/products</h3>
+<h4 id="input">Input</h4>
+<p>Get product names and ATC codes based on PZNs. Please note, that some PZNs may not be up to date.</p>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,03041347,00592733&quot; \
+    -H &quot;accept: */*&quot; \
+    -H &quot;Authorization: Bearer yourjwttoken&quot;
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+    &quot;products&quot;: [
+    {
+        &quot;pzn&quot;:&quot;00592733&quot;,
+        &quot;product&quot;:&quot;Famotidin STADA 40mg&quot;,
+        &quot;atc&quot;:&quot;A02BA03&quot;
+    },
+    {
+        &quot;pzn&quot;:&quot;03041347&quot;,
+        &quot;product&quot;:&quot;Domperidon AbZ 10mg&quot;,
+        &quot;atc&quot;:&quot;A03FA03&quot;
+    },
+    {
+        &quot;pzn&quot;:&quot;03967062&quot;,
+        &quot;product&quot;:&quot;MCP-ratiopharm 10mg&quot;,
+        &quot;atc&quot;:&quot;A03FA01&quot;
+    }
+    ],
+    &quot;unknown_pzns&quot;:[],
+    &quot;timestamp&quot;:&quot;2024-02-22 09:05:55&quot;,
+    &quot;api_version&quot;:&quot;0.3.0&quot;,
+    &quot;pzns&quot;:[
+        &quot;03967062&quot;,
+        &quot;03041347&quot;,
+        &quot;00592733&quot;
+    ]
+}
 </div></code></pre>
 
 </body>
