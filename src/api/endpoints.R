@@ -162,3 +162,58 @@ function(req, res) {
     with_logger(LOGGER, log_info, api_pzn_product_get(pzns))
   })
 }
+
+
+# Endpoints Priscus ----
+# *******************************************************************
+#* Priscus endpoint for compound names input
+#* @param compounds:[string] Comma-separated unique compound names as string
+#* @tag priscus
+#* @serializer unboxedJSON list(na = NULL)
+#* @get /priscus/compounds
+function(req, res) {
+  log_info <- req_info(req)
+  cmps <- req$args$compounds
+  future_promise({
+   with_logger(LOGGER, log_info, api_compound_priscus_get(cmps))
+  })
+}
+
+#* Priscus endpoint for  compound names from JSON
+#* @param .body The raw body content from the request
+#* @tag priscus
+#* @serializer unboxedJSON list(na = NULL)
+#* @post /priscus/compounds
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+   # with_logger(LOGGER, log_info, api_compound_interactions_post(body))
+  })
+}
+
+#* Priscus endpoint for PZN input
+#* @param pzns:[string] Comma-separated unique PZNs as strings
+#* @tag priscus
+#* @serializer unboxedJSON list(na = NULL)
+#* @get /priscus/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  pzns <- req$args$pzns
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_priscus_get(pzns))
+  })
+}
+
+#* Priscus endpoint for PZN input from JSON
+#* @param .body The raw body content from the request
+#* @tag priscus
+#* @serializer unboxedJSON list(na = NULL)
+#* @post /priscus/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_priscus_post(body))
+  })
+}

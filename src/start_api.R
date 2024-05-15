@@ -40,6 +40,7 @@ source("api/pzn_api.R")
 source("api/atc_api.R")
 source("api/misc_api.R")
 source("api/interaction_api.R")
+source("api/priscus_api.R")
 source("setup/swagger.R")
 source("setup/handlers.R")
 

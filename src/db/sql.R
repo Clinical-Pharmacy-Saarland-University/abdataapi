@@ -323,3 +323,112 @@ compound_interactions <- function(compounds, explain = FALSE, con = NULL) {
 
   res
 }
+
+
+# Priscus ----
+# *******************************************************************
+
+# list or NULL on error
+pzn_priscus <- function(pz_numbers, con = NULL) {
+  if (length(pz_numbers) < 1) {
+    res <- list(
+      priscus = character(),
+      unknown_pzns = character()
+    )
+    return(res)
+  }
+
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  # fam key fetching
+  fam_keys <- sql_famkeys_pzn(pz_numbers, con)
+  if (is.null(fam_keys)) {
+    return(NULL)
+  }
+
+  unknown_pzns <- pz_numbers[!pz_numbers %in% fam_keys$PZN]
+  if (nrow(fam_keys) == 0) {
+    res <- list(
+      priscus = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  # priscus fetching
+  priscus_df <- sql_priscus_fam(fam_keys$Key_FAM, con)
+  if (is.null(priscus_df)) {
+    return(NULL)
+  }
+
+  res_df <- fam_keys |>
+    mutate(priscus = Key_FAM %in% priscus_df$Key_FAM) |>
+    select(-Key_FAM) |>
+    set_names(c("pzn", "priscus"))
+
+  res <- list(
+    priscus = res_df,
+    unknown_pzns = unknown_pzns
+  )
+
+  return(res)
+}
+
+# list or NULL on error
+compound_priscus <- function(compounds, con = NULL) {
+  if (length(compounds) < 1) {
+    res <- list(
+      priscus = character(),
+      unknown_compounds = character()
+    )
+    return(res)
+  }
+
+  sto_entries <- sql_query("SELECT Key_STO, Name FROM SNA_DB WHERE Name IN ({compounds*})",
+    compounds = compounds, .con = con
+  )
+  if (is.null(sto_entries)) {
+    return(NULL)
+  }
+
+  unknown_compounds <- compounds[!tolower(compounds) %in% tolower(sto_entries$Name)]
+  if (nrow(sto_entries) == 0) {
+    res <- list(
+      priscus = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  sto <- unique(sto_entries$Key_STO)
+  priscus_df <- sql_query("SELECT Key_STO FROM SZG_DB WHERE Key_STO IN ({sto*}) AND Key_SGR = 10084520",
+    sto = sto, .con = con
+  )
+  if (is.null(priscus_df)) {
+    return(NULL)
+  }
+  print(sto_entries)
+  return(NULL)
+
+
+
+  res_df <- fam_keys |>
+    mutate(priscus = Key_FAM %in% priscus_df$Key_FAM) |>
+    select(-Key_FAM) |>
+    set_names(c("pzn", "priscus"))
+
+
+  res <- list(
+    priscus = res_df,
+    unknown_compounds = unknown_compounds
+  )
+
+  res
+}
