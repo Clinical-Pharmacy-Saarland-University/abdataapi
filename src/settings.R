@@ -28,7 +28,7 @@ SWAGGER_SETTINGS <- list(
 
 SETTINGS <- list(
   debug_mode = FALSE,
-  version = "0.5.0",
+  version = "0.6.0",
   secrets_file = "./secrets.json",
   validation = list(
     validate_pzn_checksums = TRUE
@@ -69,7 +69,8 @@ SETTINGS <- list(
   token = list(
     token_salt = "",
     token_exp = 3600 # time in s)
-  )
+  ),
+  schemas = load_schemas("schemas")
 )
 
 

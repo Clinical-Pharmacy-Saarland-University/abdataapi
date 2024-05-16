@@ -118,34 +118,12 @@ api_compound_interactions_get <- function(compounds, explain) {
 }
 
 api_compound_interactions_post <- function(body_data) {
-  schema <- '{
-    "type": "array",
-    "minItems": 1,
-    "maxItems": (max_ids),
-    "items": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "explain": {
-          "type": "boolean"
-        },
-        "compounds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "maxItems": (max_cmpts),
-          "uniqueItems": true,
-        }
-      },
-      "required": ["id", "compounds"]
-    }
-  }'
+  schema <- SETTINGS |>
+    pluck("schemas") |>
+    pluck("post-compounds-interaction")
 
-  parse_res <- read_json_body(body_data, schema,
+  parse_res <- read_json_body(body_data,
+    schema = schema,
     max_cmpts = SETTINGS$limits$max_compounds,
     max_ids = SETTINGS$limits$max_ids
   )
@@ -206,34 +184,12 @@ api_pzn_interactions_get <- function(pzns, explain) {
 
 
 api_pzn_interactions_post <- function(body_data) {
-  schema <- '{
-    "type": "array",
-    "minItems": 1,
-    "maxItems": (max_ids),
-    "items": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "explain": {
-          "type": "boolean"
-        },
-        "pzns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "maxItems": (max_pzns),
-          "uniqueItems": true,
-        }
-      },
-      "required": ["id", "pzns"]
-    }
-  }'
+  schema <- SETTINGS |>
+    pluck("schemas") |>
+    pluck("post-pzns-interaction")
 
-  parse_res <- read_json_body(body_data, schema,
+  parse_res <- read_json_body(body_data,
+    schema = schema,
     max_pzns = SETTINGS$limits$max_pzns,
     max_ids = SETTINGS$limits$max_ids
   )

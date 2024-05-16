@@ -414,15 +414,13 @@ compound_priscus <- function(compounds, con = NULL) {
   if (is.null(priscus_df)) {
     return(NULL)
   }
-  print(sto_entries)
-  return(NULL)
 
 
-
-  res_df <- fam_keys |>
-    mutate(priscus = Key_FAM %in% priscus_df$Key_FAM) |>
-    select(-Key_FAM) |>
-    set_names(c("pzn", "priscus"))
+  res_df <- sto_entries |>
+    mutate(priscus = Key_STO %in% priscus_df$Key_STO) |>
+    select(-Key_STO) |>
+    set_names(c("compound", "priscus")) |>
+    distinct()
 
 
   res <- list(

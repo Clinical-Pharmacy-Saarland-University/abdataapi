@@ -5,11 +5,9 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-safe_json_validate <- safely(json_validate)
-
 # NULL on valid, else the error msg
 .validate_json_schema <- function(json_str, schema) {
-  res <- json_validate(json_str, schema, engine = "ajv", verbose = TRUE)
+  res <- jsonvalidate::json_validate(json = json_str, schema = schema, engine = "ajv", verbose = TRUE)
   if (res) {
     return(NULL)
   }
@@ -26,7 +24,6 @@ read_json_body <- function(json_str, schema, ...) {
   }
 
   # test for schema
-  schema <- glue(schema, ..., .open = "(", .close = ")")
   validation_error <- .validate_json_schema(json_str, schema)
   if (!is.null(validation_error)) {
     stop_for_bad_request("JSON request has invalid schema.")
@@ -80,7 +77,6 @@ validate_atc <- function(atc) {
 
 
 validate_logical <- function(logical, default, error_msg) {
-
   if (missing(logical) || is.null(logical) || logical == "") {
     return(default)
   }
@@ -98,7 +94,6 @@ validate_logical <- function(logical, default, error_msg) {
 
 # returns result
 .validate_compounds_get <- function(cmps) {
-
   if (missing(cmps) || is.null(cmps) || cmps == "") {
     stop_for_bad_request("Compounds parameter is required.")
   }

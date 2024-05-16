@@ -21,6 +21,9 @@
 # RStudio files
 .Rproj.user/
 
+# linters
+.lintr
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
@@ -49,6 +52,7 @@ po/*~
 rsconnect/
 src/secrets.json
 client/test_credentials.R
+client/client_credentials.yaml
 management/users.json
 management/users_*.json
 src/Rplots.pdf

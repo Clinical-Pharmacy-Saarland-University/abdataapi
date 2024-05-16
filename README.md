@@ -22,9 +22,9 @@ This repository does **not** provide the ABDA data base.
     "database": "db_name"
   },
   "userdb": {
-    "collection": "users",
-    "db": "abdata",
-    "url": "mongodb://localhost:27017"
+    "collection": "user_collection",
+    "db": "db_for_users",
+    "url": "url_to_mongodb"
   },
    "log_db": {
     "collection": "logs_collection",

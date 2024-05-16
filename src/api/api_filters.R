@@ -1,7 +1,6 @@
-
 .cleanup_token_current <- function(token) {
   token <- token |>
-    stringr::str_split(" ", simplify = TRUE) |>
+    str_split(" ", simplify = TRUE) |>
     trimws()
 
   if (length(token) != 2) {
@@ -15,7 +14,7 @@
 
   token <- token[2]
   token <- token |>
-    stringr::str_remove_all('\"')
+    str_remove_all('\"')
 
   return(token)
 }
@@ -23,7 +22,7 @@
 .cleanup_token_v1 <- function(token) {
   token <- token |> trimws()
   token <- token |>
-    stringr::str_remove_all('\"')
+    str_remove_all('\"')
 
   return(token)
 }

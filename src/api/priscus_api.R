@@ -8,8 +8,7 @@
 # Helper ----
 # *******************************************************************
 safe_fromJson <- safely(fromJSON)
-pzn_priscus(c("04966751", "00054065", "04524289"))
-compound_priscus(c("Sotalol", "Metoprolol", "Bisoprolol"))
+
 ### Compounds ----
 # *******************************************************************
 api_compound_priscus_get <- function(compounds) {
@@ -22,6 +21,45 @@ api_compound_priscus_get <- function(compounds) {
   ret <- tag_result(ret, list(ids = 1, items = length(compounds)))
   ret$compounds <- compounds
   return(ret)
+}
+
+api_compound_priscus_post <- function(body_data) {
+  schema <- SETTINGS |>
+    pluck("schemas") |>
+    pluck("post-compounds")
+
+  parse_res <- read_json_body(body_data,
+    schema = schema,
+    max_compounds = SETTINGS$limits$max_compounds,
+    max_ids = SETTINGS$limits$max_ids
+  )
+  con <- connectServer()
+  on.exit(disconnect(con))
+  sum_c <- 0
+  ret <- lapply(parse_res, \(x) {
+    cmpts <- unlist(x$compounds)
+    sum_c <<- sum_c + length(cmpts)
+    cmpts_ok <- map_lgl(cmpts, \(x) nchar(trimws(x)) > 0)
+    if (any(!cmpts_ok)) {
+      stop_for_bad_request("Some Compounds are invalid.", invalid_compounds = cmpts[which(!cmpts_ok)])
+    }
+
+    res <- compound_priscus(cmpts, con)
+    if (is.null(res)) {
+      stop_for_internal_server_error("Database connection error.")
+    }
+
+    res$id <- unbox(x$id)
+    res$compounds <- cmpts
+    res
+  })
+
+  result <- list(results = ret)
+  result <- tag_result(result, list(
+    ids = length(parse_res),
+    items = length(sum_c)
+  ))
+  result
 }
 
 
@@ -40,33 +78,14 @@ api_pzn_priscus_get <- function(pzns) {
 }
 
 api_pzn_priscus_post <- function(body_data) {
-  schema <- '{
-    "type": "array",
-    "minItems": 1,
-    "maxItems": (max_ids),
-    "items": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "pzns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "maxItems": (max_pzns),
-          "uniqueItems": true,
-        }
-      },
-      "required": ["id", "pzns"]
-    }
-  }'
+  schema <- SETTINGS |>
+    pluck("schemas") |>
+    pluck("post-pzns")
 
-  parse_res <- read_json_body(body_data, schema,
-                              max_pzns = SETTINGS$limits$max_pzns,
-                              max_ids = SETTINGS$limits$max_ids
+  parse_res <- read_json_body(body_data,
+    schema = schema,
+    max_pzns = SETTINGS$limits$max_pzns,
+    max_ids = SETTINGS$limits$max_ids
   )
 
   con <- connectServer()

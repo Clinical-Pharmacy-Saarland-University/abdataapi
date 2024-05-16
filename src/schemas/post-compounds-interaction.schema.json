@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "post-compounds-interaction",
+  "description": "schema for posting compounds to the interaction endpoint interactions/compounds",
+  "$id": "post-compounds-interaction",
+  "type": "array",
+  "minItems": 1,
+  "maxItems": 100,
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "explain": {
+        "type": "boolean"
+      },
+      "compounds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 50,
+        "uniqueItems": true
+      }
+    },
+    "required": ["id", "compounds"]
+  }
+}

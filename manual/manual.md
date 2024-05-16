@@ -1,13 +1,14 @@
 # ABDA API usage
 
 ## Version History
-| Date        | Version | Changes |                                                          
-| ------------ | ------ | ------- |
-| 10-20-2023         | 0.1.0    | Initial document   |
-| 11-06-2023         | 0.2.0    | Updates authorization schema (Bearer format)   |
-| 02-21-2024         | 0.3.0    | Adds PZN search endpoint, fixed documentation error  |
-| 02-22-2024         | 0.4.0    | Adds /pzns/products endpoint  |
-| 03-19-2024         | 0.5.0    | Changes /pzns/products endpoint to include ATC output |
+| Date         | Version | Changes                                               |
+| ------------ | ------  | -------                                               |
+| 10-20-2023   | 0.1.0   | Initial document                                      |
+| 11-06-2023   | 0.2.0   | Updates authorization schema (Bearer format)          |
+| 02-21-2024   | 0.3.0   | Adds PZN search endpoint, fixed documentation error   |
+| 02-22-2024   | 0.4.0   | Adds /pzns/products endpoint                          |
+| 03-19-2024   | 0.5.0   | Changes /pzns/products endpoint to include ATC output |
+| 05-15-2024   | 0.6.0   | Adds potentially inadequate medicine (Priscus 2.0) endpoints |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
@@ -40,17 +41,21 @@ Currently, all access to all routes other than [POST /login](#post-login) **requ
 | information  | GET    | /limits                   | Request limits of the server. No parameters.                                                                                                                     |
 | information  | GET    | /interactions/description | Request description of the interaction table. No parameters.                                                                                                     |
 | interactions | GET    | /interactions/compounds   | Interaction endpoint for compound names input. See [GET /interactions/compounds](#get-interactionscompounds) for more information and example usage.             |
-| interactions | POST   | /interactions/compounds   | Interaction endpoint for compound names input from JSON. See [POST /interactions/compounds](#post-interactionscompounds) for more information and example usage. |
+| interactions | POST   | /interactions/compounds   | Interaction endpoint for compound names input from json. See [POST /interactions/compounds](#post-interactionscompounds) for more information and example usage. |
 | interactions | GET    | /interactions/pzns        | Interaction endpoint for pzn input. See [GET /interactions/pzns](#get-interactionspzns) for more information and example usage.                                  |
-| interactions | POST   | /interactions/pzns        | Interaction endpoint for pzn input from JSON. See [POST /interactions/pzns](#post-interactionspzns) for more information and example usage.                      |
-| atc          | GET    | /atcs/drugs               | Drug endpoint for ATC input                                                                                                                                      |
-| pzns         | GET    | /pzns/products            | Drug products endpoint for PZN input                                                                                                                             |
+| interactions | POST   | /interactions/pzns        | Interaction endpoint for pzn input from json. See [POST /interactions/pzns](#post-interactionspzns) for more information and example usage.                      |
+| priscus      | GET    | /priscus/compounds        | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.                                                           |
+| priscus      | POST   | /priscus/compounds        | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.                                                 |
+| priscus      | GET    | /priscus/pzns             | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.                                                                     |
+| priscus      | POST   | /priscus/pzns             | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.                                                           |
+| atc          | GET    | /atcs/drugs               | Drug endpoint for ATC input.                                                                                                                                     |
+| pzns         | GET    | /pzns/products            | Drug products endpoint for PZN input.                                                                                                                            |
 
 ## Example Usage
 ### POST /login
 #### Input
-Provide your credentials as a *JSON*. The *JSON* must be structured as follows:
-```{JSON}
+Provide your credentials as a *json*. The *json* must be structured as follows:
+```{json}
 {
     "credentials": {
         "username": "your_username",
@@ -59,15 +64,15 @@ Provide your credentials as a *JSON*. The *JSON* must be structured as follows:
 }
 ```
 #### Example Usage
-```{curl}
-curl -X POST "https://abdata.clinicalpharmacy.me/api/login"  \
+  ```{curl}
+  curl -X POST "https://abdata.clinicalpharmacy.me/api/login"  \
     -H "accept: application/json" \
     -H "Content-Type: application/json" \
     -d '{"credentials":{"username":"username","password":"password"}}'
 ```
 #### Output
 The return value for a successful **POST** request has the following structure:
-```{JSON}
+```{json}
 {
     "yourjwttoken"
 }
@@ -77,7 +82,6 @@ The return value for a successful **POST** request has the following structure:
 Check for interactions based on compound names provided as query parameters. 
 #### Example Usage
 ```{curl}
-# wrong
 curl -X GET "https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin" \
     -H "accept: application/json" \
     -H "Content-Type: application/json" \
@@ -85,7 +89,7 @@ curl -X GET "https://abdata.clinicalpharmacy.me/api/interactions/compounds?compo
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
-```{JSON}
+```{json}
 {
   "interactions": [
     {
@@ -117,8 +121,8 @@ The return value for a successful **GET** request has the following structure:
 ```
 ### POST /interactions/compounds
 #### Input
-Check for interactions based on compound names provided as *JSON*. Drug lists must be provided matched to an *ID*:
-```{JSON}
+Check for interactions based on compound names provided as *json*. Drug lists must be provided matched to an *ID*:
+```{json}
 {
     [
         { 
@@ -141,7 +145,7 @@ curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/compounds" \
 ```
 #### Output
 The return value for a successful **POST** request has the following structure:
-```{JSON}
+```{json}
 {
   "results": [
     {
@@ -247,11 +251,12 @@ The return value for a successful **POST** request has the following structure:
   "timestamp": "2023-10-20 13:21:59",
   "api_version": "0.3.0"
 }
-  ```
-  ### POST /interactions/pzns
-  #### Input
-  Check for interactions based on PZNs (*Pharmazentralnummer*, a German product identifier for drugs)  provided as *JSON*. Lists of PZNs must be provided matched to an *ID*:
-  ```{JSON}
+```
+
+### POST /interactions/pzns
+#### Input
+Check for interactions based on PZNs (*Pharmazentralnummer*, a German product identifier for drugs)  provided as *json*. Lists of PZNs must be provided matched to an *ID*:
+  ```{json}
   [ 
       {
           "id": "1", 
@@ -273,7 +278,7 @@ curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns" \
 ```
 #### Output
 The return value for a successful **POST** request has the following structure:
-```{JSON}
+```{json}
 {
   "results": [
     {
@@ -323,7 +328,233 @@ The return value for a successful **POST** request has the following structure:
   "api_version": "0.3.0"
 }
 ```
+### GET /priscus/compounds
+#### Input
+Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as query parameters. 
+#### Example Usage
+```{curl}
+curl -X GET "https://abdata.clinicalpharmacy.me/api/priscus/compounds?compounds=metoprolol,pindolol,diazepam" \
+    -H "accept: application/json" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer yourjwttoken"
+```
+#### Output
+The return value for a successful **GET** request has the following structure:
+```{json}
+{
+  "priscus": [
+    {
+      "compound": "Metoprolol",
+      "priscus": false
+    },
+    {
+      "compound": "Pindolol",
+      "priscus": true
+    },
+    {
+      "compound": "Diazepam",
+      "priscus": true
+    }
+  ],
+  "unknown_compounds": [],
+  "timestamp": "2024-05-16 12:31:53",
+  "api_version": "0.6.0",
+  "compounds": ["metoprolol", "pindolol", "diazepam"]
+}
+```
+### POST /priscus/compounds
+#### Input
+Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as *json*.
+Drug lists must be provided matched to an *ID*:
+```{json}
+{
+    [
+        { 
+            "id": "1",
+            "compounds": ["metoprolol","pindolol"] 
+        },
+        { 
+            "id": "2",
+            "compounds": ["diazepam","ranitidine","amlodipine","lovastatin"] 
+        }
+    ]
+}
+```
 
+#### Example Usage
+```{curl}
+curl -X POST "https://abdata.clinicalpharmacy.me/api/priscus/compounds" \
+     -H "Authorization: Bearer yourjwttoken" \
+     -H "Content-Type: application/json" \
+     -d '[{"id":"1","compounds":["metoprolol","pindolol","diazepam"]},{"id":"2","compounds":["diazepam","ranitidine","amlodipine","lovastatin"]}]'
+```
+#### Output
+The return value for a successful **POST** request has the following structure:
+```{json}
+{
+  "results": [
+    {
+      "priscus": [
+        {
+          "compound": "Metoprolol",
+          "priscus": false
+        },
+        {
+          "compound": "Pindolol",
+          "priscus": true
+        },
+        {
+          "compound": "Diazepam",
+          "priscus": true
+        }
+      ],
+      "unknown_compounds": [],
+      "id": "1",
+      "compounds": ["metoprolol", "pindolol", "diazepam"]
+    },
+    {
+      "priscus": [
+        {
+          "compound": "Diazepam",
+          "priscus": true
+        },
+        {
+          "compound": "Ranitidine",
+          "priscus": true
+        },
+        {
+          "compound": "Amlodipine",
+          "priscus": false
+        },
+        {
+          "compound": "Lovastatin",
+          "priscus": false
+        }
+      ],
+      "unknown_compounds": [],
+      "id": "2",
+      "compounds": ["diazepam", "ranitidine", "amlodipine", "lovastatin"]
+    }
+  ],
+  "timestamp": "2024-05-16 12:58:51",
+  "api_version": "0.6.0"
+}
+```
+### GET /priscus/pzns
+#### Input
+Check for potentially inadequate medicine for geriatric patients based on PZNs (*Pharmazentralnummer*, a German product identifier for drugs) provided as *query parameters*.
+
+#### Example Usage
+```{curl}
+curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns?pzns=03967062,03041347,00592733" \
+     -H "Authorization: Bearer yourjwttoken" \
+     -H "Content-Type: application/json" \
+```
+#### Output
+The return value for a successful **GET** request has the following structure:
+```{json}
+{
+  "priscus": [
+    {
+      "pzn": "00592733",
+      "priscus": false
+    },
+    {
+      "pzn": "03041347",
+      "priscus": true
+    },
+    {
+      "pzn": "03967062",
+      "priscus": true
+    }
+  ],
+  "unknown_pzns": [],
+  "timestamp": "2024-05-16 13:13:05",
+  "api_version": "0.6.0",
+  "pzns": ["03967062", "03041347", "00592733"]
+}
+```
+
+### POST /priscus/pzns
+#### Input
+Check for potentially inadequate medicine for geriatric patients based on PZNs (*Pharmazentralnummer*, a German product identifier for drugs) provided as *json*.
+Lists of PZNs must be provided matched to an *ID*:
+  ```{json}
+[ 
+  {
+    "id": "1", 
+    "pzns":["03041347","17145955","00592733","13981502"] 
+  },
+  {
+    "id": "2", 
+    "pzns":["03041347","17145955","00592733","13981502"] 
+  }
+]
+        
+```
+#### Example Usage
+```{curl}
+curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns" \
+     -H "Authorization: Bearer yourjwttoken" \
+     -H "Content-Type: application/json" \
+     -d '[{"id":"1","pzns":["03041347","17145955","00592733","13981502"]},{"id":"2","pzns":["03041347","17145955","00592733","13981502"]}]'
+```
+#### Output
+The return value for a successful **POST** request has the following structure:
+```{json}
+{
+  "results": [
+    {
+      "priscus": [
+        {
+          "pzn": "00592733",
+          "priscus": false
+        },
+        {
+          "pzn": "03041347",
+          "priscus": true
+        },
+        {
+          "pzn": "13981502",
+          "priscus": false
+        },
+        {
+          "pzn": "17145955",
+          "priscus": false
+        }
+      ],
+      "unknown_pzns": [],
+      "id": "1",
+      "pzns": ["03041347", "17145955", "00592733", "13981502"]
+    },
+    {
+      "priscus": [
+        {
+          "pzn": "00592733",
+          "priscus": false
+        },
+        {
+          "pzn": "03041347",
+          "priscus": true
+        },
+        {
+          "pzn": "13981502",
+          "priscus": false
+        },
+        {
+          "pzn": "17145955",
+          "priscus": false
+        }
+      ],
+      "unknown_pzns": [],
+      "id": "2",
+      "pzns": ["03041347", "17145955", "00592733", "13981502"]
+    }
+  ],
+  "timestamp": "2024-05-16 12:58:51",
+  "api_version": "0.6.0"
+}
+```
 
 ### GET /atcs/drugs
 #### Input
@@ -336,7 +567,7 @@ curl -X GET "https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08D
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
-```{JSON}
+```{json}
 { 
     "names": [ 
         { 
@@ -378,7 +609,7 @@ curl -X GET "https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,
 ```
 #### Output
 The return value for a successful **GET** request has the following structure:
-```{JSON}
+```{json}
 {
     "products": [
     {
