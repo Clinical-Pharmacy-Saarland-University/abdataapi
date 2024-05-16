@@ -47,6 +47,14 @@ install.packages(c("plumber", "dplyr", "purrr", "tidyr", "glue", "jsonlite", "js
     "jose", "mongolite", "httpproblems")
 ```
 
+## Tests
+
+To run the tests create a *client_credentials.yaml* file in the *client* directory.
+```yaml
+HOST: "host-address"
+PWD: "password"
+USER: "user"
+```
 ## Application Start
 
 After configuration you can start the application via the following command:
