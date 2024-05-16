@@ -401,6 +401,11 @@ code {
 <td>0.5.0</td>
 <td>Changes /pzns/products endpoint to include ATC output</td>
 </tr>
+<tr>
+<td>05-15-2024</td>
+<td>0.6.0</td>
+<td>Adds potentially inadequate medicine (Priscus 2.0) endpoints</td>
+</tr>
 </tbody>
 </table>
 <h2 id="general-remarks">General Remarks</h2>
@@ -411,11 +416,11 @@ code {
 <p>The API is generally intended for usage with dedicated console utilities such as <em>curl</em> or the corresponding utilities in programming languages such as the <em>httr</em> or similar packages in the <em>R</em> programming language.
 There is no dedicated endpoint for testing access to the API yet. However, testing <strong>GET</strong> endpoints is possible in a browser, for instance <a href="https://abdata.clinicalpharmacy.me/api/limits">https://abdata.clinicalpharmacy.me/api/limits</a> should return</p>
 <pre class="hljs"><code><div>{
-    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7235#section-3.1&quot;,
-    &quot;title&quot;: &quot;Unauthorized&quot;, 
-    &quot;status&quot;: 401, 
-    &quot;detail&quot;: &quot;No login token provided.&quot;, 
-    &quot;instance&quot;: &quot;/limits&quot; 
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"https://tools.ietf.org/html/rfc7235#section-3.1"</span>,
+    <span class="hljs-attr">"title"</span>: <span class="hljs-string">"Unauthorized"</span>, 
+    <span class="hljs-attr">"status"</span>: <span class="hljs-number">401</span>, 
+    <span class="hljs-attr">"detail"</span>: <span class="hljs-string">"No login token provided."</span>, 
+    <span class="hljs-attr">"instance"</span>: <span class="hljs-string">"/limits"</span> 
 }
 </div></code></pre>
 <h2 id="authorization">Authorization</h2>
@@ -475,7 +480,7 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>interactions</td>
 <td>POST</td>
 <td>/interactions/compounds</td>
-<td>Interaction endpoint for compound names input from JSON. See <a href="#post-interactionscompounds">POST /interactions/compounds</a> for more information and example usage.</td>
+<td>Interaction endpoint for compound names input from json. See <a href="#post-interactionscompounds">POST /interactions/compounds</a> for more information and example usage.</td>
 </tr>
 <tr>
 <td>interactions</td>
@@ -487,35 +492,59 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>interactions</td>
 <td>POST</td>
 <td>/interactions/pzns</td>
-<td>Interaction endpoint for pzn input from JSON. See <a href="#post-interactionspzns">POST /interactions/pzns</a> for more information and example usage.</td>
+<td>Interaction endpoint for pzn input from json. See <a href="#post-interactionspzns">POST /interactions/pzns</a> for more information and example usage.</td>
+</tr>
+<tr>
+<td>priscus</td>
+<td>GET</td>
+<td>/priscus/compounds</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.</td>
+</tr>
+<tr>
+<td>priscus</td>
+<td>POST</td>
+<td>/priscus/compounds</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.</td>
+</tr>
+<tr>
+<td>priscus</td>
+<td>GET</td>
+<td>/priscus/pzns</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.</td>
+</tr>
+<tr>
+<td>priscus</td>
+<td>POST</td>
+<td>/priscus/pzns</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.</td>
 </tr>
 <tr>
 <td>atc</td>
 <td>GET</td>
 <td>/atcs/drugs</td>
-<td>Drug endpoint for ATC input</td>
+<td>Drug endpoint for ATC input.</td>
 </tr>
 <tr>
 <td>pzns</td>
 <td>GET</td>
 <td>/pzns/products</td>
-<td>Drug products endpoint for PZN input</td>
+<td>Drug products endpoint for PZN input.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="example-usage">Example Usage</h2>
 <h3 id="post-login">POST /login</h3>
 <h4 id="input">Input</h4>
-<p>Provide your credentials as a <em>JSON</em>. The <em>JSON</em> must be structured as follows:</p>
+<p>Provide your credentials as a <em>json</em>. The <em>json</em> must be structured as follows:</p>
 <pre class="hljs"><code><div>{
-    &quot;credentials&quot;: {
-        &quot;username&quot;: &quot;your_username&quot;,
-        &quot;password&quot;: &quot;your_password&quot;
+    <span class="hljs-attr">"credentials"</span>: {
+        <span class="hljs-attr">"username"</span>: <span class="hljs-string">"your_username"</span>,
+        <span class="hljs-attr">"password"</span>: <span class="hljs-string">"your_password"</span>
     }
 }
 </div></code></pre>
 <h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/login&quot;  \
+<pre class="hljs"><code><div>  curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/login&quot;  \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
     -d '{&quot;credentials&quot;:{&quot;username&quot;:&quot;username&quot;,&quot;password&quot;:&quot;password&quot;}}'
@@ -523,15 +552,14 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{
-    &quot;yourjwttoken&quot;
+    <span class="hljs-attr">"yourjwttoken"</span>
 }
 </div></code></pre>
 <h3 id="get-interactionscompounds">GET /interactions/compounds</h3>
 <h4 id="input">Input</h4>
 <p>Check for interactions based on compound names provided as query parameters.</p>
 <h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div># wrong
-curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
+<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
     -H &quot;Authorization: Bearer yourjwttoken&quot;
@@ -539,46 +567,46 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{
-  &quot;interactions&quot;: [
+  <span class="hljs-attr">"interactions"</span>: [
     {
-      &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-      &quot;relevance&quot;: &quot;severe&quot;,
-      &quot;frequency&quot;: &quot;not known&quot;,
-      &quot;credibility&quot;: &quot;high&quot;,
-      &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-      &quot;left_compound&quot;: &quot;Simvastatin&quot;,
-      &quot;right_compound&quot;: &quot;Verapamil&quot;,
-      &quot;left_atc&quot;: &quot;C10AA01&quot;,
-      &quot;right_atc&quot;: &quot;C08DA01&quot;,
-      &quot;left_formulation&quot;: &quot;FTA&quot;,
-      &quot;right_formulation&quot;: &quot;FTA&quot;,
-      &quot;left_medication&quot;: &quot;ZOCOR 10mg&quot;,
-      &quot;right_medication&quot;: &quot;Isoptin 80mg&quot;,
-      &quot;left_dose&quot;: &quot;10 mg&quot;,
-      &quot;right_dose&quot;: &quot;74.06 mg&quot;
+      <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+      <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
+      <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+      <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
+      <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+      <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Simvastatin"</span>,
+      <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Verapamil"</span>,
+      <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA01"</span>,
+      <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DA01"</span>,
+      <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"FTA"</span>,
+      <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"FTA"</span>,
+      <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"ZOCOR 10mg"</span>,
+      <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Isoptin 80mg"</span>,
+      <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"10 mg"</span>,
+      <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"74.06 mg"</span>
     }
   ],
-  &quot;unknown_compounds&quot;: [],
-  &quot;timestamp&quot;: &quot;2023-10-20 13:20:57&quot;,
-  &quot;api_version&quot;: &quot;0.3.0&quot;,
-  &quot;compounds&quot;: [
-    &quot;verapamil&quot;,
-    &quot;simvastatin&quot;
+  <span class="hljs-attr">"unknown_compounds"</span>: [],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:20:57"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>,
+  <span class="hljs-attr">"compounds"</span>: [
+    <span class="hljs-string">"verapamil"</span>,
+    <span class="hljs-string">"simvastatin"</span>
   ]
 }
 </div></code></pre>
 <h3 id="post-interactionscompounds">POST /interactions/compounds</h3>
 <h4 id="input">Input</h4>
-<p>Check for interactions based on compound names provided as <em>JSON</em>. Drug lists must be provided matched to an <em>ID</em>:</p>
+<p>Check for interactions based on compound names provided as <em>json</em>. Drug lists must be provided matched to an <em>ID</em>:</p>
 <pre class="hljs"><code><div>{
     [
         { 
-            &quot;id&quot;: &quot;1&quot;,
-            &quot;compounds&quot;: [&quot;verapamil&quot;,&quot;simvastatin&quot;] 
+            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>,<span class="hljs-string">"simvastatin"</span>] 
         },
         { 
-            &quot;id&quot;: &quot;2&quot;,
-            &quot;compounds&quot;: [&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;] 
+            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diltiazem"</span>,<span class="hljs-string">"amiodarone"</span>,<span class="hljs-string">"amlodipine"</span>,<span class="hljs-string">"lovastatin"</span>] 
         }
     ]
 }
@@ -592,125 +620,125 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{
-  &quot;results&quot;: [
+  <span class="hljs-attr">"results"</span>: [
     {
-      &quot;interactions&quot;: [
+      <span class="hljs-attr">"interactions"</span>: [
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;severe&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;high&quot;,
-          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-          &quot;left_compound&quot;: &quot;Simvastatin&quot;,
-          &quot;right_compound&quot;: &quot;Verapamil&quot;,
-          &quot;left_atc&quot;: &quot;C10AA01&quot;,
-          &quot;right_atc&quot;: &quot;C08DA01&quot;,
-          &quot;left_formulation&quot;: &quot;FTA&quot;,
-          &quot;right_formulation&quot;: &quot;FTA&quot;,
-          &quot;left_medication&quot;: &quot;ZOCOR 10mg&quot;,
-          &quot;right_medication&quot;: &quot;Isoptin 80mg&quot;,
-          &quot;left_dose&quot;: &quot;10 mg&quot;,
-          &quot;right_dose&quot;: &quot;74.06 mg&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Simvastatin"</span>,
+          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Verapamil"</span>,
+          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA01"</span>,
+          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DA01"</span>,
+          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"FTA"</span>,
+          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"FTA"</span>,
+          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"ZOCOR 10mg"</span>,
+          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Isoptin 80mg"</span>,
+          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"10 mg"</span>,
+          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"74.06 mg"</span>
         }
       ],
-      &quot;unknown_compounds&quot;: [],
-      &quot;id&quot;: &quot;1&quot;,
-      &quot;compounds&quot;: [
-        &quot;verapamil&quot;,
-        &quot;simvastatin&quot;
+      <span class="hljs-attr">"unknown_compounds"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"compounds"</span>: [
+        <span class="hljs-string">"verapamil"</span>,
+        <span class="hljs-string">"simvastatin"</span>
       ]
     },
     {
-      &quot;interactions&quot;: [
+      <span class="hljs-attr">"interactions"</span>: [
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;moderate&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;weak&quot;,
-          &quot;direction&quot;: &quot;undirected interaction&quot;,
-          &quot;left_compound&quot;: &quot;Amiodarone&quot;,
-          &quot;right_compound&quot;: &quot;Diltiazem&quot;,
-          &quot;left_atc&quot;: &quot;C01BD01&quot;,
-          &quot;right_atc&quot;: &quot;C08DB01&quot;,
-          &quot;left_formulation&quot;: &quot;DFL&quot;,
-          &quot;right_formulation&quot;: &quot;RET&quot;,
-          &quot;left_medication&quot;: &quot;Cordarex 150mg/3ml Injektionslösung&quot;,
-          &quot;right_medication&quot;: &quot;Dilzem 120mg retard&quot;,
-          &quot;left_dose&quot;: &quot;141.98 mg&quot;,
-          &quot;right_dose&quot;: &quot;110.3 mg&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"moderate"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"undirected interaction"</span>,
+          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Amiodarone"</span>,
+          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Diltiazem"</span>,
+          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C01BD01"</span>,
+          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DB01"</span>,
+          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"DFL"</span>,
+          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"RET"</span>,
+          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Cordarex 150mg/3ml Injektionslösung"</span>,
+          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Dilzem 120mg retard"</span>,
+          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"141.98 mg"</span>,
+          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"110.3 mg"</span>
         },
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;severe&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;high&quot;,
-          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
-          &quot;right_compound&quot;: &quot;Amiodarone&quot;,
-          &quot;left_atc&quot;: &quot;C10AA02&quot;,
-          &quot;right_atc&quot;: &quot;C01BD01&quot;,
-          &quot;left_formulation&quot;: &quot;TAB&quot;,
-          &quot;right_formulation&quot;: &quot;DFL&quot;,
-          &quot;left_medication&quot;: &quot;Lovastatin AL 20mg&quot;,
-          &quot;right_medication&quot;: &quot;Cordarex 150mg/3ml Injektionslösung&quot;,
-          &quot;left_dose&quot;: &quot;20 mg&quot;,
-          &quot;right_dose&quot;: &quot;141.98 mg&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
+          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Amiodarone"</span>,
+          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA02"</span>,
+          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C01BD01"</span>,
+          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"TAB"</span>,
+          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"DFL"</span>,
+          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Lovastatin AL 20mg"</span>,
+          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Cordarex 150mg/3ml Injektionslösung"</span>,
+          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"20 mg"</span>,
+          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"141.98 mg"</span>
         },
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;severe&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;high&quot;,
-          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
-          &quot;right_compound&quot;: &quot;Diltiazem&quot;,
-          &quot;left_atc&quot;: &quot;C10AA02&quot;,
-          &quot;right_atc&quot;: &quot;C08DB01&quot;,
-          &quot;left_formulation&quot;: &quot;TAB&quot;,
-          &quot;right_formulation&quot;: &quot;RET&quot;,
-          &quot;left_medication&quot;: &quot;Lovastatin AL 20mg&quot;,
-          &quot;right_medication&quot;: &quot;Dilzem 120mg retard&quot;,
-          &quot;left_dose&quot;: &quot;20 mg&quot;,
-          &quot;right_dose&quot;: &quot;110.3 mg&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
+          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Diltiazem"</span>,
+          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA02"</span>,
+          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DB01"</span>,
+          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"TAB"</span>,
+          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"RET"</span>,
+          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Lovastatin AL 20mg"</span>,
+          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Dilzem 120mg retard"</span>,
+          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"20 mg"</span>,
+          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"110.3 mg"</span>
         },
         {
-          &quot;relevance&quot;: &quot;no statement possible&quot;,
-          &quot;left_compound&quot;: &quot;Lovastatin&quot;,
-          &quot;right_compound&quot;: &quot;Amlodipine&quot;,
-          &quot;right_atc&quot;: &quot;C08CA01&quot;,
-          &quot;right_formulation&quot;: &quot;TAB&quot;,
-          &quot;right_medication&quot;: &quot;Norvasc 5mg&quot;,
-          &quot;right_dose&quot;: &quot;5 mg&quot;
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"no statement possible"</span>,
+          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
+          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Amlodipine"</span>,
+          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08CA01"</span>,
+          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"TAB"</span>,
+          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Norvasc 5mg"</span>,
+          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"5 mg"</span>
         }
       ],
-      &quot;unknown_compounds&quot;: [],
-      &quot;id&quot;: &quot;2&quot;,
-      &quot;compounds&quot;: [
-        &quot;diltiazem&quot;,
-        &quot;amiodarone&quot;,
-        &quot;amlodipine&quot;,
-        &quot;lovastatin&quot;
+      <span class="hljs-attr">"unknown_compounds"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+      <span class="hljs-attr">"compounds"</span>: [
+        <span class="hljs-string">"diltiazem"</span>,
+        <span class="hljs-string">"amiodarone"</span>,
+        <span class="hljs-string">"amlodipine"</span>,
+        <span class="hljs-string">"lovastatin"</span>
       ]
     }
   ],
-  &quot;timestamp&quot;: &quot;2023-10-20 13:21:59&quot;,
-  &quot;api_version&quot;: &quot;0.3.0&quot;
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:21:59"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>
 }
 </div></code></pre>
 <h3 id="post-interactionspzns">POST /interactions/pzns</h3>
 <h4 id="input">Input</h4>
-<p>Check for interactions based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs)  provided as <em>JSON</em>. Lists of PZNs must be provided matched to an <em>ID</em>:</p>
-<pre class="hljs"><code><div>[ 
-    {
-        &quot;id&quot;: &quot;1&quot;, 
-        &quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;] 
-    },
-    {
-        &quot;id&quot;: &quot;2&quot;, 
-        &quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;] 
-    }
+<p>Check for interactions based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs)  provided as <em>json</em>. Lists of PZNs must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>  [ 
+      {
+          <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>, 
+          <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
+      },
+      {
+          <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>, 
+          <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
+      }
 ]
-      
+        
 </div></code></pre>
 <h4 id="example-usage">Example Usage</h4>
 <pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
@@ -721,52 +749,265 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{
-  &quot;results&quot;: [
+  <span class="hljs-attr">"results"</span>: [
     {
-      &quot;interactions&quot;: [
+      <span class="hljs-attr">"interactions"</span>: [
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;minor&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;weak&quot;,
-          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-          &quot;left_PZN&quot;: &quot;03041347&quot;,
-          &quot;right_PZN&quot;: &quot;00592733&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"minor"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+          <span class="hljs-attr">"left_PZN"</span>: <span class="hljs-string">"03041347"</span>,
+          <span class="hljs-attr">"right_PZN"</span>: <span class="hljs-string">"00592733"</span>
         }
       ],
-      &quot;unknown_pzns&quot;: [],
-      &quot;id&quot;: &quot;1&quot;,
-      &quot;pzns&quot;: [
-        &quot;03041347&quot;,
-        &quot;17145955&quot;,
-        &quot;00592733&quot;,
-        &quot;13981502&quot;
+      <span class="hljs-attr">"unknown_pzns"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"pzns"</span>: [
+        <span class="hljs-string">"03041347"</span>,
+        <span class="hljs-string">"17145955"</span>,
+        <span class="hljs-string">"00592733"</span>,
+        <span class="hljs-string">"13981502"</span>
       ]
     },
     {
-      &quot;interactions&quot;: [
+      <span class="hljs-attr">"interactions"</span>: [
         {
-          &quot;plausibility&quot;: &quot;plausible mechanism&quot;,
-          &quot;relevance&quot;: &quot;minor&quot;,
-          &quot;frequency&quot;: &quot;not known&quot;,
-          &quot;credibility&quot;: &quot;weak&quot;,
-          &quot;direction&quot;: &quot;unidirectional interaction&quot;,
-          &quot;left_PZN&quot;: &quot;03041347&quot;,
-          &quot;right_PZN&quot;: &quot;00592733&quot;
+          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
+          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"minor"</span>,
+          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
+          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
+          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
+          <span class="hljs-attr">"left_PZN"</span>: <span class="hljs-string">"03041347"</span>,
+          <span class="hljs-attr">"right_PZN"</span>: <span class="hljs-string">"00592733"</span>
         }
       ],
-      &quot;unknown_pzns&quot;: [],
-      &quot;id&quot;: &quot;2&quot;,
-      &quot;pzns&quot;: [
-        &quot;03041347&quot;,
-        &quot;17145955&quot;,
-        &quot;00592733&quot;,
-        &quot;13981502&quot;
+      <span class="hljs-attr">"unknown_pzns"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+      <span class="hljs-attr">"pzns"</span>: [
+        <span class="hljs-string">"03041347"</span>,
+        <span class="hljs-string">"17145955"</span>,
+        <span class="hljs-string">"00592733"</span>,
+        <span class="hljs-string">"13981502"</span>
       ]
     }
   ],
-  &quot;timestamp&quot;: &quot;2023-10-20 13:17:41&quot;,
-  &quot;api_version&quot;: &quot;0.3.0&quot;
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:17:41"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>
+}
+</div></code></pre>
+<h3 id="get-priscuscompounds">GET /priscus/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as query parameters.</p>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds?compounds=metoprolol,pindolol,diazepam&quot; \
+    -H &quot;accept: application/json&quot; \
+    -H &quot;Content-Type: application/json&quot; \
+    -H &quot;Authorization: Bearer yourjwttoken&quot;
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"priscus"</span>: [
+    {
+      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Metoprolol"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+    },
+    {
+      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Pindolol"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+    },
+    {
+      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+    }
+  ],
+  <span class="hljs-attr">"unknown_compounds"</span>: [],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:31:53"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
+  <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>, <span class="hljs-string">"pindolol"</span>, <span class="hljs-string">"diazepam"</span>]
+}
+</div></code></pre>
+<h3 id="post-priscuscompounds">POST /priscus/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as <em>json</em>.
+Drug lists must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>{
+    [
+        { 
+            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>,<span class="hljs-string">"pindolol"</span>] 
+        },
+        { 
+            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diazepam"</span>,<span class="hljs-string">"ranitidine"</span>,<span class="hljs-string">"amlodipine"</span>,<span class="hljs-string">"lovastatin"</span>] 
+        }
+    ]
+}
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;metoprolol&quot;,&quot;pindolol&quot;,&quot;diazepam&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diazepam&quot;,&quot;ranitidine&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;]}]'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"results"</span>: [
+    {
+      <span class="hljs-attr">"priscus"</span>: [
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Metoprolol"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Pindolol"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        },
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        }
+      ],
+      <span class="hljs-attr">"unknown_compounds"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>, <span class="hljs-string">"pindolol"</span>, <span class="hljs-string">"diazepam"</span>]
+    },
+    {
+      <span class="hljs-attr">"priscus"</span>: [
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        },
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Ranitidine"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        },
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Amlodipine"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        }
+      ],
+      <span class="hljs-attr">"unknown_compounds"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diazepam"</span>, <span class="hljs-string">"ranitidine"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
+    }
+  ],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:58:51"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
+}
+</div></code></pre>
+<h3 id="get-priscuspzns">GET /priscus/pzns</h3>
+<h4 id="input">Input</h4>
+<p>Check for potentially inadequate medicine for geriatric patients based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs) provided as <em>query parameters</em>.</p>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns?pzns=03967062,03041347,00592733&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"priscus"</span>: [
+    {
+      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+    },
+    {
+      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+    },
+    {
+      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03967062"</span>,
+      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+    }
+  ],
+  <span class="hljs-attr">"unknown_pzns"</span>: [],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 13:13:05"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
+  <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03967062"</span>, <span class="hljs-string">"03041347"</span>, <span class="hljs-string">"00592733"</span>]
+}
+</div></code></pre>
+<h3 id="post-priscuspzns">POST /priscus/pzns</h3>
+<h4 id="input">Input</h4>
+<p>Check for potentially inadequate medicine for geriatric patients based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs) provided as <em>json</em>.
+Lists of PZNs must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>[ 
+  {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>, 
+    <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
+  },
+  {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>, 
+    <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
+  }
+]
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"results"</span>: [
+    {
+      <span class="hljs-attr">"priscus"</span>: [
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"13981502"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"17145955"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        }
+      ],
+      <span class="hljs-attr">"unknown_pzns"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03041347"</span>, <span class="hljs-string">"17145955"</span>, <span class="hljs-string">"00592733"</span>, <span class="hljs-string">"13981502"</span>]
+    },
+    {
+      <span class="hljs-attr">"priscus"</span>: [
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"13981502"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        },
+        {
+          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"17145955"</span>,
+          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
+        }
+      ],
+      <span class="hljs-attr">"unknown_pzns"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
+      <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03041347"</span>, <span class="hljs-string">"17145955"</span>, <span class="hljs-string">"00592733"</span>, <span class="hljs-string">"13981502"</span>]
+    }
+  ],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:58:51"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
 }
 </div></code></pre>
 <h3 id="get-atcsdrugs">GET /atcs/drugs</h3>
@@ -780,32 +1021,32 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{ 
-    &quot;names&quot;: [ 
+    <span class="hljs-attr">"names"</span>: [ 
         { 
-            &quot;atc&quot;: &quot;C01BD01&quot;, 
-            &quot;name_german&quot;:&quot;Amiodaron&quot;, 
-            &quot;name_english&quot;:&quot;Amiodarone&quot; 
+            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C01BD01"</span>, 
+            <span class="hljs-attr">"name_german"</span>:<span class="hljs-string">"Amiodaron"</span>, 
+            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Amiodarone"</span> 
         }, 
         { 
-            &quot;atc&quot;: &quot;C08DA01&quot; 
-            ,&quot;name_german&quot;: &quot;Verapamil&quot;,
-            &quot;name_english&quot;:&quot;Verapamil&quot;
+            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C08DA01"</span> 
+            ,<span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Verapamil"</span>,
+            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Verapamil"</span>
         },
         { 
-            &quot;atc&quot;: &quot;C08DB01&quot;, 
-            &quot;name_german&quot;: &quot;Diltiazem&quot;,
-            &quot;name_english&quot;: &quot;Diltiazem&quot;
+            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C08DB01"</span>, 
+            <span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Diltiazem"</span>,
+            <span class="hljs-attr">"name_english"</span>: <span class="hljs-string">"Diltiazem"</span>
         }, 
         { 
-            &quot;atc&quot;: &quot;J01CR02&quot;, 
-            &quot;name_german&quot;: &quot;Amoxicillin und Beta-Lactamase-Inhibitor&quot;, 
-            &quot;name_english&quot;:&quot;Amoxicillin and beta-lactamase inhibitor&quot;
+            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"J01CR02"</span>, 
+            <span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Amoxicillin und Beta-Lactamase-Inhibitor"</span>, 
+            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Amoxicillin and beta-lactamase inhibitor"</span>
         }
     ],
-    &quot;unknown_atcs&quot;:[],
-    &quot;timestamp&quot;: &quot;2023-10-20 10:56:21&quot;,
-    &quot;api_version&quot;: &quot;0.3.0&quot;, 
-    &quot;atcs&quot;: [&quot;C01BD01&quot;,&quot;C08DB01&quot;,&quot;C08DA01&quot;,&quot;J01CR02&quot;]
+    <span class="hljs-attr">"unknown_atcs"</span>:[],
+    <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 10:56:21"</span>,
+    <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>, 
+    <span class="hljs-attr">"atcs"</span>: [<span class="hljs-string">"C01BD01"</span>,<span class="hljs-string">"C08DB01"</span>,<span class="hljs-string">"C08DA01"</span>,<span class="hljs-string">"J01CR02"</span>]
 } 
 </div></code></pre>
 <h3 id="get-pznsproducts">GET /pzns/products</h3>
@@ -819,30 +1060,30 @@ curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?
 <h4 id="output">Output</h4>
 <p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
 <pre class="hljs"><code><div>{
-    &quot;products&quot;: [
+    <span class="hljs-attr">"products"</span>: [
     {
-        &quot;pzn&quot;:&quot;00592733&quot;,
-        &quot;product&quot;:&quot;Famotidin STADA 40mg&quot;,
-        &quot;atc&quot;:&quot;A02BA03&quot;
+        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"00592733"</span>,
+        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"Famotidin STADA 40mg"</span>,
+        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A02BA03"</span>
     },
     {
-        &quot;pzn&quot;:&quot;03041347&quot;,
-        &quot;product&quot;:&quot;Domperidon AbZ 10mg&quot;,
-        &quot;atc&quot;:&quot;A03FA03&quot;
+        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"03041347"</span>,
+        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"Domperidon AbZ 10mg"</span>,
+        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A03FA03"</span>
     },
     {
-        &quot;pzn&quot;:&quot;03967062&quot;,
-        &quot;product&quot;:&quot;MCP-ratiopharm 10mg&quot;,
-        &quot;atc&quot;:&quot;A03FA01&quot;
+        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"03967062"</span>,
+        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"MCP-ratiopharm 10mg"</span>,
+        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A03FA01"</span>
     }
     ],
-    &quot;unknown_pzns&quot;:[],
-    &quot;timestamp&quot;:&quot;2024-02-22 09:05:55&quot;,
-    &quot;api_version&quot;:&quot;0.3.0&quot;,
-    &quot;pzns&quot;:[
-        &quot;03967062&quot;,
-        &quot;03041347&quot;,
-        &quot;00592733&quot;
+    <span class="hljs-attr">"unknown_pzns"</span>:[],
+    <span class="hljs-attr">"timestamp"</span>:<span class="hljs-string">"2024-02-22 09:05:55"</span>,
+    <span class="hljs-attr">"api_version"</span>:<span class="hljs-string">"0.3.0"</span>,
+    <span class="hljs-attr">"pzns"</span>:[
+        <span class="hljs-string">"03967062"</span>,
+        <span class="hljs-string">"03041347"</span>,
+        <span class="hljs-string">"00592733"</span>
     ]
 }
 </div></code></pre>
