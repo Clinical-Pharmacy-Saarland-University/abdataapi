@@ -75,6 +75,16 @@ tests <- function(time = TRUE) {
     api_get(cred$HOST, "api/qtc/pzns?pzns=03967062,03041347,00592733", token, time = time)
   )
 
+  log <- api_test(
+    log, "GET", "adrs/pzns", "1 pzn, lang = 'german'",
+    api_get(cred$HOST, "api/adrs/pzns?pzns=03967062&lang=german", token, time = time)
+  )
+
+  log <- api_test(
+    log, "GET", "adrs/pzns", "3 pzns",
+    api_get(cred$HOST, "api/adrs/pzns?pzns=03967062,03041347,00592733", token, time = time)
+  )
+
   ## PZN Post ----
   # *******************************************************************
   pzn_list <- purrr::map(seq(5), \(i)  {
@@ -102,6 +112,35 @@ tests <- function(time = TRUE) {
   log <- api_test(
     log, "POST", "qtc/pzns", "5 ids",
     api_post(cred$HOST, "api/qtc/pzns", pzn_list, token, time = time)
+  )
+
+  log <- api_test(
+    log, "POST", "adrs/pzns", "5 ids",
+    api_post(cred$HOST, "api/adrs/pzns", pzn_list, token, time = time)
+  )
+
+  pzn_list <- purrr::map(seq(5), \(i)  {
+    list(
+      id = unbox(as.character(i)), lang = c("german-simple"),
+      pzns = c("03041347", "17145955", "00592733", "13981502")
+    )
+  })
+
+  log <- api_test(
+    log, "POST", "adrs/pzns", "5 ids, lang = 'german-simple'",
+    api_post(cred$HOST, "api/adrs/pzns", pzn_list, token, time = time)
+  )
+
+  pzn_list <- purrr::map(seq(5), \(i)  {
+    list(
+      id = unbox(as.character(i)), lang = c("german"),
+      pzns = c("03041347", "17145955", "00592733", "13981502")
+    )
+  })
+
+  log <- api_test(
+    log, "POST", "adrs/pzns", "5 ids, lang = 'german'",
+    api_post(cred$HOST, "api/adrs/pzns", pzn_list, token, time = time)
   )
 
   ## Compound GET ----

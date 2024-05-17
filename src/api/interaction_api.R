@@ -57,12 +57,12 @@ api_interaction_description <- function() {
     "Frequency is not documented in the database."
   )
 
-  credebility <- data.frame(ABDATA_code = c(10, 20, 30, 40, 50, NA))
-  credebility <- credebility |> mutate(
+  credibility <- data.frame(ABDATA_code = c(10, 20, 30, 40, 50, NA))
+  credibility <- credibility |> mutate(
     api_text =
-      purrr::map_vec(ABDATA_code, ~ .translate_credebility(.))
+      purrr::map_vec(ABDATA_code, ~ .translate_credibility(.))
   )
-  credebility$description <- c(
+  credibility$description <- c(
     "Evidence for interaction is not known from the evaluated literature.",
     "Evidence for interaction is insufficient from the evaluated literature.",
     "Evidence for interaction is weak from the evaluated literature.",
@@ -88,7 +88,7 @@ api_interaction_description <- function() {
       plausability = plausability,
       relevance = relevance,
       frequency = frequency,
-      credebility = credebility,
+      credibility = credibility,
       direction = direction
     )
   )

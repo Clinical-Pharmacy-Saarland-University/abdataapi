@@ -83,7 +83,7 @@
 }
 
 
-.translate_credebility <- function(value) {
+.translate_credibility <- function(value) {
   if (is.na(value)) {
     return(NA_character_)
   }
@@ -131,7 +131,7 @@ translate_interaction_table <- function(df) {
   df$plausibility <- purrr::map_vec(df$plausibility, ~ .translate_plausability(.))
   df$relevance <- purrr::map_vec(df$relevance, ~ .translate_relevance(.))
   df$frequency <- purrr::map_vec(df$frequency, ~ .translate_frequency(.))
-  df$credibility <- purrr::map_vec(df$credibility, ~ .translate_credebility(.))
+  df$credibility <- purrr::map_vec(df$credibility, ~ .translate_credibility(.))
   df$direction <- purrr::map_vec(df$direction, ~ .translate_direction(.))
 
   return(df)
