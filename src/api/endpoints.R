@@ -213,9 +213,9 @@ function(req, res) {
 function(req, res) {
   log_info <- req_info(req)
   body <- req$postBody
-  # future_promise({
-  with_logger(LOGGER, log_info, api_pzn_priscus_post(body))
-  # })
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_priscus_post(body))
+  })
 }
 
 # Endpoints QTc drug ----
