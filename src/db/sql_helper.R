@@ -130,6 +130,30 @@ sql_qtc_fam <- function(fam_keys, con = NULL) {
   res
 }
 
+
+# df or NULL on error
+sql_adrs_fam <- function(fam_keys, lang = c("german", "german-simple", "english"), con = NULL) {
+  lang <- match.arg(lang)
+
+  lang_add <- case_when(
+    lang == "german" ~ "AND Sprache = 1",
+    lang == "german-simple" ~ "AND Vorzugsbezeichnung_L = 1",
+    lang == "english" ~ "AND Sprache = 2"
+  )
+
+  res <- sql_query(
+    paste(
+      "SELECT NEB_C.Key_FAM, NEB_C.Key_MIV, NEB_C.Haeufigkeit, MIN_C.Name FROM NEB_C JOIN MIN_C ON NEB_C.Key_MIV = MIN_C.Key_MIV",
+      "WHERE NEB_C.Key_FAM IN ({fam_keys*})",
+      "AND MIN_C.Key_MIV = NEB_C.Key_MIV", # ADRS
+      lang_add
+    ),
+    fam_keys = fam_keys, .con = con
+  )
+
+  res
+}
+
 # df or NULL on error
 sql_fam_keys_interactions <- function(fam_keys, con = NULL) {
   res <- sql_query(
@@ -152,7 +176,7 @@ sql_inter_explain <- function(int_keys, con = NULL) {
     paste(
       "SELECT Key_INT, Textfeld, Text FROM INT_C RIGHT JOIN ITX_C ON",
       "INT_C.Textverweis = ITX_C.Textverweis WHERE Key_INT IN ({int_keys*}) AND",
-      "Textfeld IN (50, 360, 350, 270)"
+      "Textfeld IN (50, 360, 350, 330, 270, 280, 290, 300, 310)"
     ),
     int_keys = int_keys, .con = con
   )
@@ -164,6 +188,11 @@ sql_inter_explain <- function(int_keys, con = NULL) {
         Textfeld == 360 ~ "adr",
         Textfeld == 350 ~ "risk_factors",
         Textfeld == 270 ~ "risk_factors_add",
+        Textfeld == 330 ~ "possible_symptoms",
+        Textfeld == 280 ~ "measures_intake",
+        Textfeld == 290 ~ "measures_interval",
+        Textfeld == 300 ~ "measures_other",
+        Textfeld == 310 ~ "measures_short_term",
         TRUE ~ as.character(Textfeld)
       )) |>
       select(-Textfeld) |>
@@ -175,7 +204,10 @@ sql_inter_explain <- function(int_keys, con = NULL) {
       )
 
     # List of all expected columns after pivot
-    expected_columns <- c("pharm_effect", "adr", "risk_factors", "risk_factors_add")
+    expected_columns <- c(
+      "pharm_effect", "adr", "risk_factors", "risk_factors_add", "possible_symptoms",
+      "measures_intake", "measures_interval", "measures_other", "measures_short_term"
+    )
 
     # Adding missing columns with NA values
     missing_columns <- setdiff(expected_columns, names(res))

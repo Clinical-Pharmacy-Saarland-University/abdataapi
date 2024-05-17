@@ -271,3 +271,33 @@ function(req, res) {
     with_logger(LOGGER, log_info, api_pzn_qtc_post(body))
   })
 }
+
+# Endpoints ADRs ----
+# *******************************************************************
+#* ADRs endpoint for pzn input
+#* @param pzns:[string] Comma-separated unique pzns as string
+#* @param lang:[string] Language for the ADRs. Allowed values are "english", "german" and "german-simple". Default is "english".
+#* @tag adrs
+#* @serializer unboxedJSON list(na = NULL)
+#* @get /adrs/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  pzns <- req$args$pzns
+  lang <- req$args$lang
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_adrs_get(pzns, lang))
+  })
+}
+
+#* Interaction endpoint for PZN input from JSON
+#* @param .body The raw body content from the request
+#* @tag adrs
+#* @serializer unboxedJSON list(na = NULL)
+#* @post /adrs/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_adrs_post(body))
+  })
+}

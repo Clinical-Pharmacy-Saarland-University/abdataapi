@@ -44,6 +44,7 @@ source("api/misc_api.R")
 source("api/interaction_api.R")
 source("api/priscus_api.R")
 source("api/qtc_api.R")
+source("api/adrs_api.R")
 source("setup/swagger.R")
 source("setup/handlers.R")
 

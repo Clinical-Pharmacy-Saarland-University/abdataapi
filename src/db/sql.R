@@ -453,6 +453,37 @@ compound_priscus <- function(compounds, con = NULL) {
     ))
 }
 
+.set_adr_category <- function(df, lang = c("german", "german-simple", "english")) {
+  lang <- match.arg(lang)
+  if (lang == "english") {
+    df_out <- df |>
+      mutate(adr_frequency_description = case_when(
+        Haeufigkeit == 1 ~ "Very common (>= 10%)",
+        Haeufigkeit == 2 ~ "Common (>= 1% to < 10%)",
+        Haeufigkeit == 3 ~ "Occasional (>= 0.1% to < 1%)",
+        Haeufigkeit == 4 ~ "Rare (>= 0.01% to < 0.1%)",
+        Haeufigkeit == 5 ~ "Very rare (< 0.01%)",
+        Haeufigkeit == 6 ~ "Unknown",
+        .default = "Unknown"
+      ))
+  } else {
+    df_out <- df |>
+      mutate(adr_frequency_description = case_when(
+        Haeufigkeit == 1 ~ "Sehr häufig (>= 10%)",
+        Haeufigkeit == 2 ~ "Häufig (>= 1% bis < 10%)",
+        Haeufigkeit == 3 ~ "Gelegentlich (>= 0.1% bis < 1%)",
+        Haeufigkeit == 4 ~ "Selten (>= 0.01% bis < 0.1%)",
+        Haeufigkeit == 5 ~ "Sehr selten (< 0.01%)",
+        Haeufigkeit == 6 ~ "Nicht bekannt",
+        .default = "Nicht bekannt"
+      ))
+  }
+  out <- df_out |>
+    mutate(adr_frequency_category = Haeufigkeit) |>
+    select(-Haeufigkeit)
+  return(out)
+}
+
 # list or NULL on error
 pzn_qtc <- function(pz_numbers, con = NULL) {
   if (length(pz_numbers) < 1) {
@@ -555,4 +586,87 @@ compound_qtc <- function(compounds, con = NULL) {
   )
 
   res
+}
+
+# ADRs ----
+# *******************************************************************
+# list or NULL on error
+pzn_adrs <- function(pz_numbers, lang = c("german", "german-simple", "english"), con = NULL) {
+  lang <- match.arg(lang)
+
+  if (length(pz_numbers) < 1) {
+    res <- list(
+      adrs = character(),
+      unknown_pzns = character()
+    )
+    return(res)
+  }
+
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  # fam key fetching
+  fam_keys <- sql_famkeys_pzn(pz_numbers, con)
+  if (is.null(fam_keys)) {
+    return(NULL)
+  }
+
+  unknown_pzns <- pz_numbers[!pz_numbers %in% fam_keys$PZN]
+  if (nrow(fam_keys) == 0) {
+    res <- list(
+      adrs = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  # adr fetching
+  adr_df <- sql_adrs_fam(fam_keys$Key_FAM, lang, con)
+
+  if (is.null(adr_df)) {
+    return(NULL)
+  }
+
+  res_df <- fam_keys |>
+    left_join(adr_df, by = "Key_FAM") |>
+    .set_adr_category(lang = lang) |>
+    select(-Key_FAM)
+
+  res_pzns <- res_df |>
+    group_split(PZN)
+
+  res_adrs <- res_pzns |>
+    lapply(\(df) {
+      out <- list()
+      out$pzn <- df |>
+        pull(PZN) |>
+        unique()
+
+      out$adrs <- df |>
+        group_split(Key_MIV) |>
+        lapply(\(x) {
+          list(
+            adr_frequency_category = pull(x, adr_frequency_category) |> unique() |> first(),
+            adr_frequency_description = pull(x, adr_frequency_description) |> unique() |> first(),
+            names = pull(x, Name) |> as.list()
+          )
+        })
+      return(out)
+    })
+
+
+
+  res <- list(
+    lang = lang,
+    results = res_adrs,
+    unknown_pzns = unknown_pzns
+  )
+
+  return(res)
 }

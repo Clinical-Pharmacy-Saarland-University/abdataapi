@@ -82,6 +82,20 @@ validate_atc <- function(atc) {
   }
 }
 
+validate_language <- function(lang, default, error_msg) {
+  if (missing(lang) || is.null(lang) || lang == "") {
+    return(default)
+  }
+
+  lang <- tolower(lang) |>
+    trimws()
+
+  if (!lang %in% c("english", "german-simple", "german")) {
+    stop_for_bad_request(error_msg)
+  }
+
+  return(lang)
+}
 
 validate_logical <- function(logical, default, error_msg) {
   if (missing(logical) || is.null(logical) || logical == "") {
