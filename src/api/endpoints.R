@@ -213,7 +213,61 @@ function(req, res) {
 function(req, res) {
   log_info <- req_info(req)
   body <- req$postBody
+  # future_promise({
+  with_logger(LOGGER, log_info, api_pzn_priscus_post(body))
+  # })
+}
+
+# Endpoints QTc drug ----
+# *******************************************************************
+#* QTc drug endpoint for compound names input
+#* @param compounds:[string] Comma-separated unique compound names as string
+#* @tag qtc
+#* @serializer unboxedJSON list(na = NULL)
+#* @get /qtc/compounds
+function(req, res) {
+  log_info <- req_info(req)
+  cmps <- req$args$compounds
   future_promise({
-    with_logger(LOGGER, log_info, api_pzn_priscus_post(body))
+    with_logger(LOGGER, log_info, api_compound_qtc_get(cmps))
+  })
+}
+
+#* QTc drug endpoint for  compound names from JSON
+#* @param .body The raw body content from the request
+#* @tag qtc
+#* @serializer unboxedJSON list(na = NULL)
+#* @post /qtc/compounds
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+    with_logger(LOGGER, log_info, api_compound_qtc_post(body))
+  })
+}
+
+#* QTc drug endpoint for PZN input
+#* @param pzns:[string] Comma-separated unique PZNs as strings
+#* @tag qtc
+#* @serializer unboxedJSON list(na = NULL)
+#* @get /qtc/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  pzns <- req$args$pzns
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_qtc_get(pzns))
+  })
+}
+
+#* QTc drug endpoint for PZN input from JSON
+#* @param .body The raw body content from the request
+#* @tag qtc
+#* @serializer unboxedJSON list(na = NULL)
+#* @post /qtc/pzns
+function(req, res) {
+  log_info <- req_info(req)
+  body <- req$postBody
+  future_promise({
+    with_logger(LOGGER, log_info, api_pzn_qtc_post(body))
   })
 }

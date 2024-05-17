@@ -7,6 +7,8 @@
 
 # Misc queries ----
 # *******************************************************************
+# pzn_qtc(c("04966751", "00054065", "04524289", "08782315", "02524807", "04877929", "03173184", "00036357"))
+# compound_qtc(c("carbamazepine", "ciprofloxacine", "metoprolol", "amitriptyline", "pindolol", "ibuprofen"))
 
 # list or NULL on error
 sql_formulations <- sql_atc_names <- function(con = NULL) {
@@ -425,6 +427,130 @@ compound_priscus <- function(compounds, con = NULL) {
 
   res <- list(
     priscus = res_df,
+    unknown_compounds = unknown_compounds
+  )
+
+  res
+}
+
+# QTc Drugs ----
+# *******************************************************************
+
+# helper function to set qtc category
+.set_qtc_category <- function(df) {
+  df |>
+    mutate(qtc_category = case_when(
+      Key_SGR == 10079780 ~ 3,
+      Key_SGR == 10079781 ~ 2,
+      Key_SGR == 10079782 ~ 1,
+      .default = 0
+    )) |>
+    mutate(description = case_when(
+      qtc_category == 3 ~ "Known risk for Torsade de pointes according to crediblemeds.org",
+      qtc_category == 2 ~ "Possible risk for Torsade de pointes according to crediblemeds.org",
+      qtc_category == 1 ~ "Conditional risk for Torsade de pointes according to crediblemeds.org",
+      TRUE ~ "Risk unknown"
+    ))
+}
+
+# list or NULL on error
+pzn_qtc <- function(pz_numbers, con = NULL) {
+  if (length(pz_numbers) < 1) {
+    res <- list(
+      qtc = character(),
+      unknown_pzns = character()
+    )
+    return(res)
+  }
+
+  if (is.null(con)) {
+    con <- connectServer()
+    on.exit(disconnect(con), add = TRUE)
+  }
+
+  if (is.null(con)) {
+    return(NULL)
+  }
+
+  # fam key fetching
+  fam_keys <- sql_famkeys_pzn(pz_numbers, con)
+  if (is.null(fam_keys)) {
+    return(NULL)
+  }
+
+  unknown_pzns <- pz_numbers[!pz_numbers %in% fam_keys$PZN]
+  if (nrow(fam_keys) == 0) {
+    res <- list(
+      qtc = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  # qtc fetching
+  qtc_df <- sql_qtc_fam(fam_keys$Key_FAM, con)
+  if (is.null(qtc_df)) {
+    return(NULL)
+  }
+
+  res_df <- fam_keys |>
+    left_join(qtc_df, by = "Key_FAM") |>
+    .set_qtc_category() |>
+    select(-Key_FAM, -Key_SGR, -Key_STO) |>
+    distinct()
+
+  res <- list(
+    qtc = res_df,
+    unknown_pzns = unknown_pzns
+  )
+
+  return(res)
+}
+
+# list or NULL on error
+compound_qtc <- function(compounds, con = NULL) {
+  if (length(compounds) < 1) {
+    res <- list(
+      qtc = character(),
+      unknown_compounds = character()
+    )
+    return(res)
+  }
+
+  sto_entries <- sql_query("SELECT Key_STO, Name FROM SNA_DB WHERE Name IN ({compounds*})",
+    compounds = compounds, .con = con
+  )
+  if (is.null(sto_entries)) {
+    return(NULL)
+  }
+
+  unknown_compounds <- compounds[!tolower(compounds) %in% tolower(sto_entries$Name)]
+  if (nrow(sto_entries) == 0) {
+    res <- list(
+      qtc = character(),
+      unknown_pzns = unknown_pzns
+    )
+    return(res)
+  }
+
+  sto <- unique(sto_entries$Key_STO)
+  qtc_df <- sql_query("SELECT Key_STO, Key_SGR FROM SZG_DB WHERE Key_STO IN ({sto*}) AND Key_SGR IN (10079780, 10079781, 10079782)",
+    sto = sto, .con = con
+  )
+
+  if (is.null(qtc_df)) {
+    return(NULL)
+  }
+
+  res_df <- sto_entries |>
+    left_join(qtc_df, by = "Key_STO") |>
+    .set_qtc_category() |>
+    select(-Key_SGR, -Key_STO) |>
+    distinct()
+
+
+  res <- list(
+    qtc = res_df,
     unknown_compounds = unknown_compounds
   )
 

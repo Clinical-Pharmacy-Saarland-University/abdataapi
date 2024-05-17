@@ -24,3 +24,31 @@ tag_result <- function(res, details = NULL) {
   attr(res, "details") <- details
   res
 }
+
+# iterates over parsed items, validates input and queries the database using provided functions
+process_items_post <- function(parse_res, item = c("pzns", "compounds"), validate_fn, query_fn, con) {
+  item <- match.arg(item)
+
+  sum <- 0
+  ret <- lapply(parse_res, \(x) {
+    items <- unlist(x[[item]])
+    items_ok <- map_lgl(items, validate_fn)
+
+    if (any(!items_ok) && item == "pzns") {
+      stop_for_bad_request("Some PZNs are invalid.", invalid_pzns = pzns[which(!pzns_ok)])
+    } else if (any(!items_ok) && item == "compounds") {
+      stop_for_bad_request("Some Compounds are invalid.", invalid_compounds = cmpts[which(!cmpts_ok)])
+    }
+
+    sum <<- sum + length(items)
+    res <- query_fn(items, con)
+    if (is.null(res)) {
+      stop_for_internal_server_error("Database connection error.")
+    }
+
+    res$id <- unbox(x$id)
+    res[[item]] <- items
+    res
+  })
+  return(ret)
+}

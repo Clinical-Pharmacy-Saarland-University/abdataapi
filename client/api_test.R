@@ -65,6 +65,16 @@ tests <- function(time = TRUE) {
     api_get(cred$HOST, "api/priscus/pzns?pzns=03967062,03041347,00592733", token, time = time)
   )
 
+  log <- api_test(
+    log, "GET", "qtc/pzns", "1 pzn",
+    api_get(cred$HOST, "api/qtc/pzns?pzns=03967062", token, time = time)
+  )
+
+  log <- api_test(
+    log, "GET", "qtc/pzns", "3 pzns",
+    api_get(cred$HOST, "api/qtc/pzns?pzns=03967062,03041347,00592733", token, time = time)
+  )
+
   ## PZN Post ----
   # *******************************************************************
   pzn_list <- purrr::map(seq(5), \(i)  {
@@ -86,8 +96,12 @@ tests <- function(time = TRUE) {
     api_post(cred$HOST, "api/interactions/pzns", pzn_list, token, time = time)
   )
   log <- api_test(
-    log, "POST", "priscus/pzns", "5 ids ",
+    log, "POST", "priscus/pzns", "5 ids",
     api_post(cred$HOST, "api/priscus/pzns", pzn_list, token, time = time)
+  )
+  log <- api_test(
+    log, "POST", "qtc/pzns", "5 ids",
+    api_post(cred$HOST, "api/qtc/pzns", pzn_list, token, time = time)
   )
 
   ## Compound GET ----
@@ -116,6 +130,14 @@ tests <- function(time = TRUE) {
     log, "GET", "priscus/compounds", "3 compounds",
     api_get(cred$HOST, "api/priscus/compounds?compounds=metoprolol,pindolol,diazepam", token, time = time)
   )
+  log <- api_test(
+    log, "GET", "qtc/compounds", "1 compound",
+    api_get(cred$HOST, "api/qtc/compounds?compounds=verapamil", token, time = time)
+  )
+  log <- api_test(
+    log, "GET", "qtc/compounds", "3 compounds",
+    api_get(cred$HOST, "api/qtc/compounds?compounds=quinidine,diphenhydramine,ciprofloxacine", token, time = time)
+  )
 
   ## Compound Post ----
   # *******************************************************************
@@ -129,6 +151,10 @@ tests <- function(time = TRUE) {
   log <- api_test(
     log, "POST", "priscus/compounds", "5 ids",
     api_post(cred$HOST, "api/priscus/compounds", compound_list, token, time = time)
+  )
+  log <- api_test(
+    log, "POST", "qtc/compounds", "5 ids",
+    api_post(cred$HOST, "api/qtc/compounds", compound_list, token, time = time)
   )
 
   compound_list <- purrr::map(seq(5), \(i)  {

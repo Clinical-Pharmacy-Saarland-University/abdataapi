@@ -62,6 +62,13 @@ validate_pzn <- function(pzn, validate_checksum = SETTINGS$validation$validate_p
 }
 
 # T/F
+# input must be a string of at least one character
+validate_compound <- function(cmp) {
+  ok <- nchar(trimws(cmp)) > 0
+  return(ok)
+}
+
+# T/F
 # input must be one atc code
 validate_atc <- function(atc) {
   # Regular expression to match ATC pattern

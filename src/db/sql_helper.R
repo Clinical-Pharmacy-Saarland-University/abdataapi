@@ -118,6 +118,19 @@ sql_priscus_fam <- function(fam_keys, con = NULL) {
 }
 
 # df or NULL on error
+sql_qtc_fam <- function(fam_keys, con = NULL) {
+  res <- sql_query(
+    paste(
+      "SELECT Key_FAM, FAI_DB.Key_STO, SZG_DB.Key_SGR FROM FAI_DB LEFT JOIN SZG_DB ON FAI_DB.Key_STO = SZG_DB.Key_STO",
+      "WHERE Key_FAM IN ({fam_keys*}) AND Key_SGR IN (10079780, 10079781, 10079782)"
+    ),
+    fam_keys = fam_keys, .con = con
+  )
+
+  res
+}
+
+# df or NULL on error
 sql_fam_keys_interactions <- function(fam_keys, con = NULL) {
   res <- sql_query(
     paste(

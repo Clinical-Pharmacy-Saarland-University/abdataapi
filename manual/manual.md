@@ -2,14 +2,15 @@
 
 ## Version History
 
-| Date         | Version | Changes                                               |
-| ------------ | ------  | -------                                               |
-| 10-20-2023   | 0.1.0   | Initial document                                      |
-| 11-06-2023   | 0.2.0   | Updates authorization schema (Bearer format)          |
-| 02-21-2024   | 0.3.0   | Adds PZN search endpoint, fixed documentation error   |
-| 02-22-2024   | 0.4.0   | Adds /pzns/products endpoint                          |
-| 03-19-2024   | 0.5.0   | Changes /pzns/products endpoint to include ATC output |
+| Date         | Version | Changes                                                      |
+| ------------ | ------  | -------                                                      |
+| 10-20-2023   | 0.1.0   | Initial document                                             |
+| 11-06-2023   | 0.2.0   | Updates authorization schema (Bearer format)                 |
+| 02-21-2024   | 0.3.0   | Adds PZN search endpoint, fixed documentation error          |
+| 02-22-2024   | 0.4.0   | Adds /pzns/products endpoint                                 |
+| 03-19-2024   | 0.5.0   | Changes /pzns/products endpoint to include ATC output        |
 | 05-15-2024   | 0.6.0   | Adds potentially inadequate medicine (Priscus 2.0) endpoints |
+| 05-17-2024   | 0.6.1   | Adds QTc drugs according to crediblemeds.org                 |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
@@ -35,23 +36,28 @@ All endpoints are only accessible **without a trailing slash!**
 All routes refer to [https://abdata.clinicalpharmacy.me/api](https://abdata.clinicalpharmacy.me/api) as the root URI.
 Currently, all access to all routes other than [POST /login](#post-login) **require authentication.**
 
-| Group        | Method | Route                     | Description                                                                                                                                                      |
-| ------------ | ------ | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| user         | POST   | /login                    | Log a user in. See [POST /login](#post-login) for more information and example usage.                                                                            |
-| user         | GET    | /renew-token              | Retrieve a new token. No parameters.                                                                                                                             |
-| information  | GET    | /formulations             | Retrieve a list of all formulations within the database. No parameters.                                                                                          |
-| information  | GET    | /limits                   | Request limits of the server. No parameters.                                                                                                                     |
-| information  | GET    | /interactions/description | Request description of the interaction table. No parameters.                                                                                                     |
-| interactions | GET    | /interactions/compounds   | Interaction endpoint for compound names input. See [GET /interactions/compounds](#get-interactionscompounds) for more information and example usage.             |
-| interactions | POST   | /interactions/compounds   | Interaction endpoint for compound names input from json. See [POST /interactions/compounds](#post-interactionscompounds) for more information and example usage. |
-| interactions | GET    | /interactions/pzns        | Interaction endpoint for pzn input. See [GET /interactions/pzns](#get-interactionspzns) for more information and example usage.                                  |
-| interactions | POST   | /interactions/pzns        | Interaction endpoint for pzn input from json. See [POST /interactions/pzns](#post-interactionspzns) for more information and example usage.                      |
-| priscus      | GET    | /priscus/compounds        | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.                                                           |
-| priscus      | POST   | /priscus/compounds        | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.                                                 |
-| priscus      | GET    | /priscus/pzns             | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.                                                                     |
-| priscus      | POST   | /priscus/pzns             | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.                                                           |
-| atc          | GET    | /atcs/drugs               | Drug endpoint for ATC input.                                                                                                                                     |
-| pzns         | GET    | /pzns/products            | Drug products endpoint for PZN input.                                                                                                                            |
+| Group        | Method | Route                     | Reference                                                   | Description                                                                                                         |
+| ------------ | ------ | ------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| user         | POST   | /login                    | [POST /login](#post-login)                                  | Log a user in.                                                                                                      |
+| user         | GET    | /renew-token              |                                                             | Retrieve a new token. No parameters.                                                                                |
+| information  | GET    | /formulations             |                                                             | Retrieve a list of all formulations within the database. No parameters.                                             |
+| information  | GET    | /limits                   |                                                             | Request limits of the server. No parameters.                                                                        |
+| information  | GET    | /interactions/description |                                                             | Request description of the interaction table. No parameters.                                                        |
+| interactions | GET    | /interactions/compounds   | [GET /interactions/compounds](#get-interactionscompounds)   | Interaction endpoint for compound names input.                                                                      |
+| interactions | POST   | /interactions/compounds   | [POST /interactions/compounds](#post-interactionscompounds) | Interaction endpoint for compound names input from json.                                                            |
+| interactions | GET    | /interactions/pzns        | [GET /interactions/pzns](#get-interactionspzns)             | Interaction endpoint for pzn input.                                                                                 |
+| interactions | POST   | /interactions/pzns        |                                                             | Interaction endpoint for pzn input from json.                                                                       |
+| priscus      | GET    | /priscus/compounds        | [GET /priscus/compounds](#get-priscuscompounds)             | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.              |
+| priscus      | POST   | /priscus/compounds        | [POST /priscus/compounds](#post-priscuscompounds)           | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.    |
+| priscus      | GET    | /priscus/pzns             | [GET /priscus/pzns](#get-priscuspzns)                       | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.                        |
+| priscus      | POST   | /priscus/pzns             | [POST /priscus/pzns](#post-priscuspzns)                     | Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.              |
+| qtc          | GET    | /qtc/compounds            | [GET /qtc/compounds](#get-qtccompounds)                     | QTc (drugs with risk for Torsade de pointes) endpoint for compound name input.                                      |
+| qtc          | POST   | /qtc/compounds            | [POST /qtc/compounds](#post-qtccompounds)                   | QTc (drugs with risk for Torsade de pointes) endpoint for compound name input from json.                            |
+| qtc          | GET    | /qtc/pzns                 |                                                             | QTc (drugs with risk for Torsade de pointes) endpoint for pzn input.                                                |
+| qtc          | POST   | /qtc/pzns                 |                                                             | QTc (drugs with risk for Torsade de pointes) endpoint for pzn input from json.                                      |
+| atc          | GET    | /atcs/drugs               | [GET /atcs/drugs](#get-atcsdrugs)                           | Drug endpoint for ATC input.                                                                                        |
+| pzns         | GET    | /pzns/products            | [GET /pzns/products](#get-pznsproducts)                     | Drug products endpoint for PZN input.                                                                               |
+
 
 ## Example Usage
 ### POST /login
@@ -364,6 +370,7 @@ The return value for a successful **GET** request has the following structure:
   "compounds": ["metoprolol", "pindolol", "diazepam"]
 }
 ```
+
 ### POST /priscus/compounds
 #### Input
 Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as *json*.
@@ -448,7 +455,7 @@ Check for potentially inadequate medicine for geriatric patients based on PZNs (
 
 #### Example Usage
 ```curl
-curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns?pzns=03967062,03041347,00592733" \
+curl -X POST "https://abdata.clinicalpharmacy.me/api/priscus/pzns?pzns=03967062,03041347,00592733" \
      -H "Authorization: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
 ```
@@ -495,7 +502,7 @@ Lists of PZNs must be provided matched to an *ID*:
 ```
 #### Example Usage
 ```curl
-curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/pzns" \
+curl -X POST "https://abdata.clinicalpharmacy.me/api/priscus/pzns" \
      -H "Authorization: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
      -d '[{"id":"1","pzns":["03041347","17145955","00592733","13981502"]},{"id":"2","pzns":["03041347","17145955","00592733","13981502"]}]'
@@ -553,6 +560,129 @@ The return value for a successful **POST** request has the following structure:
     }
   ],
   "timestamp": "2024-05-16 12:58:51",
+  "api_version": "0.6.0"
+}
+```
+
+### GET /qtc/compounds
+#### Input
+Check for drugs with risks for Torsade de pointes according to [crediblemeds.org](https://crediblemeds.org) based on compound names provided as query parameters. 
+The following categories are used:
+
+- 0: Unknown risk
+- 1: Conditional risk
+- 2: Possible risk
+- 3: Known risk
+
+
+#### Example Usage
+```curl
+curl -X GET "https://abdata.clinicalpharmacy.me/api/qtc/compounds?compounds=quinidine,diphenhydramine,ciprofloxacine" \
+    -H "accept: application/json" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer yourjwttoken"
+```
+#### Output
+The return value for a successful **GET** request has the following structure:
+```json
+{
+  "qtc": [
+    {
+      "Name": "Diphenhydramine",
+      "qtc_category": 1,
+      "description": "Conditional risk for Torsade de pointes according to crediblemeds.org"
+    },
+    {
+      "Name": "Quinidine",
+      "qtc_category": 3,
+      "description": "Known risk for Torsade de pointes according to crediblemeds.org"
+    },
+    {
+      "Name": "Ciprofloxacine",
+      "qtc_category": 3,
+      "description": "Known risk for Torsade de pointes according to crediblemeds.org"
+    }
+  ],
+  "unknown_compounds": [],
+  "timestamp": "2024-05-17 08:58:27",
+  "api_version": "0.6.0",
+  "compounds": ["quinidine", "diphenhydramine", "ciprofloxacine"]
+}
+```
+
+### POST /qtc/compounds
+#### Input
+Check for drugs with risks for Torsade de pointes according to [crediblemeds.org](https://crediblemeds.org) based on compound names provided as query parameters. 
+The following categories are used:
+- 0: Unknown risk
+- 1: Conditional risk
+- 2: Possible risk
+- 3: Known risk
+
+Drug lists must be provided matched to an *ID*:
+
+```json
+{
+  [
+    { 
+      "id": "1",
+      "compounds": ["verapamil", "simvastatin", "diltiazem", "amiodarone", "amlodipine", "lovastatin"]
+    }
+  ]
+}
+```
+
+#### Example Usage
+```curl
+curl -X POST "https://abdata.clinicalpharmacy.me/api/qtc/compounds" \
+     -H "Authorization: Bearer yourjwttoken" \
+     -H "Content-Type: application/json" \
+     -d '[{"id":"1","compounds":["verapamil", "simvastatin", "diltiazem", "amiodarone", "amlodipine", "lovastatin"]}]'
+```
+#### Output
+The return value for a successful **POST** request has the following structure:
+```json
+{
+  "results": [
+    {
+      "qtc": [
+        {
+          "Name": "Amiodarone",
+          "qtc_category": 3,
+          "description": "Known risk for Torsade de pointes according to crediblemeds.org"
+        },
+        {
+          "Name": "Diltiazem",
+          "qtc_category": 1,
+          "description": "Conditional risk for Torsade de pointes according to crediblemeds.org"
+        },
+        {
+          "Name": "Verapamil",
+          "qtc_category": 0,
+          "description": "Risk unknown"
+        },
+        {
+          "Name": "Amlodipine",
+          "qtc_category": 0,
+          "description": "Risk unknown"
+        },
+        {
+          "Name": "Lovastatin",
+          "qtc_category": 0,
+          "description": "Risk unknown"
+        },
+        {
+          "Name": "Simvastatin",
+          "qtc_category": 0,
+          "description": "Risk unknown"
+        }
+      ],
+      "unknown_compounds": [],
+      "id": "1",
+      "compounds": ["verapamil", "simvastatin", "diltiazem", "amiodarone", "amlodipine", "lovastatin"]
+    }
+  ],
+  "timestamp": "2024-05-17 09:00:08",
   "api_version": "0.6.0"
 }
 ```

@@ -406,6 +406,11 @@ code {
 <td>0.6.0</td>
 <td>Adds potentially inadequate medicine (Priscus 2.0) endpoints</td>
 </tr>
+<tr>
+<td>05-17-2024</td>
+<td>0.6.1</td>
+<td>Adds QTc drugs according to crediblemeds.org</td>
+</tr>
 </tbody>
 </table>
 <h2 id="general-remarks">General Remarks</h2>
@@ -436,6 +441,7 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <th>Group</th>
 <th>Method</th>
 <th>Route</th>
+<th>Reference</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -444,90 +450,133 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>user</td>
 <td>POST</td>
 <td>/login</td>
-<td>Log a user in. See <a href="#post-login">POST /login</a> for more information and example usage.</td>
+<td><a href="#post-login">POST /login</a></td>
+<td>Log a user in.</td>
 </tr>
 <tr>
 <td>user</td>
 <td>GET</td>
 <td>/renew-token</td>
+<td></td>
 <td>Retrieve a new token. No parameters.</td>
 </tr>
 <tr>
 <td>information</td>
 <td>GET</td>
 <td>/formulations</td>
+<td></td>
 <td>Retrieve a list of all formulations within the database. No parameters.</td>
 </tr>
 <tr>
 <td>information</td>
 <td>GET</td>
 <td>/limits</td>
+<td></td>
 <td>Request limits of the server. No parameters.</td>
 </tr>
 <tr>
 <td>information</td>
 <td>GET</td>
 <td>/interactions/description</td>
+<td></td>
 <td>Request description of the interaction table. No parameters.</td>
 </tr>
 <tr>
 <td>interactions</td>
 <td>GET</td>
 <td>/interactions/compounds</td>
-<td>Interaction endpoint for compound names input. See <a href="#get-interactionscompounds">GET /interactions/compounds</a> for more information and example usage.</td>
+<td><a href="#get-interactionscompounds">GET /interactions/compounds</a></td>
+<td>Interaction endpoint for compound names input.</td>
 </tr>
 <tr>
 <td>interactions</td>
 <td>POST</td>
 <td>/interactions/compounds</td>
-<td>Interaction endpoint for compound names input from json. See <a href="#post-interactionscompounds">POST /interactions/compounds</a> for more information and example usage.</td>
+<td><a href="#post-interactionscompounds">POST /interactions/compounds</a></td>
+<td>Interaction endpoint for compound names input from json.</td>
 </tr>
 <tr>
 <td>interactions</td>
 <td>GET</td>
 <td>/interactions/pzns</td>
-<td>Interaction endpoint for pzn input. See <a href="#get-interactionspzns">GET /interactions/pzns</a> for more information and example usage.</td>
+<td><a href="#get-interactionspzns">GET /interactions/pzns</a></td>
+<td>Interaction endpoint for pzn input.</td>
 </tr>
 <tr>
 <td>interactions</td>
 <td>POST</td>
 <td>/interactions/pzns</td>
-<td>Interaction endpoint for pzn input from json. See <a href="#post-interactionspzns">POST /interactions/pzns</a> for more information and example usage.</td>
+<td></td>
+<td>Interaction endpoint for pzn input from json.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>GET</td>
 <td>/priscus/compounds</td>
+<td><a href="#get-priscuscompounds">GET /priscus/compounds</a></td>
 <td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>POST</td>
 <td>/priscus/compounds</td>
+<td><a href="#post-priscuscompounds">POST /priscus/compounds</a></td>
 <td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>GET</td>
 <td>/priscus/pzns</td>
+<td><a href="#get-priscuspzns">GET /priscus/pzns</a></td>
 <td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>POST</td>
 <td>/priscus/pzns</td>
+<td><a href="#post-priscuspzns">POST /priscus/pzns</a></td>
 <td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.</td>
+</tr>
+<tr>
+<td>qtc</td>
+<td>GET</td>
+<td>/qtc/compounds</td>
+<td><a href="#get-qtccompounds">GET /qtc/compounds</a></td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound name input.</td>
+</tr>
+<tr>
+<td>qtc</td>
+<td>POST</td>
+<td>/qtc/compounds</td>
+<td><a href="#post-qtccompounds">POST /qtc/compounds</a></td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound name input from json.</td>
+</tr>
+<tr>
+<td>qtc</td>
+<td>GET</td>
+<td>/qtc/pzns</td>
+<td></td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn input.</td>
+</tr>
+<tr>
+<td>qtc</td>
+<td>POST</td>
+<td>/qtc/pzns</td>
+<td></td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn input from json.</td>
 </tr>
 <tr>
 <td>atc</td>
 <td>GET</td>
 <td>/atcs/drugs</td>
+<td><a href="#get-atcsdrugs">GET /atcs/drugs</a></td>
 <td>Drug endpoint for ATC input.</td>
 </tr>
 <tr>
 <td>pzns</td>
 <td>GET</td>
 <td>/pzns/products</td>
+<td><a href="#get-pznsproducts">GET /pzns/products</a></td>
 <td>Drug products endpoint for PZN input.</td>
 </tr>
 </tbody>
@@ -907,7 +956,7 @@ Drug lists must be provided matched to an <em>ID</em>:</p>
 <h4 id="input">Input</h4>
 <p>Check for potentially inadequate medicine for geriatric patients based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs) provided as <em>query parameters</em>.</p>
 <h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns?pzns=03967062,03041347,00592733&quot; \
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns?pzns=03967062,03041347,00592733&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
 </div></code></pre>
@@ -950,7 +999,7 @@ Lists of PZNs must be provided matched to an <em>ID</em>:</p>
 ]
 </div></code></pre>
 <h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
      -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
@@ -1007,6 +1056,120 @@ Lists of PZNs must be provided matched to an <em>ID</em>:</p>
     }
   ],
   <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:58:51"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
+}
+</div></code></pre>
+<h3 id="get-qtccompounds">GET /qtc/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for drugs with risks for Torsade de pointes according to <a href="https://crediblemeds.org">crediblemeds.org</a> based on compound names provided as query parameters.
+The following categories are used:</p>
+<ul>
+<li>0: Unknown risk</li>
+<li>1: Conditional risk</li>
+<li>2: Possible risk</li>
+<li>3: Known risk</li>
+</ul>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds?compounds=quinidine,diphenhydramine,ciprofloxacine&quot; \
+    -H &quot;accept: application/json&quot; \
+    -H &quot;Content-Type: application/json&quot; \
+    -H &quot;Authorization: Bearer yourjwttoken&quot;
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"qtc"</span>: [
+    {
+      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Diphenhydramine"</span>,
+      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">1</span>,
+      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Conditional risk for Torsade de pointes according to crediblemeds.org"</span>
+    },
+    {
+      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Quinidine"</span>,
+      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
+    },
+    {
+      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Ciprofloxacine"</span>,
+      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
+    }
+  ],
+  <span class="hljs-attr">"unknown_compounds"</span>: [],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-17 08:58:27"</span>,
+  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
+  <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"quinidine"</span>, <span class="hljs-string">"diphenhydramine"</span>, <span class="hljs-string">"ciprofloxacine"</span>]
+}
+</div></code></pre>
+<h3 id="post-qtccompounds">POST /qtc/compounds</h3>
+<h4 id="input">Input</h4>
+<p>Check for drugs with risks for Torsade de pointes according to <a href="https://crediblemeds.org">crediblemeds.org</a> based on compound names provided as query parameters.
+The following categories are used:</p>
+<ul>
+<li>0: Unknown risk</li>
+<li>1: Conditional risk</li>
+<li>2: Possible risk</li>
+<li>3: Known risk</li>
+</ul>
+<p>Drug lists must be provided matched to an <em>ID</em>:</p>
+<pre class="hljs"><code><div>{
+  [
+    { 
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>, <span class="hljs-string">"simvastatin"</span>, <span class="hljs-string">"diltiazem"</span>, <span class="hljs-string">"amiodarone"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
+    }
+  ]
+}
+</div></code></pre>
+<h4 id="example-usage">Example Usage</h4>
+<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds&quot; \
+     -H &quot;Authorization: Bearer yourjwttoken&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;, &quot;simvastatin&quot;, &quot;diltiazem&quot;, &quot;amiodarone&quot;, &quot;amlodipine&quot;, &quot;lovastatin&quot;]}]'
+</div></code></pre>
+<h4 id="output">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"results"</span>: [
+    {
+      <span class="hljs-attr">"qtc"</span>: [
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Amiodarone"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Diltiazem"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">1</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Conditional risk for Torsade de pointes according to crediblemeds.org"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Verapamil"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Amlodipine"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Lovastatin"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Simvastatin"</span>,
+          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
+        }
+      ],
+      <span class="hljs-attr">"unknown_compounds"</span>: [],
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
+      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>, <span class="hljs-string">"simvastatin"</span>, <span class="hljs-string">"diltiazem"</span>, <span class="hljs-string">"amiodarone"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
+    }
+  ],
+  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-17 09:00:08"</span>,
   <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
 }
 </div></code></pre>
