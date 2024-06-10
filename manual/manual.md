@@ -11,6 +11,7 @@
 | 03-19-2024   | 0.5.0   | Changes /pzns/products endpoint to include ATC output        |
 | 05-15-2024   | 0.6.0   | Adds potentially inadequate medicine (Priscus 2.0) endpoints |
 | 05-17-2024   | 0.6.1   | Adds QTc drugs according to crediblemeds.org                 |
+| 06-10-2024   | 0.6.2   | Adds ADRs for DDIs, DDI query for pzns                       |
 
 ## General Remarks
 The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.
@@ -56,6 +57,8 @@ Currently, all access to all routes other than [POST /login](#post-login) **requ
 | qtc          | GET    | /qtc/pzns                 |                                                             | QTc (drugs with risk for Torsade de pointes) endpoint for pzn input.                                                |
 | qtc          | POST   | /qtc/pzns                 |                                                             | QTc (drugs with risk for Torsade de pointes) endpoint for pzn input from json.                                      |
 | atc          | GET    | /atcs/drugs               | [GET /atcs/drugs](#get-atcsdrugs)                           | Drug endpoint for ATC input.                                                                                        |
+| adrs         | GET    | /adrs/pzns                | [GET /adrs/pzns](#get-adrspzns)                             | ADR endpoint for PZN input.                                                                                         |
+| adrs         | POST   | /adrs/pzns                |                                                             | ADR endpoint for PZN input.                                                                                         |
 | pzns         | GET    | /pzns/products            | [GET /pzns/products](#get-pznsproducts)                     | Drug products endpoint for PZN input.                                                                               |
 
 
@@ -130,16 +133,19 @@ The return value for a successful **GET** request has the following structure:
 ### POST /interactions/compounds
 #### Input
 Check for interactions based on compound names provided as *json*. Drug lists must be provided matched to an *ID*:
+Explain is an optional parameter, if set to *true*, the API will return the explanation for the interaction.
+Default is *false*.
 ```json
 {
     [
         { 
             "id": "1",
-            "compounds": ["verapamil","simvastatin"] 
+            "compounds": ["verapamil","simvastatin"]
         },
         { 
             "id": "2",
-            "compounds": ["diltiazem","amiodarone","amlodipine","lovastatin"] 
+            "compounds": ["diltiazem","amiodarone","amlodipine","lovastatin"],
+            "explain": true
         }
     ]
 }
@@ -149,7 +155,7 @@ Check for interactions based on compound names provided as *json*. Drug lists mu
 curl -X POST "https://abdata.clinicalpharmacy.me/api/interactions/compounds" \
      -H "Authorization: Bearer yourjwttoken" \
      -H "Content-Type: application/json" \
-     -d '[{"id":"1","compounds":["verapamil","simvastatin"]},{"id":"2","compounds":["diltiazem","amiodarone","amlodipine","lovastatin"]}]'
+     -d '[{"id":"1","compounds":["verapamil","simvastatin"]},{"id":"2","compounds":["diltiazem","amiodarone","amlodipine","lovastatin"],"explain":true}]'
 ```
 #### Output
 The return value for a successful **POST** request has the following structure:
@@ -727,6 +733,78 @@ The return value for a successful **GET** request has the following structure:
     "api_version": "0.3.0", 
     "atcs": ["C01BD01","C08DB01","C08DA01","J01CR02"]
 } 
+```
+### GET /adrs/pzns
+#### Input
+Get ADRs for PZNs. Please note, that some PZNs may not be up to date.
+#### Example Usage
+```curl
+curl -X GET "https://abdata.clinicalpharmacy.me/api/adrs/pzns?pzns=03967062,03041347,00592733" \
+    -H "accept: */*" \
+    -H "Authorization: Bearer yourjwttoken"
+```
+#### Output
+The return value for a successful **GET** request has the following structure:
+```json
+{
+  "lang": "english",
+  "results": [
+    {
+      "pzn": "00592733",
+      "adrs": [
+        {
+          "adr_frequency_category": 5,
+          "adr_frequency_description": "Very rare (< 0.01%)",
+          "names": "epilepsy"
+        },
+        {
+          "adr_frequency_category": 5,
+          "adr_frequency_description": "Very rare (< 0.01%)",
+          "names": ["thrombocytopenia", "thrombopenia"]
+        }
+      ]
+    },
+    {
+      "pzn": "03041347",
+      "adrs": [
+        {
+          "adr_frequency_category": 6,
+          "adr_frequency_description": "Unknown",
+          "names": "torsade de pointes"
+        },
+        {
+          "adr_frequency_category": 4,
+          "adr_frequency_description": "Rare (>= 0.01% to < 0.1%)",
+          "names": ["amenorrhoea", "amenorrhea post pill", "lack of menses"]
+        }
+      ]
+    },
+    {
+      "pzn": "03967062",
+      "adrs": [
+        {
+          "adr_frequency_category": 3,
+          "adr_frequency_description": "Occasional (>= 0.1% to < 1%)",
+          "names": ["bradycardia", "reflex bradycardia"]
+        },
+        {
+          "adr_frequency_category": 2,
+          "adr_frequency_description": "Common (>= 1% to < 10%)",
+          "names": ["hypotension", "arterial hypotension"]
+        },
+        {
+          "adr_frequency_category": 6,
+          "adr_frequency_description": "Unknown",
+          "names": ["AV nodals block", "atrioventricular block"]
+        }
+      ]
+    }
+  ],
+  "unknown_pzns": [],
+  "timestamp": "2024-06-10 15:12:50",
+  "api_version": "0.6.2",
+  "pzns": ["03967062", "03041347", "00592733"]
+}
 ```
 
 ### GET /pzns/products
