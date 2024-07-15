@@ -1,373 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-<title>manual.md</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ADATA API usage</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h1 id="abda-api-usage">ABDA API usage</h1>
+<header id="title-block-header">
+<h1 class="title">ADATA API usage</h1>
+</header>
 <h2 id="version-history">Version History</h2>
 <table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 9%" />
+<col style="width: 77%" />
+</colgroup>
 <thead>
 <tr>
 <th>Date</th>
@@ -419,28 +151,53 @@ code {
 </tbody>
 </table>
 <h2 id="general-remarks">General Remarks</h2>
-<p>The ABDATA API has been provided by the Saarland University Clinical Pharmacy working group. The API is not intended for public use, but only for usage within the SafePolyMed project. This document is intended as a guide for using the API, it is, however, not a comprehensive manual or technical documentation of the API.</p>
+<p>The ABDATA API has been provided by the Saarland University Clinical
+Pharmacy working group. The API is not intended for public use, but only
+for usage within the SafePolyMed project. This document is intended as a
+guide for using the API, it is, however, not a comprehensive manual or
+technical documentation of the API.</p>
 <h2 id="access">Access</h2>
-<p>The API is provided under the following URL: <a href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a>.</p>
+<p>The API is provided under the following URL: <a
+href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a>.</p>
 <h2 id="usage-and-testing-info">Usage and Testing Info</h2>
-<p>The API is generally intended for usage with dedicated console utilities such as <em>curl</em> or the corresponding utilities in programming languages such as the <em>httr</em> or similar packages in the <em>R</em> programming language.
-There is no dedicated endpoint for testing access to the API yet. However, testing <strong>GET</strong> endpoints is possible in a browser, for instance <a href="https://abdata.clinicalpharmacy.me/api/limits">https://abdata.clinicalpharmacy.me/api/limits</a> should return</p>
-<pre class="hljs"><code><div>{
-    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"https://tools.ietf.org/html/rfc7235#section-3.1"</span>,
-    <span class="hljs-attr">"title"</span>: <span class="hljs-string">"Unauthorized"</span>, 
-    <span class="hljs-attr">"status"</span>: <span class="hljs-number">401</span>, 
-    <span class="hljs-attr">"detail"</span>: <span class="hljs-string">"No login token provided."</span>, 
-    <span class="hljs-attr">"instance"</span>: <span class="hljs-string">"/limits"</span> 
-}
-</div></code></pre>
+<p>The API is generally intended for usage with dedicated console
+utilities such as <em>curl</em> or the corresponding utilities in
+programming languages such as the <em>httr</em> or similar packages in
+the <em>R</em> programming language. There is no dedicated endpoint for
+testing access to the API yet. However, testing <strong>GET</strong>
+endpoints is possible in a browser, for instance <a
+href="https://abdata.clinicalpharmacy.me/api/limits">https://abdata.clinicalpharmacy.me/api/limits</a>
+should return</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;https://tools.ietf.org/html/rfc7235#section-3.1&quot;</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Unauthorized&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">401</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;detail&quot;</span><span class="fu">:</span> <span class="st">&quot;No login token provided.&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;instance&quot;</span><span class="fu">:</span> <span class="st">&quot;/limits&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h2 id="authorization">Authorization</h2>
-<p>This API uses <em>Java Web Token (jwt)</em> for authentication. A <em>jwt</em> is provided to you <a href="#post-login">upon login</a> and must be provided when accessing all other routes. See <a href="#get-interactionscompounds">GET /interactions/compounds</a>  as an example on how to provide the token.</p>
+<p>This API uses <em>Java Web Token (jwt)</em> for authentication. A
+<em>jwt</em> is provided to you <a href="#post-login">upon login</a> and
+must be provided when accessing all other routes. See <a
+href="#get-interactionscompounds">GET /interactions/compounds</a> as an
+example on how to provide the token.</p>
 <h2 id="endpoints">Endpoints</h2>
-<p>The following is a list of endpoints for the API.
-All endpoints are only accessible <strong>without a trailing slash!</strong>
-All routes refer to <a href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a> as the root URI.
-Currently, all access to all routes other than <a href="#post-login">POST /login</a> <strong>require authentication.</strong></p>
-<table>
+<p>The following is a list of endpoints for the API. All endpoints are
+only accessible <strong>without a trailing slash!</strong> All routes
+refer to <a
+href="https://abdata.clinicalpharmacy.me/api">https://abdata.clinicalpharmacy.me/api</a>
+as the root URI. Currently, all access to all routes other than <a
+href="#post-login">POST /login</a> <strong>require
+authentication.</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 2%" />
+<col style="width: 11%" />
+<col style="width: 27%" />
+<col style="width: 52%" />
+</colgroup>
 <thead>
 <tr>
 <th>Group</th>
@@ -470,7 +227,8 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>GET</td>
 <td>/formulations</td>
 <td></td>
-<td>Retrieve a list of all formulations within the database. No parameters.</td>
+<td>Retrieve a list of all formulations within the database. No
+parameters.</td>
 </tr>
 <tr>
 <td>information</td>
@@ -490,14 +248,16 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>interactions</td>
 <td>GET</td>
 <td>/interactions/compounds</td>
-<td><a href="#get-interactionscompounds">GET /interactions/compounds</a></td>
+<td><a href="#get-interactionscompounds">GET
+/interactions/compounds</a></td>
 <td>Interaction endpoint for compound names input.</td>
 </tr>
 <tr>
 <td>interactions</td>
 <td>POST</td>
 <td>/interactions/compounds</td>
-<td><a href="#post-interactionscompounds">POST /interactions/compounds</a></td>
+<td><a href="#post-interactionscompounds">POST
+/interactions/compounds</a></td>
 <td>Interaction endpoint for compound names input from json.</td>
 </tr>
 <tr>
@@ -519,56 +279,64 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <td>GET</td>
 <td>/priscus/compounds</td>
 <td><a href="#get-priscuscompounds">GET /priscus/compounds</a></td>
-<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input.</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients)
+endpoint for compound name input.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>POST</td>
 <td>/priscus/compounds</td>
 <td><a href="#post-priscuscompounds">POST /priscus/compounds</a></td>
-<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for compound name input from json.</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients)
+endpoint for compound name input from json.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>GET</td>
 <td>/priscus/pzns</td>
 <td><a href="#get-priscuspzns">GET /priscus/pzns</a></td>
-<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input.</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients)
+endpoint for pzn input.</td>
 </tr>
 <tr>
 <td>priscus</td>
 <td>POST</td>
 <td>/priscus/pzns</td>
 <td><a href="#post-priscuspzns">POST /priscus/pzns</a></td>
-<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients) endpoint for pzn input from json.</td>
+<td>Priscus 2.0 (potentially inadequate medicine for geriatric patients)
+endpoint for pzn input from json.</td>
 </tr>
 <tr>
 <td>qtc</td>
 <td>GET</td>
 <td>/qtc/compounds</td>
 <td><a href="#get-qtccompounds">GET /qtc/compounds</a></td>
-<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound name input.</td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound
+name input.</td>
 </tr>
 <tr>
 <td>qtc</td>
 <td>POST</td>
 <td>/qtc/compounds</td>
 <td><a href="#post-qtccompounds">POST /qtc/compounds</a></td>
-<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound name input from json.</td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for compound
+name input from json.</td>
 </tr>
 <tr>
 <td>qtc</td>
 <td>GET</td>
 <td>/qtc/pzns</td>
 <td></td>
-<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn input.</td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn
+input.</td>
 </tr>
 <tr>
 <td>qtc</td>
 <td>POST</td>
 <td>/qtc/pzns</td>
 <td></td>
-<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn input from json.</td>
+<td>QTc (drugs with risk for Torsade de pointes) endpoint for pzn input
+from json.</td>
 </tr>
 <tr>
 <td>atc</td>
@@ -603,530 +371,524 @@ Currently, all access to all routes other than <a href="#post-login">POST /login
 <h2 id="example-usage">Example Usage</h2>
 <h3 id="post-login">POST /login</h3>
 <h4 id="input">Input</h4>
-<p>Provide your credentials as a <em>json</em>. The <em>json</em> must be structured as follows:</p>
-<pre class="hljs"><code><div>{
-    <span class="hljs-attr">"credentials"</span>: {
-        <span class="hljs-attr">"username"</span>: <span class="hljs-string">"your_username"</span>,
-        <span class="hljs-attr">"password"</span>: <span class="hljs-string">"your_password"</span>
-    }
-}
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>  curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/login&quot;  \
+<p>Provide your credentials as a <em>json</em>. The <em>json</em> must
+be structured as follows:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;credentials&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;username&quot;</span><span class="fu">:</span> <span class="st">&quot;your_username&quot;</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;password&quot;</span><span class="fu">:</span> <span class="st">&quot;your_password&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h4 id="example-usage-1">Example Usage</h4>
+<pre class="curl"><code>  curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/login&quot;  \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
-    -d '{&quot;credentials&quot;:{&quot;username&quot;:&quot;username&quot;,&quot;password&quot;:&quot;password&quot;}}'
-</div></code></pre>
+    -d &#39;{&quot;credentials&quot;:{&quot;username&quot;:&quot;username&quot;,&quot;password&quot;:&quot;password&quot;}}&#39;</code></pre>
 <h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-    <span class="hljs-attr">"yourjwttoken"</span>
-}
-</div></code></pre>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;yourjwttoken&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-interactionscompounds">GET /interactions/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for interactions based on compound names provided as query parameters.</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
+<h4 id="input-1">Input</h4>
+<p>Check for interactions based on compound names provided as query
+parameters.</p>
+<h4 id="example-usage-2">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds?compounds=verapamil,simvastatin&quot; \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"interactions"</span>: [
-    {
-      <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-      <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
-      <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-      <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
-      <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-      <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Simvastatin"</span>,
-      <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Verapamil"</span>,
-      <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA01"</span>,
-      <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DA01"</span>,
-      <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"FTA"</span>,
-      <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"FTA"</span>,
-      <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"ZOCOR 10mg"</span>,
-      <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Isoptin 80mg"</span>,
-      <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"10 mg"</span>,
-      <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"74.06 mg"</span>
-    }
-  ],
-  <span class="hljs-attr">"unknown_compounds"</span>: [],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:20:57"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>,
-  <span class="hljs-attr">"compounds"</span>: [
-    <span class="hljs-string">"verapamil"</span>,
-    <span class="hljs-string">"simvastatin"</span>
-  ]
-}
-</div></code></pre>
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-1">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;interactions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;severe&quot;</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;high&quot;</span><span class="fu">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Simvastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Verapamil&quot;</span><span class="fu">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;left_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C10AA01&quot;</span><span class="fu">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DA01&quot;</span><span class="fu">,</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;left_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;FTA&quot;</span><span class="fu">,</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;FTA&quot;</span><span class="fu">,</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;left_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;ZOCOR 10mg&quot;</span><span class="fu">,</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Isoptin 80mg&quot;</span><span class="fu">,</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;left_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;10 mg&quot;</span><span class="fu">,</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;74.06 mg&quot;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2023-10-20 13:20:57&quot;</span><span class="fu">,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.3.0&quot;</span><span class="fu">,</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;verapamil&quot;</span><span class="ot">,</span> <span class="st">&quot;simvastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="post-interactionscompounds">POST /interactions/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for interactions based on compound names provided as <em>json</em>. Drug lists must be provided matched to an <em>ID</em>:
-Explain is an optional parameter, if set to <em>true</em>, the API will return the explanation for the interaction.
-Default is <em>false</em>.</p>
-<pre class="hljs"><code><div>{
-    [
-        { 
-            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>,<span class="hljs-string">"simvastatin"</span>]
-        },
-        { 
-            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diltiazem"</span>,<span class="hljs-string">"amiodarone"</span>,<span class="hljs-string">"amlodipine"</span>,<span class="hljs-string">"lovastatin"</span>],
-            <span class="hljs-attr">"explain"</span>: <span class="hljs-literal">true</span>
-        }
-    ]
-}
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds&quot; \
+<h4 id="input-2">Input</h4>
+<p>Check for interactions based on compound names provided as
+<em>json</em>. Drug lists must be provided matched to an <em>ID</em>:
+Explain is an optional parameter, if set to <em>true</em>, the API will
+return the explanation for the interaction. Default is
+<em>false</em>.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">[</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">{</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;verapamil&quot;</span><span class="ot">,</span><span class="st">&quot;simvastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="er">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;diltiazem&quot;</span><span class="ot">,</span><span class="st">&quot;amiodarone&quot;</span><span class="ot">,</span><span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span><span class="st">&quot;lovastatin&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;explain&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="er">]</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
+<h4 id="example-usage-3">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/compounds&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
-     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;,&quot;simvastatin&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;],&quot;explain&quot;:true}]'
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"interactions"</span>: [
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Simvastatin"</span>,
-          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Verapamil"</span>,
-          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA01"</span>,
-          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DA01"</span>,
-          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"FTA"</span>,
-          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"FTA"</span>,
-          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"ZOCOR 10mg"</span>,
-          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Isoptin 80mg"</span>,
-          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"10 mg"</span>,
-          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"74.06 mg"</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_compounds"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"compounds"</span>: [
-        <span class="hljs-string">"verapamil"</span>,
-        <span class="hljs-string">"simvastatin"</span>
-      ]
-    },
-    {
-      <span class="hljs-attr">"interactions"</span>: [
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"moderate"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"undirected interaction"</span>,
-          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Amiodarone"</span>,
-          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Diltiazem"</span>,
-          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C01BD01"</span>,
-          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DB01"</span>,
-          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"DFL"</span>,
-          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"RET"</span>,
-          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Cordarex 150mg/3ml Injektionslösung"</span>,
-          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Dilzem 120mg retard"</span>,
-          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"141.98 mg"</span>,
-          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"110.3 mg"</span>
-        },
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
-          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Amiodarone"</span>,
-          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA02"</span>,
-          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C01BD01"</span>,
-          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"TAB"</span>,
-          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"DFL"</span>,
-          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Lovastatin AL 20mg"</span>,
-          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Cordarex 150mg/3ml Injektionslösung"</span>,
-          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"20 mg"</span>,
-          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"141.98 mg"</span>
-        },
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"severe"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"high"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
-          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Diltiazem"</span>,
-          <span class="hljs-attr">"left_atc"</span>: <span class="hljs-string">"C10AA02"</span>,
-          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08DB01"</span>,
-          <span class="hljs-attr">"left_formulation"</span>: <span class="hljs-string">"TAB"</span>,
-          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"RET"</span>,
-          <span class="hljs-attr">"left_medication"</span>: <span class="hljs-string">"Lovastatin AL 20mg"</span>,
-          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Dilzem 120mg retard"</span>,
-          <span class="hljs-attr">"left_dose"</span>: <span class="hljs-string">"20 mg"</span>,
-          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"110.3 mg"</span>
-        },
-        {
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"no statement possible"</span>,
-          <span class="hljs-attr">"left_compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
-          <span class="hljs-attr">"right_compound"</span>: <span class="hljs-string">"Amlodipine"</span>,
-          <span class="hljs-attr">"right_atc"</span>: <span class="hljs-string">"C08CA01"</span>,
-          <span class="hljs-attr">"right_formulation"</span>: <span class="hljs-string">"TAB"</span>,
-          <span class="hljs-attr">"right_medication"</span>: <span class="hljs-string">"Norvasc 5mg"</span>,
-          <span class="hljs-attr">"right_dose"</span>: <span class="hljs-string">"5 mg"</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_compounds"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-      <span class="hljs-attr">"compounds"</span>: [
-        <span class="hljs-string">"diltiazem"</span>,
-        <span class="hljs-string">"amiodarone"</span>,
-        <span class="hljs-string">"amlodipine"</span>,
-        <span class="hljs-string">"lovastatin"</span>
-      ]
-    }
-  ],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:21:59"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>
-}
-</div></code></pre>
+     -d &#39;[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;,&quot;simvastatin&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diltiazem&quot;,&quot;amiodarone&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;],&quot;explain&quot;:true}]&#39;</code></pre>
+<h4 id="output-2">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;interactions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;severe&quot;</span><span class="fu">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;high&quot;</span><span class="fu">,</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Simvastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Verapamil&quot;</span><span class="fu">,</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C10AA01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DA01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;FTA&quot;</span><span class="fu">,</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;FTA&quot;</span><span class="fu">,</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;ZOCOR 10mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Isoptin 80mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;10 mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;74.06 mg&quot;</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;verapamil&quot;</span><span class="ot">,</span> <span class="st">&quot;simvastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;interactions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;moderate&quot;</span><span class="fu">,</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;weak&quot;</span><span class="fu">,</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;undirected interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Amiodarone&quot;</span><span class="fu">,</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Diltiazem&quot;</span><span class="fu">,</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C01BD01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DB01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;DFL&quot;</span><span class="fu">,</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;RET&quot;</span><span class="fu">,</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Cordarex 150mg/3ml Injektionslösung&quot;</span><span class="fu">,</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Dilzem 120mg retard&quot;</span><span class="fu">,</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;141.98 mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;110.3 mg&quot;</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;severe&quot;</span><span class="fu">,</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;high&quot;</span><span class="fu">,</span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Amiodarone&quot;</span><span class="fu">,</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C10AA02&quot;</span><span class="fu">,</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C01BD01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;TAB&quot;</span><span class="fu">,</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;DFL&quot;</span><span class="fu">,</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin AL 20mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Cordarex 150mg/3ml Injektionslösung&quot;</span><span class="fu">,</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;20 mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;141.98 mg&quot;</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;severe&quot;</span><span class="fu">,</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;high&quot;</span><span class="fu">,</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Diltiazem&quot;</span><span class="fu">,</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C10AA02&quot;</span><span class="fu">,</span></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DB01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;TAB&quot;</span><span class="fu">,</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;RET&quot;</span><span class="fu">,</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin AL 20mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Dilzem 120mg retard&quot;</span><span class="fu">,</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;20 mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;110.3 mg&quot;</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;no statement possible&quot;</span><span class="fu">,</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Amlodipine&quot;</span><span class="fu">,</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08CA01&quot;</span><span class="fu">,</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_formulation&quot;</span><span class="fu">:</span> <span class="st">&quot;TAB&quot;</span><span class="fu">,</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_medication&quot;</span><span class="fu">:</span> <span class="st">&quot;Norvasc 5mg&quot;</span><span class="fu">,</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_dose&quot;</span><span class="fu">:</span> <span class="st">&quot;5 mg&quot;</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;diltiazem&quot;</span><span class="ot">,</span> <span class="st">&quot;amiodarone&quot;</span><span class="ot">,</span> <span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span> <span class="st">&quot;lovastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2023-10-20 13:21:59&quot;</span><span class="fu">,</span></span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.3.0&quot;</span></span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="post-interactionspzns">POST /interactions/pzns</h3>
-<h4 id="input">Input</h4>
-<p>Check for interactions based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs)  provided as <em>json</em>. Lists of PZNs must be provided matched to an <em>ID</em>:</p>
-<pre class="hljs"><code><div>  [ 
-      {
-          <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>, 
-          <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
-      },
-      {
-          <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>, 
-          <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
-      }
-]
-        
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
+<h4 id="input-3">Input</h4>
+<p>Check for interactions based on PZNs (<em>Pharmazentralnummer</em>, a
+German product identifier for drugs) provided as <em>json</em>. Lists of
+PZNs must be provided matched to an <em>ID</em>:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<h4 id="example-usage-4">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/interactions/pzns&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
-     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"interactions"</span>: [
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"minor"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-          <span class="hljs-attr">"left_PZN"</span>: <span class="hljs-string">"03041347"</span>,
-          <span class="hljs-attr">"right_PZN"</span>: <span class="hljs-string">"00592733"</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_pzns"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"pzns"</span>: [
-        <span class="hljs-string">"03041347"</span>,
-        <span class="hljs-string">"17145955"</span>,
-        <span class="hljs-string">"00592733"</span>,
-        <span class="hljs-string">"13981502"</span>
-      ]
-    },
-    {
-      <span class="hljs-attr">"interactions"</span>: [
-        {
-          <span class="hljs-attr">"plausibility"</span>: <span class="hljs-string">"plausible mechanism"</span>,
-          <span class="hljs-attr">"relevance"</span>: <span class="hljs-string">"minor"</span>,
-          <span class="hljs-attr">"frequency"</span>: <span class="hljs-string">"not known"</span>,
-          <span class="hljs-attr">"credibility"</span>: <span class="hljs-string">"weak"</span>,
-          <span class="hljs-attr">"direction"</span>: <span class="hljs-string">"unidirectional interaction"</span>,
-          <span class="hljs-attr">"left_PZN"</span>: <span class="hljs-string">"03041347"</span>,
-          <span class="hljs-attr">"right_PZN"</span>: <span class="hljs-string">"00592733"</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_pzns"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-      <span class="hljs-attr">"pzns"</span>: [
-        <span class="hljs-string">"03041347"</span>,
-        <span class="hljs-string">"17145955"</span>,
-        <span class="hljs-string">"00592733"</span>,
-        <span class="hljs-string">"13981502"</span>
-      ]
-    }
-  ],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 13:17:41"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>
-}
-</div></code></pre>
+     -d &#39;[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]&#39;</code></pre>
+<h4 id="output-3">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;interactions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;minor&quot;</span><span class="fu">,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;weak&quot;</span><span class="fu">,</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_PZN&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_PZN&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;interactions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;plausibility&quot;</span><span class="fu">:</span> <span class="st">&quot;plausible mechanism&quot;</span><span class="fu">,</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="st">&quot;minor&quot;</span><span class="fu">,</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;frequency&quot;</span><span class="fu">:</span> <span class="st">&quot;not known&quot;</span><span class="fu">,</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;credibility&quot;</span><span class="fu">:</span> <span class="st">&quot;weak&quot;</span><span class="fu">,</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;direction&quot;</span><span class="fu">:</span> <span class="st">&quot;unidirectional interaction&quot;</span><span class="fu">,</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;left_PZN&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;right_PZN&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2023-10-20 13:17:41&quot;</span><span class="fu">,</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.3.0&quot;</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-priscuscompounds">GET /priscus/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as query parameters.</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds?compounds=metoprolol,pindolol,diazepam&quot; \
+<h4 id="input-4">Input</h4>
+<p>Check for potentially inadequate medication for geriatric patients
+(Priscus 2.0) based on compound names provided as query parameters.</p>
+<h4 id="example-usage-5">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds?compounds=metoprolol,pindolol,diazepam&quot; \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"priscus"</span>: [
-    {
-      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Metoprolol"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-    },
-    {
-      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Pindolol"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-    },
-    {
-      <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-    }
-  ],
-  <span class="hljs-attr">"unknown_compounds"</span>: [],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:31:53"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
-  <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>, <span class="hljs-string">"pindolol"</span>, <span class="hljs-string">"diazepam"</span>]
-}
-</div></code></pre>
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-4">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Metoprolol&quot;</span><span class="fu">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Pindolol&quot;</span><span class="fu">,</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Diazepam&quot;</span><span class="fu">,</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-16 12:31:53&quot;</span><span class="fu">,</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span><span class="fu">,</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;metoprolol&quot;</span><span class="ot">,</span> <span class="st">&quot;pindolol&quot;</span><span class="ot">,</span> <span class="st">&quot;diazepam&quot;</span><span class="ot">]</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="post-priscuscompounds">POST /priscus/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for potentially inadequate medication for geriatric patients (Priscus 2.0) based on compound names provided as <em>json</em>.
-Drug lists must be provided matched to an <em>ID</em>:</p>
-<pre class="hljs"><code><div>{
-    [
-        { 
-            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>,<span class="hljs-string">"pindolol"</span>] 
-        },
-        { 
-            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-            <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diazepam"</span>,<span class="hljs-string">"ranitidine"</span>,<span class="hljs-string">"amlodipine"</span>,<span class="hljs-string">"lovastatin"</span>] 
-        }
-    ]
-}
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds&quot; \
+<h4 id="input-5">Input</h4>
+<p>Check for potentially inadequate medication for geriatric patients
+(Priscus 2.0) based on compound names provided as <em>json</em>. Drug
+lists must be provided matched to an <em>ID</em>:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">[</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">{</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;metoprolol&quot;</span><span class="ot">,</span><span class="st">&quot;pindolol&quot;</span><span class="ot">]</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="er">,</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;diazepam&quot;</span><span class="ot">,</span><span class="st">&quot;ranitidine&quot;</span><span class="ot">,</span><span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span><span class="st">&quot;lovastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="er">]</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
+<h4 id="example-usage-6">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/compounds&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
-     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;metoprolol&quot;,&quot;pindolol&quot;,&quot;diazepam&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diazepam&quot;,&quot;ranitidine&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;]}]'
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"priscus"</span>: [
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Metoprolol"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Pindolol"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        },
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_compounds"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"metoprolol"</span>, <span class="hljs-string">"pindolol"</span>, <span class="hljs-string">"diazepam"</span>]
-    },
-    {
-      <span class="hljs-attr">"priscus"</span>: [
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Diazepam"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        },
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Ranitidine"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        },
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Amlodipine"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"compound"</span>: <span class="hljs-string">"Lovastatin"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_compounds"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"diazepam"</span>, <span class="hljs-string">"ranitidine"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
-    }
-  ],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:58:51"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
-}
-</div></code></pre>
+     -d &#39;[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;metoprolol&quot;,&quot;pindolol&quot;,&quot;diazepam&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;compounds&quot;:[&quot;diazepam&quot;,&quot;ranitidine&quot;,&quot;amlodipine&quot;,&quot;lovastatin&quot;]}]&#39;</code></pre>
+<h4 id="output-5">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Metoprolol&quot;</span><span class="fu">,</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Pindolol&quot;</span><span class="fu">,</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Diazepam&quot;</span><span class="fu">,</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;metoprolol&quot;</span><span class="ot">,</span> <span class="st">&quot;pindolol&quot;</span><span class="ot">,</span> <span class="st">&quot;diazepam&quot;</span><span class="ot">]</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Diazepam&quot;</span><span class="fu">,</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Ranitidine&quot;</span><span class="fu">,</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Amlodipine&quot;</span><span class="fu">,</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;compound&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;diazepam&quot;</span><span class="ot">,</span> <span class="st">&quot;ranitidine&quot;</span><span class="ot">,</span> <span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span> <span class="st">&quot;lovastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-16 12:58:51&quot;</span><span class="fu">,</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-priscuspzns">GET /priscus/pzns</h3>
-<h4 id="input">Input</h4>
-<p>Check for potentially inadequate medicine for geriatric patients based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs) provided as <em>query parameters</em>.</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns?pzns=03967062,03041347,00592733&quot; \
+<h4 id="input-6">Input</h4>
+<p>Check for potentially inadequate medicine for geriatric patients
+based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier
+for drugs) provided as <em>query parameters</em>.</p>
+<h4 id="example-usage-7">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns?pzns=03967062,03041347,00592733&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
-     -H &quot;Content-Type: application/json&quot; \
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"priscus"</span>: [
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-    },
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-    },
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03967062"</span>,
-      <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-    }
-  ],
-  <span class="hljs-attr">"unknown_pzns"</span>: [],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 13:13:05"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
-  <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03967062"</span>, <span class="hljs-string">"03041347"</span>, <span class="hljs-string">"00592733"</span>]
-}
-</div></code></pre>
+     -H &quot;Content-Type: application/json&quot; \</code></pre>
+<h4 id="output-6">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span><span class="fu">,</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03967062&quot;</span><span class="fu">,</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-16 13:13:05&quot;</span><span class="fu">,</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span><span class="fu">,</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03967062&quot;</span><span class="ot">,</span> <span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">]</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="post-priscuspzns">POST /priscus/pzns</h3>
-<h4 id="input">Input</h4>
-<p>Check for potentially inadequate medicine for geriatric patients based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier for drugs) provided as <em>json</em>.
-Lists of PZNs must be provided matched to an <em>ID</em>:</p>
-<pre class="hljs"><code><div>[ 
-  {
-    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>, 
-    <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
-  },
-  {
-    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>, 
-    <span class="hljs-attr">"pzns"</span>:[<span class="hljs-string">"03041347"</span>,<span class="hljs-string">"17145955"</span>,<span class="hljs-string">"00592733"</span>,<span class="hljs-string">"13981502"</span>] 
-  }
-]
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns&quot; \
+<h4 id="input-7">Input</h4>
+<p>Check for potentially inadequate medicine for geriatric patients
+based on PZNs (<em>Pharmazentralnummer</em>, a German product identifier
+for drugs) provided as <em>json</em>. Lists of PZNs must be provided
+matched to an <em>ID</em>:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<h4 id="example-usage-8">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/priscus/pzns&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
-     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]'
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"priscus"</span>: [
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"13981502"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"17145955"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_pzns"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03041347"</span>, <span class="hljs-string">"17145955"</span>, <span class="hljs-string">"00592733"</span>, <span class="hljs-string">"13981502"</span>]
-    },
-    {
-      <span class="hljs-attr">"priscus"</span>: [
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">true</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"13981502"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        },
-        {
-          <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"17145955"</span>,
-          <span class="hljs-attr">"priscus"</span>: <span class="hljs-literal">false</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_pzns"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2"</span>,
-      <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03041347"</span>, <span class="hljs-string">"17145955"</span>, <span class="hljs-string">"00592733"</span>, <span class="hljs-string">"13981502"</span>]
-    }
-  ],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-16 12:58:51"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
-}
-</div></code></pre>
+     -d &#39;[{&quot;id&quot;:&quot;1&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]},{&quot;id&quot;:&quot;2&quot;,&quot;pzns&quot;:[&quot;03041347&quot;,&quot;17145955&quot;,&quot;00592733&quot;,&quot;13981502&quot;]}]&#39;</code></pre>
+<h4 id="output-7">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span><span class="fu">,</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;13981502&quot;</span><span class="fu">,</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;17145955&quot;</span><span class="fu">,</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span><span class="fu">,</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;13981502&quot;</span><span class="fu">,</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;17145955&quot;</span><span class="fu">,</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;priscus&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;2&quot;</span><span class="fu">,</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;17145955&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">,</span> <span class="st">&quot;13981502&quot;</span><span class="ot">]</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-16 12:58:51&quot;</span><span class="fu">,</span></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-qtccompounds">GET /qtc/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for drugs with risks for Torsade de pointes according to <a href="https://crediblemeds.org">crediblemeds.org</a> based on compound names provided as query parameters.
-The following categories are used:</p>
+<h4 id="input-8">Input</h4>
+<p>Check for drugs with risks for Torsade de pointes according to <a
+href="https://crediblemeds.org">crediblemeds.org</a> based on compound
+names provided as query parameters. The following categories are
+used:</p>
 <ul>
 <li>0: Unknown risk</li>
 <li>1: Conditional risk</li>
 <li>2: Possible risk</li>
 <li>3: Known risk</li>
 </ul>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds?compounds=quinidine,diphenhydramine,ciprofloxacine&quot; \
+<h4 id="example-usage-9">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds?compounds=quinidine,diphenhydramine,ciprofloxacine&quot; \
     -H &quot;accept: application/json&quot; \
     -H &quot;Content-Type: application/json&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"qtc"</span>: [
-    {
-      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Diphenhydramine"</span>,
-      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">1</span>,
-      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Conditional risk for Torsade de pointes according to crediblemeds.org"</span>
-    },
-    {
-      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Quinidine"</span>,
-      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
-      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
-    },
-    {
-      <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Ciprofloxacine"</span>,
-      <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
-      <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
-    }
-  ],
-  <span class="hljs-attr">"unknown_compounds"</span>: [],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-17 08:58:27"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>,
-  <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"quinidine"</span>, <span class="hljs-string">"diphenhydramine"</span>, <span class="hljs-string">"ciprofloxacine"</span>]
-}
-</div></code></pre>
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-8">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;qtc&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Diphenhydramine&quot;</span><span class="fu">,</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Conditional risk for Torsade de pointes according to crediblemeds.org&quot;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Quinidine&quot;</span><span class="fu">,</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Known risk for Torsade de pointes according to crediblemeds.org&quot;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Ciprofloxacine&quot;</span><span class="fu">,</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Known risk for Torsade de pointes according to crediblemeds.org&quot;</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-17 08:58:27&quot;</span><span class="fu">,</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span><span class="fu">,</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;quinidine&quot;</span><span class="ot">,</span> <span class="st">&quot;diphenhydramine&quot;</span><span class="ot">,</span> <span class="st">&quot;ciprofloxacine&quot;</span><span class="ot">]</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="post-qtccompounds">POST /qtc/compounds</h3>
-<h4 id="input">Input</h4>
-<p>Check for drugs with risks for Torsade de pointes according to <a href="https://crediblemeds.org">crediblemeds.org</a> based on compound names provided as query parameters.
-The following categories are used:</p>
+<h4 id="input-9">Input</h4>
+<p>Check for drugs with risks for Torsade de pointes according to <a
+href="https://crediblemeds.org">crediblemeds.org</a> based on compound
+names provided as query parameters. The following categories are
+used:</p>
 <ul>
 <li>0: Unknown risk</li>
 <li>1: Conditional risk</li>
@@ -1134,214 +896,220 @@ The following categories are used:</p>
 <li>3: Known risk</li>
 </ul>
 <p>Drug lists must be provided matched to an <em>ID</em>:</p>
-<pre class="hljs"><code><div>{
-  [
-    { 
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>, <span class="hljs-string">"simvastatin"</span>, <span class="hljs-string">"diltiazem"</span>, <span class="hljs-string">"amiodarone"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
-    }
-  ]
-}
-</div></code></pre>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds&quot; \
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="er">[</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="er">{</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;verapamil&quot;</span><span class="ot">,</span> <span class="st">&quot;simvastatin&quot;</span><span class="ot">,</span> <span class="st">&quot;diltiazem&quot;</span><span class="ot">,</span> <span class="st">&quot;amiodarone&quot;</span><span class="ot">,</span> <span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span> <span class="st">&quot;lovastatin&quot;</span><span class="ot">]</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="er">]</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
+<h4 id="example-usage-10">Example Usage</h4>
+<pre class="curl"><code>curl -X POST &quot;https://abdata.clinicalpharmacy.me/api/qtc/compounds&quot; \
      -H &quot;Authorization: Bearer yourjwttoken&quot; \
      -H &quot;Content-Type: application/json&quot; \
-     -d '[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;, &quot;simvastatin&quot;, &quot;diltiazem&quot;, &quot;amiodarone&quot;, &quot;amlodipine&quot;, &quot;lovastatin&quot;]}]'
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>POST</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"qtc"</span>: [
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Amiodarone"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">3</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Known risk for Torsade de pointes according to crediblemeds.org"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Diltiazem"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">1</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Conditional risk for Torsade de pointes according to crediblemeds.org"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Verapamil"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Amlodipine"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Lovastatin"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Simvastatin"</span>,
-          <span class="hljs-attr">"qtc_category"</span>: <span class="hljs-number">0</span>,
-          <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Risk unknown"</span>
-        }
-      ],
-      <span class="hljs-attr">"unknown_compounds"</span>: [],
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1"</span>,
-      <span class="hljs-attr">"compounds"</span>: [<span class="hljs-string">"verapamil"</span>, <span class="hljs-string">"simvastatin"</span>, <span class="hljs-string">"diltiazem"</span>, <span class="hljs-string">"amiodarone"</span>, <span class="hljs-string">"amlodipine"</span>, <span class="hljs-string">"lovastatin"</span>]
-    }
-  ],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-05-17 09:00:08"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.0"</span>
-}
-</div></code></pre>
+     -d &#39;[{&quot;id&quot;:&quot;1&quot;,&quot;compounds&quot;:[&quot;verapamil&quot;, &quot;simvastatin&quot;, &quot;diltiazem&quot;, &quot;amiodarone&quot;, &quot;amlodipine&quot;, &quot;lovastatin&quot;]}]&#39;</code></pre>
+<h4 id="output-9">Output</h4>
+<p>The return value for a successful <strong>POST</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;qtc&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Amiodarone&quot;</span><span class="fu">,</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Known risk for Torsade de pointes according to crediblemeds.org&quot;</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Diltiazem&quot;</span><span class="fu">,</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Conditional risk for Torsade de pointes according to crediblemeds.org&quot;</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Verapamil&quot;</span><span class="fu">,</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Risk unknown&quot;</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Amlodipine&quot;</span><span class="fu">,</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Risk unknown&quot;</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Lovastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Risk unknown&quot;</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Simvastatin&quot;</span><span class="fu">,</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;qtc_category&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Risk unknown&quot;</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;unknown_compounds&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;compounds&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;verapamil&quot;</span><span class="ot">,</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;simvastatin&quot;</span><span class="ot">,</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;diltiazem&quot;</span><span class="ot">,</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;amiodarone&quot;</span><span class="ot">,</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;amlodipine&quot;</span><span class="ot">,</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;lovastatin&quot;</span></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-05-17 09:00:08&quot;</span><span class="fu">,</span></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.0&quot;</span></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-atcsdrugs">GET /atcs/drugs</h3>
-<h4 id="input">Input</h4>
-<p>Get drug names based on ATCs. Please note, that some ATCs may not resolve to a unique drug product, especially in case of fixed drug combinations</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02&quot; \
+<h4 id="input-10">Input</h4>
+<p>Get drug names based on ATCs. Please note, that some ATCs may not
+resolve to a unique drug product, especially in case of fixed drug
+combinations</p>
+<h4 id="example-usage-11">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/atcs/drugs?atcs=C01BD01,C08DB01,C08DA01,J01CR02&quot; \
     -H &quot;accept: */*&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{ 
-    <span class="hljs-attr">"names"</span>: [ 
-        { 
-            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C01BD01"</span>, 
-            <span class="hljs-attr">"name_german"</span>:<span class="hljs-string">"Amiodaron"</span>, 
-            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Amiodarone"</span> 
-        }, 
-        { 
-            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C08DA01"</span> 
-            ,<span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Verapamil"</span>,
-            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Verapamil"</span>
-        },
-        { 
-            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"C08DB01"</span>, 
-            <span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Diltiazem"</span>,
-            <span class="hljs-attr">"name_english"</span>: <span class="hljs-string">"Diltiazem"</span>
-        }, 
-        { 
-            <span class="hljs-attr">"atc"</span>: <span class="hljs-string">"J01CR02"</span>, 
-            <span class="hljs-attr">"name_german"</span>: <span class="hljs-string">"Amoxicillin und Beta-Lactamase-Inhibitor"</span>, 
-            <span class="hljs-attr">"name_english"</span>:<span class="hljs-string">"Amoxicillin and beta-lactamase inhibitor"</span>
-        }
-    ],
-    <span class="hljs-attr">"unknown_atcs"</span>:[],
-    <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2023-10-20 10:56:21"</span>,
-    <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.3.0"</span>, 
-    <span class="hljs-attr">"atcs"</span>: [<span class="hljs-string">"C01BD01"</span>,<span class="hljs-string">"C08DB01"</span>,<span class="hljs-string">"C08DA01"</span>,<span class="hljs-string">"J01CR02"</span>]
-} 
-</div></code></pre>
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-10">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C01BD01&quot;</span><span class="fu">,</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_german&quot;</span><span class="fu">:</span> <span class="st">&quot;Amiodaron&quot;</span><span class="fu">,</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_english&quot;</span><span class="fu">:</span> <span class="st">&quot;Amiodarone&quot;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DA01&quot;</span><span class="fu">,</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_german&quot;</span><span class="fu">:</span> <span class="st">&quot;Verapamil&quot;</span><span class="fu">,</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_english&quot;</span><span class="fu">:</span> <span class="st">&quot;Verapamil&quot;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;C08DB01&quot;</span><span class="fu">,</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_german&quot;</span><span class="fu">:</span> <span class="st">&quot;Diltiazem&quot;</span><span class="fu">,</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_english&quot;</span><span class="fu">:</span> <span class="st">&quot;Diltiazem&quot;</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;J01CR02&quot;</span><span class="fu">,</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_german&quot;</span><span class="fu">:</span> <span class="st">&quot;Amoxicillin und Beta-Lactamase-Inhibitor&quot;</span><span class="fu">,</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name_english&quot;</span><span class="fu">:</span> <span class="st">&quot;Amoxicillin and beta-lactamase inhibitor&quot;</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_atcs&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2023-10-20 10:56:21&quot;</span><span class="fu">,</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.3.0&quot;</span><span class="fu">,</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;atcs&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;C01BD01&quot;</span><span class="ot">,</span> <span class="st">&quot;C08DB01&quot;</span><span class="ot">,</span> <span class="st">&quot;C08DA01&quot;</span><span class="ot">,</span> <span class="st">&quot;J01CR02&quot;</span><span class="ot">]</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-adrspzns">GET /adrs/pzns</h3>
-<h4 id="input">Input</h4>
-<p>Get ADRs for PZNs. Please note, that some PZNs may not be up to date.</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/adrs/pzns?pzns=03967062,03041347,00592733&quot; \
+<h4 id="input-11">Input</h4>
+<p>Get ADRs for PZNs. Please note, that some PZNs may not be up to
+date.</p>
+<h4 id="example-usage-12">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/adrs/pzns?pzns=03967062,03041347,00592733&quot; \
     -H &quot;accept: */*&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-  <span class="hljs-attr">"lang"</span>: <span class="hljs-string">"english"</span>,
-  <span class="hljs-attr">"results"</span>: [
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"00592733"</span>,
-      <span class="hljs-attr">"adrs"</span>: [
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">5</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Very rare (&lt; 0.01%)"</span>,
-          <span class="hljs-attr">"names"</span>: <span class="hljs-string">"epilepsy"</span>
-        },
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">5</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Very rare (&lt; 0.01%)"</span>,
-          <span class="hljs-attr">"names"</span>: [<span class="hljs-string">"thrombocytopenia"</span>, <span class="hljs-string">"thrombopenia"</span>]
-        }
-      ]
-    },
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03041347"</span>,
-      <span class="hljs-attr">"adrs"</span>: [
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">6</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Unknown"</span>,
-          <span class="hljs-attr">"names"</span>: <span class="hljs-string">"torsade de pointes"</span>
-        },
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">4</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Rare (&gt;= 0.01% to &lt; 0.1%)"</span>,
-          <span class="hljs-attr">"names"</span>: [<span class="hljs-string">"amenorrhoea"</span>, <span class="hljs-string">"amenorrhea post pill"</span>, <span class="hljs-string">"lack of menses"</span>]
-        }
-      ]
-    },
-    {
-      <span class="hljs-attr">"pzn"</span>: <span class="hljs-string">"03967062"</span>,
-      <span class="hljs-attr">"adrs"</span>: [
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">3</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Occasional (&gt;= 0.1% to &lt; 1%)"</span>,
-          <span class="hljs-attr">"names"</span>: [<span class="hljs-string">"bradycardia"</span>, <span class="hljs-string">"reflex bradycardia"</span>]
-        },
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">2</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Common (&gt;= 1% to &lt; 10%)"</span>,
-          <span class="hljs-attr">"names"</span>: [<span class="hljs-string">"hypotension"</span>, <span class="hljs-string">"arterial hypotension"</span>]
-        },
-        {
-          <span class="hljs-attr">"adr_frequency_category"</span>: <span class="hljs-number">6</span>,
-          <span class="hljs-attr">"adr_frequency_description"</span>: <span class="hljs-string">"Unknown"</span>,
-          <span class="hljs-attr">"names"</span>: [<span class="hljs-string">"AV nodals block"</span>, <span class="hljs-string">"atrioventricular block"</span>]
-        }
-      ]
-    }
-  ],
-  <span class="hljs-attr">"unknown_pzns"</span>: [],
-  <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2024-06-10 15:12:50"</span>,
-  <span class="hljs-attr">"api_version"</span>: <span class="hljs-string">"0.6.2"</span>,
-  <span class="hljs-attr">"pzns"</span>: [<span class="hljs-string">"03967062"</span>, <span class="hljs-string">"03041347"</span>, <span class="hljs-string">"00592733"</span>]
-}
-</div></code></pre>
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-11">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;lang&quot;</span><span class="fu">:</span> <span class="st">&quot;english&quot;</span><span class="fu">,</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span><span class="fu">,</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;adrs&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">5</span><span class="fu">,</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Very rare (&lt; 0.01%)&quot;</span><span class="fu">,</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="st">&quot;epilepsy&quot;</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">5</span><span class="fu">,</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Very rare (&lt; 0.01%)&quot;</span><span class="fu">,</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;thrombocytopenia&quot;</span><span class="ot">,</span> <span class="st">&quot;thrombopenia&quot;</span><span class="ot">]</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;adrs&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">6</span><span class="fu">,</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">,</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="st">&quot;torsade de pointes&quot;</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">4</span><span class="fu">,</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Rare (&gt;= 0.01% to &lt; 0.1%)&quot;</span><span class="fu">,</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;amenorrhoea&quot;</span><span class="ot">,</span> <span class="st">&quot;amenorrhea post pill&quot;</span><span class="ot">,</span> <span class="st">&quot;lack of menses&quot;</span><span class="ot">]</span></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03967062&quot;</span><span class="fu">,</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;adrs&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Occasional (&gt;= 0.1% to &lt; 1%)&quot;</span><span class="fu">,</span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;bradycardia&quot;</span><span class="ot">,</span> <span class="st">&quot;reflex bradycardia&quot;</span><span class="ot">]</span></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Common (&gt;= 1% to &lt; 10%)&quot;</span><span class="fu">,</span></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;hypotension&quot;</span><span class="ot">,</span> <span class="st">&quot;arterial hypotension&quot;</span><span class="ot">]</span></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_category&quot;</span><span class="fu">:</span> <span class="dv">6</span><span class="fu">,</span></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;adr_frequency_description&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">,</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;names&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;AV nodals block&quot;</span><span class="ot">,</span> <span class="st">&quot;atrioventricular block&quot;</span><span class="ot">]</span></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-06-10 15:12:50&quot;</span><span class="fu">,</span></span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.6.2&quot;</span><span class="fu">,</span></span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03967062&quot;</span><span class="ot">,</span> <span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">]</span></span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h3 id="get-pznsproducts">GET /pzns/products</h3>
-<h4 id="input">Input</h4>
-<p>Get product names and ATC codes based on PZNs. Please note, that some PZNs may not be up to date.</p>
-<h4 id="example-usage">Example Usage</h4>
-<pre class="hljs"><code><div>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,03041347,00592733&quot; \
+<h4 id="input-12">Input</h4>
+<p>Get product names and ATC codes based on PZNs. Please note, that some
+PZNs may not be up to date.</p>
+<h4 id="example-usage-13">Example Usage</h4>
+<pre class="curl"><code>curl -X GET &quot;https://abdata.clinicalpharmacy.me/api/pzns/products?pzns=03967062,03041347,00592733&quot; \
     -H &quot;accept: */*&quot; \
-    -H &quot;Authorization: Bearer yourjwttoken&quot;
-</div></code></pre>
-<h4 id="output">Output</h4>
-<p>The return value for a successful <strong>GET</strong> request has the following structure:</p>
-<pre class="hljs"><code><div>{
-    <span class="hljs-attr">"products"</span>: [
-    {
-        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"00592733"</span>,
-        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"Famotidin STADA 40mg"</span>,
-        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A02BA03"</span>
-    },
-    {
-        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"03041347"</span>,
-        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"Domperidon AbZ 10mg"</span>,
-        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A03FA03"</span>
-    },
-    {
-        <span class="hljs-attr">"pzn"</span>:<span class="hljs-string">"03967062"</span>,
-        <span class="hljs-attr">"product"</span>:<span class="hljs-string">"MCP-ratiopharm 10mg"</span>,
-        <span class="hljs-attr">"atc"</span>:<span class="hljs-string">"A03FA01"</span>
-    }
-    ],
-    <span class="hljs-attr">"unknown_pzns"</span>:[],
-    <span class="hljs-attr">"timestamp"</span>:<span class="hljs-string">"2024-02-22 09:05:55"</span>,
-    <span class="hljs-attr">"api_version"</span>:<span class="hljs-string">"0.3.0"</span>,
-    <span class="hljs-attr">"pzns"</span>:[
-        <span class="hljs-string">"03967062"</span>,
-        <span class="hljs-string">"03041347"</span>,
-        <span class="hljs-string">"00592733"</span>
-    ]
-}
-</div></code></pre>
-
+    -H &quot;Authorization: Bearer yourjwttoken&quot;</code></pre>
+<h4 id="output-12">Output</h4>
+<p>The return value for a successful <strong>GET</strong> request has
+the following structure:</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;products&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;00592733&quot;</span><span class="fu">,</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;product&quot;</span><span class="fu">:</span> <span class="st">&quot;Famotidin STADA 40mg&quot;</span><span class="fu">,</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;A02BA03&quot;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03041347&quot;</span><span class="fu">,</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;product&quot;</span><span class="fu">:</span> <span class="st">&quot;Domperidon AbZ 10mg&quot;</span><span class="fu">,</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;A03FA03&quot;</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;pzn&quot;</span><span class="fu">:</span> <span class="st">&quot;03967062&quot;</span><span class="fu">,</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;product&quot;</span><span class="fu">:</span> <span class="st">&quot;MCP-ratiopharm 10mg&quot;</span><span class="fu">,</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;atc&quot;</span><span class="fu">:</span> <span class="st">&quot;A03FA01&quot;</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unknown_pzns&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-02-22 09:05:55&quot;</span><span class="fu">,</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api_version&quot;</span><span class="fu">:</span> <span class="st">&quot;0.3.0&quot;</span><span class="fu">,</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;pzns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;03967062&quot;</span><span class="ot">,</span> <span class="st">&quot;03041347&quot;</span><span class="ot">,</span> <span class="st">&quot;00592733&quot;</span><span class="ot">]</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 </body>
 </html>

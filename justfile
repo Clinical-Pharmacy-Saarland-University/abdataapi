@@ -35,6 +35,11 @@ init-hooks:
     @ cd test && {{r_s}} -e "precommit::use_precommit();"
     @echo "Installed pre-commit hooks. You don't need to do anything else !!"
 
+# Renders the manual to /src/www from /manual/manual.md
+[group('dev')]
+doc:
+    @ pandoc -c style.css -s ./manual/manual.md -H ./manual/header.html -o ./src/www/index.html
+
 # run on port {{port}}
 # [group('start')]
 # run:
