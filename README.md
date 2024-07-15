@@ -1,4 +1,10 @@
-# abdataapi
+# ABDATA Database API
+
+<!-- START_BADGES -->
+
+[![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active/) [![Package version](https://img.shields.io/badge/Version-0.6.2-red.svg)](https://github.com/Clinical-Pharmacy-Saarland-University/nmrunner/) [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.1.0-blue.svg)](https://cran.r-project.org/)
+
+<!-- END_BADGES -->
 
 ## Description
 
@@ -10,8 +16,8 @@ This repository does **not** provide the ABDA data base.
 
 1. The application should run on Windows and Linux.
 
-2. To the start the application you need a runtime of at least `R Version 4.1` and the following CRAN-hosted libraries installed:
-
+2. To the start the application you need a runtime of at least `R Version 4.1`
+   and packages listed in `src/helper/packages.R`.
 3. Is is highly recommended to use the `just` command line tool to run the commands in the `justfile`. The `just` command line tool can be installed via the following command:
 
 ```bash
@@ -19,7 +25,26 @@ winget install just # windows
 apt-get install just # linux
 ```
 
-4. Provide _secrets.json_ file in the _src_ directory. The file should provide credentials for your data base instances in the following format:
+## Quick Start
+
+Thse steps will install or update the necessary packages, initialize the application settings file and start the application.
+
+```bash
+just rpkg
+just init
+just start
+```
+
+After configuration via `secrets.json` you can also start the application via the following command:
+
+```r
+setwd("src")
+source("start_api.R")
+```
+
+## Settings File
+
+Provide `secrets.json` file in the `src` directory. The file should provide credentials for your data base instances in the following format:
 
 ```json
 {
@@ -50,10 +75,25 @@ apt-get install just # linux
 }
 ```
 
-```r
-install.packages(c("plumber", "dplyr", "purrr", "tidyr", "glue", "jsonlite", "jsonvalidate",
-    "DBI", "RMySQL", "pool", "promises", "future", "bcrypt",
-    "jose", "mongolite", "httpproblems")
+## Management
+
+**TODO**
+
+## Developement
+
+The following just commands are available for development:
+
+```bash
+just doc # render the index.html file from the manual.md in manual directory (needs `pandoc`)
+just init-hooks # install git pre-commit hooks (needs python3 installed)
+just watch # watch the src directory for changes and restart the api (needs `watchexec`)
+```
+
+Install `pandoc` and `watchexec` via the following commands in windows:
+
+```bash
+winget install pandoc
+scoop install watchexec@2.0.0
 ```
 
 ## API Endpoint Tests
@@ -79,13 +119,4 @@ Edit the files `dev_credentials.yaml` and `prod_credentials.yaml` in the `tests`
 ```bash
 just test-dev
 just test-prod
-```
-
-## Application Start
-
-After configuration you can start the application via the following command:
-
-```r
-setwd("src") # or manually set the working directory to the src folder in RStudio
-source("start_api.R")
 ```
