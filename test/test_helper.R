@@ -4,11 +4,13 @@
 # Date: 09-05-2023
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
-
-library(jsonlite)
-library(httr)
-library(dplyr)
-library(tictoc)
+is_server_online <- function(url) {
+  response <- try(GET(url), silent = TRUE)
+  if (inherits(response, "try-error")) {
+    return(FALSE)
+  }
+  return(status_code(response) == 200)
+}
 
 .bearer <- function(token) {
   paste("Bearer", token)
@@ -22,7 +24,6 @@ api_login <- function(host, user, pwd) {
     body = creds, encode = "json",
     add_headers(.headers = c("Content-Type" = "application/json"))
   )
-
 
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
@@ -39,6 +40,7 @@ api_renew_token <- function(host, token) {
   addr <- paste0(host, "/api/renew-token")
   response <- GET(addr, add_headers(Authorization = .bearer(token)))
 
+
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
 
@@ -49,19 +51,13 @@ api_renew_token <- function(host, token) {
   res
 }
 
-api_get <- function(host, endpoint, token, time = TRUE) {
+api_get <- function(host, endpoint, token) {
   addr <- paste0(host, "/", endpoint)
 
-  if (time) {
-    tic()
-    on.exit(toc())
-  }
+  tic()
+  response <- GET(addr, add_headers(Authorization = .bearer(token)))
+  time <- toc(quiet = TRUE)
 
-  if (is.null(token)) {
-    response <- GET(addr)
-  } else {
-    response <- GET(addr, add_headers(TOKEN = token))
-  }
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
 
@@ -69,17 +65,14 @@ api_get <- function(host, endpoint, token, time = TRUE) {
     stop(paste("Get failed with:\n", toJSON(res, pretty = TRUE, auto_unbox = TRUE)))
   }
 
-  res
+  data <- list(time = time$callback_msg, data = res)
+  return(data)
 }
 
-api_post <- function(host, endpoint, payload, token, time = TRUE) {
+api_post <- function(host, endpoint, payload, token) {
   addr <- paste0(host, "/", endpoint)
 
-  if (time) {
-    tic()
-    on.exit(toc())
-  }
-
+  tic()
   response <- POST(addr,
     body = payload, encode = "json",
     add_headers(
@@ -87,6 +80,7 @@ api_post <- function(host, endpoint, payload, token, time = TRUE) {
       .headers = c("Content-Type" = "application/json")
     )
   )
+  time <- toc(quiet = TRUE)
 
   res <- content(response, "text", encoding = "UTF-8") |>
     fromJSON()
@@ -95,19 +89,29 @@ api_post <- function(host, endpoint, payload, token, time = TRUE) {
     stop(paste("Post failed with:\n", toJSON(res, pretty = TRUE, auto_unbox = TRUE)))
   }
 
-  res
+  data <- list(time = time$callback_msg, data = res)
+  return(data)
 }
 
 
 api_test <- function(log_table, method, endpoint, description, call) {
+  error_msg <- ""
   response <- tryCatch(call, error = function(e) {
+    error_msg <<- e$message
     return(NULL)
   })
-  result <- NULL
+
+  time <- if (is.null(response)) "?" else response$time
+
   result <- data.frame(
-    endpoint = endpoint, method = method,
-    description = description, success = !is.null(response)
+    Endpoint = endpoint,
+    Method = method,
+    Description = description,
+    Success = !is.null(response),
+    Time = time,
+    Error = error_msg
   )
-  log_table <- log_table |> rbind(result)
+  log_table <- log_table |>
+    rbind(result)
   log_table
 }

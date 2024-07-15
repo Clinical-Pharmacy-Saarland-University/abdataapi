@@ -1,17 +1,26 @@
 # abdataapi
 
 ## Description
+
 This repository provides a RESTful API for the ABDATA DDI Checks.
 The API is based on the plumber package and provides endpoints for the operations specified in [the manual](manual/manual.md).
 This repository does **not** provide the ABDA data base.
 
-##  Requirements
+## Requirements
 
 1. The application should run on Windows and Linux.
 
 2. To the start the application you need a runtime of at least `R Version 4.1` and the following CRAN-hosted libraries installed:
 
-3. Provide *secrets.json* file in the *src* directory. The file should provide credentials for your data base instances in the following format:
+3. Is is highly recommended to use the `just` command line tool to run the commands in the `justfile`. The `just` command line tool can be installed via the following command:
+
+```bash
+winget install just # windows
+apt-get install just # linux
+```
+
+4. Provide _secrets.json_ file in the _src_ directory. The file should provide credentials for your data base instances in the following format:
+
 ```json
 {
   "sql": {
@@ -26,7 +35,7 @@ This repository does **not** provide the ABDA data base.
     "db": "db_for_users",
     "url": "url_to_mongodb"
   },
-   "log_db": {
+  "log_db": {
     "collection": "logs_collection",
     "db": "db_for_logs",
     "url": "url_to_mongodb"
@@ -34,9 +43,9 @@ This repository does **not** provide the ABDA data base.
   "token": {
     "token_salt": "token_salt"
   },
-  "server" : {
-    "host" : "host",
-    "port" : 0001
+  "server": {
+    "host": "host",
+    "port": 0001
   }
 }
 ```
@@ -47,17 +56,35 @@ install.packages(c("plumber", "dplyr", "purrr", "tidyr", "glue", "jsonlite", "js
     "jose", "mongolite", "httpproblems")
 ```
 
-## Tests
+## API Endpoint Tests
 
-To run the tests create a *client_credentials.yaml* file in the *client* directory.
-```yaml
-HOST: "host-address"
-PWD: "password"
-USER: "user"
+Test are implemented in the `tests` directory (file `api_test.R`).
+
+1. Install test related `r` packages via the following command:
+
+```bash
+just test-rpkg
 ```
+
+2. Initalize login credentatls and host information via:
+
+```bash
+just test-init
+```
+
+Edit the files `dev_credentials.yaml` and `prod_credentials.yaml` in the `tests` directory to provide the necessary information.
+
+3. Tests for development and production environment can be run via the following commands:
+
+```bash
+just test-dev
+just test-prod
+```
+
 ## Application Start
 
 After configuration you can start the application via the following command:
+
 ```r
 setwd("src") # or manually set the working directory to the src folder in RStudio
 source("start_api.R")

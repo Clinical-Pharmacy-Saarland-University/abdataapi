@@ -50,9 +50,7 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-src/secrets.json
-client/test_credentials.R
-client/client_credentials.yaml
-management/users.json
-management/users_*.json
-src/Rplots.pdf
+secrets.json
+*_credentials*.yaml
+users.json
+users_*.json
