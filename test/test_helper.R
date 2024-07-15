@@ -93,7 +93,6 @@ api_post <- function(host, endpoint, payload, token) {
   return(data)
 }
 
-
 api_test <- function(log_table, method, endpoint, description, call) {
   error_msg <- ""
   response <- tryCatch(call, error = function(e) {
