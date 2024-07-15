@@ -1,7 +1,5 @@
 # settings
-port := "3333"
 cran := "https://cloud.r-project.org"
-
 r_s := if os_family() == "windows" {"Rscript.exe"} else {"Rscript"}
 
 # Runs the api server
