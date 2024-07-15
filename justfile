@@ -27,8 +27,13 @@ test-init:
     @echo "Created testing credentials files"
 
 
-
-
+# Inititalizes and updates pre-commit hooks
+[group('dev')]
+init-hooks:
+    @ cd test && {{r_s}} -e "options(repos = c(CRAN = '{{cran}}')); install.packages('precommit');"
+    @ pip3 install pre-commit --user
+    @ cd test && {{r_s}} -e "precommit::use_precommit();"
+    @echo "Installed pre-commit hooks. You don't need to do anything else !!"
 
 # run on port {{port}}
 # [group('start')]
