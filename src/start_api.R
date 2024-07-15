@@ -7,24 +7,8 @@
 
 # Libs and Options ----
 # *******************************************************************
-source("helper/loadHelper.R")
-ensureLib("plumber")
-ensureLib("dplyr")
-ensureLib("purrr")
-ensureLib("tidyr")
-ensureLib("stringr")
-ensureLib("glue")
-ensureLib("jsonlite")
-ensureLib("jsonvalidate")
-ensureLib("DBI")
-ensureLib("RMySQL")
-ensureLib("pool")
-ensureLib("promises")
-ensureLib("future")
-ensureLib("bcrypt")
-ensureLib("jose")
-ensureLib("mongolite")
-ensureLib("httpproblems")
+source("helper/packages.R")
+init_packages()
 
 source("helper/schemas.R")
 source("settings.R")

@@ -4,9 +4,15 @@
 # Date: 09-01-2023
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
-
+suppressPackageStartupMessages({
+  library(jsonlite)
+})
 
 create_secret_file <- function(path) {
+  if (file.exists(path)) {
+    file.rename(path, paste0(path, "_bak"))
+  }
+
   secrets <- list(
     sql = list(
       host = "host",
@@ -62,8 +68,8 @@ patch_settings <- function(settings) {
   settings$token$token_salt <- json$token$token_salt
 
   # server
-  settings$server$host <-  json$server$host
-  settings$server$port <-  json$server$port
+  settings$server$host <- json$server$host
+  settings$server$port <- json$server$port
 
   return(settings)
 }
