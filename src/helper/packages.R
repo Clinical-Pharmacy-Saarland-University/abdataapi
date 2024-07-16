@@ -19,7 +19,7 @@ packages <- function() {
     "RMySQL",
     "pool",
     "promises",
-    "future",
+    "mirai",
     "bcrypt",
     "jose",
     "mongolite",

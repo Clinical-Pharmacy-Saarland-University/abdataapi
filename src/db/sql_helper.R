@@ -7,16 +7,16 @@
 
 # Helper ----
 # *******************************************************************
-.isPool <- function(con) {
+isPool <- function(con) {
   "Pool" %in% class(con)
 }
 
 # Safe sql functions ----
 # *******************************************************************
-safe_dbConnect <- safely(dbConnect)
-safe_dbGetQuery <- safely(dbGetQuery)
-safe_dbExecute <- safely(dbExecute)
-safe_dbDisconnect <- safely(dbDisconnect)
+safeDbConnect <- safely(dbConnect)
+safeDbgetQuery <- safely(dbGetQuery)
+safeDbExecute <- safely(dbExecute)
+safeDbDisconnect <- safely(dbDisconnect)
 
 
 # Connections and query helper ----
@@ -31,7 +31,7 @@ connectServer <- function(settings = SETTINGS$sql) {
     }
   }
 
-  con <- safe_dbConnect(RMySQL::MySQL(),
+  con <- safeDbConnect(RMySQL::MySQL(),
     user = settings$user,
     password = settings$pwd,
     host = settings$host,
@@ -48,8 +48,8 @@ connectServer <- function(settings = SETTINGS$sql) {
 
 # returns always T
 disconnect <- function(con) {
-  if (!is.null(con) && !.isPool(con)) {
-    safe_dbDisconnect(con)
+  if (!is.null(con) && !isPool(con)) {
+    safeDbDisconnect(con)
   }
   return(TRUE)
 }
@@ -67,8 +67,8 @@ sql_query <- function(query_str, ..., .con = NULL) {
   args <- list(...)
   args <- c(query_str, args, .con = .con)
 
-  query <- do.call(glue_sql, args)
-  res <- safe_dbGetQuery(.con, query) |> suppressWarnings()
+  query <- do.call(glue::glue_sql, args)
+  res <- safeDbgetQuery(.con, query) |> suppressWarnings()
   if (!is.null(res$error)) {
     return(NULL)
   }
@@ -121,8 +121,9 @@ sql_priscus_fam <- function(fam_keys, con = NULL) {
 sql_qtc_fam <- function(fam_keys, con = NULL) {
   res <- sql_query(
     paste(
-      "SELECT Key_FAM, FAI_DB.Key_STO, SZG_DB.Key_SGR FROM FAI_DB LEFT JOIN SZG_DB ON FAI_DB.Key_STO = SZG_DB.Key_STO",
-      "WHERE Key_FAM IN ({fam_keys*}) AND Key_SGR IN (10079780, 10079781, 10079782)"
+      "SELECT Key_FAM, FAI_DB.Key_STO, SZG_DB.Key_SGR FROM FAI_DB LEFT JOIN SZG_DB ON",
+      "FAI_DB.Key_STO = SZG_DB.Key_STO WHERE Key_FAM IN ({fam_keys*}) AND Key_SGR",
+      "IN (10079780, 10079781, 10079782)"
     ),
     fam_keys = fam_keys, .con = con
   )
@@ -143,7 +144,8 @@ sql_adrs_fam <- function(fam_keys, lang = c("german", "german-simple", "english"
 
   res <- sql_query(
     paste(
-      "SELECT NEB_C.Key_FAM, NEB_C.Key_MIV, NEB_C.Haeufigkeit, MIN_C.Name FROM NEB_C JOIN MIN_C ON NEB_C.Key_MIV = MIN_C.Key_MIV",
+      "SELECT NEB_C.Key_FAM, NEB_C.Key_MIV, NEB_C.Haeufigkeit, MIN_C.Name",
+      "FROM NEB_C JOIN MIN_C ON NEB_C.Key_MIV = MIN_C.Key_MIV",
       "WHERE NEB_C.Key_FAM IN ({fam_keys*})",
       "AND MIN_C.Key_MIV = NEB_C.Key_MIV", # ADRS
       lang_add

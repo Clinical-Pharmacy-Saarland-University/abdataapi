@@ -41,6 +41,10 @@ test-init:
     @ cd test && {{r_s}} -e "source('credentials.R'); write_dev_cred(); write_prod_cred();"
     @echo "Created testing credentials files"
 
+# Runs code in test/single_test.R
+[group('test')]
+test-single:
+    @ cd test && {{r_s}} single_test.R
 
 # Inititalizes and updates pre-commit hooks
 [group('dev')]

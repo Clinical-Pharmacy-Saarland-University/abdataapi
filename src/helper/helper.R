@@ -19,8 +19,8 @@ catch_error <- function(code, otherwise = NULL, quiet = TRUE) {
 }
 
 tag_result <- function(res, details = NULL) {
-  res$timestamp <- unbox(Sys.time())
-  res$api_version <- unbox(SETTINGS$version)
+  res$timestamp <- jsonlite::unbox(Sys.time())
+  res$api_version <- jsonlite::unbox(SETTINGS$version)
   attr(res, "details") <- details
   res
 }

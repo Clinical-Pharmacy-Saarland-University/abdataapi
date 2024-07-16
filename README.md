@@ -2,7 +2,7 @@
 
 <!-- START_BADGES -->
 
-[![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active/) [![Package version](https://img.shields.io/badge/Version-0.6.2-red.svg)](https://github.com/Clinical-Pharmacy-Saarland-University/nmrunner/) [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.1.0-blue.svg)](https://cran.r-project.org/)
+[![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active/) [![Package version](https://img.shields.io/badge/Version-0.6.2-red.svg)](https://github.com/Clinical-Pharmacy-Saarland-University/abdataapi) [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.1.0-blue.svg)](https://cran.r-project.org/)
 
 <!-- END_BADGES -->
 
@@ -10,7 +10,7 @@
 
 This repository provides a RESTful API for the ABDATA DDI Checks.
 The API is based on the plumber package and provides endpoints for the operations specified in [the manual](manual/manual.md).
-This repository does **not** provide the ABDA data base.
+This repository does **not** provide the ABDA database.
 
 ## Requirements
 

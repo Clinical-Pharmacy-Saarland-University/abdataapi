@@ -1,4 +1,4 @@
-#  Logger ----
+# Logger ----
 # *******************************************************************
 LOGGER <- create_logger(SETTINGS$logging$log_device)
 
@@ -48,9 +48,7 @@ function(req, res) {
 #* @get /formulations
 function(req, res) {
   log_info <- req_info(req)
-  future_promise({
-    with_logger(LOGGER, log_info, api_formulation_list_get())
-  })
+  with_logger(LOGGER, log_info, api_formulation_list_get())
 }
 
 #* Request limits of the server
@@ -276,7 +274,8 @@ function(req, res) {
 # *******************************************************************
 #* ADRs endpoint for pzn input
 #* @param pzns:[string] Comma-separated unique pzns as string
-#* @param lang:[string] Language for the ADRs. Allowed values are "english", "german" and "german-simple". Default is "english".
+#* @param lang:[string] Language for the ADRs. Allowed values are "english",
+#* "german" and "german-simple". Default is "english".
 #* @tag adrs
 #* @serializer unboxedJSON list(na = NULL)
 #* @get /adrs/pzns

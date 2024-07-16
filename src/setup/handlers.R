@@ -5,7 +5,7 @@
 # Author: Dominik Selzer (dominik.selzer@uni-saarland.de)
 # *******************************************************************
 
-api_error_handler <- function(req, res, err){
+api_error_handler <- function(req, res, err) {
   # Force "unboxed" JSON and the Content-Type from RFC 7807.
   res$serializer <- serializer_unboxed_json(
     type = "application/json"
@@ -22,5 +22,5 @@ api_error_handler <- function(req, res, err){
   }
 
   res$status <- 500
-  internal_server_error("Unknown system error.")
+  internal_server_error(err$message)
 }
