@@ -2,6 +2,9 @@
 cran := "https://cloud.r-project.org"
 r_s := if os_family() == "windows" {"Rscript.exe"} else {"Rscript"}
 
+default:
+    @ just -l
+
 # Runs the api server
 [group('start')]
 run:
